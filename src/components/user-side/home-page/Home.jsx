@@ -1,0 +1,79 @@
+import React from 'react'
+import './Home.css'
+import Button from '@mui/material/Button';
+import { TextField } from '@mui/material';
+import Login from '../login-page/Login';
+import SignupPage from '../signup-page/SignupPage';
+import { Navigate, useNavigate, useParams } from 'react-router';
+import RoleSelection from '../role-selection/RoleSelection';
+
+
+
+const Home = () => {
+   
+  const {mode} = useParams()
+  const navigate = useNavigate()
+
+  const renderContent = () => {
+    if (mode === 'signup') {
+      return <SignupPage />;
+    }
+  
+    else if (mode == 'login'){
+      return <Login/>
+    }
+    else {
+      return <RoleSelection/>
+    }
+    
+
+    };
+
+  const handleToggle = () => {
+    if (mode === 'signup') {
+      navigate('/login'); 
+    } else {
+      navigate('/signup'); 
+    }
+  };
+    
+  return (
+    
+    <div className='container'>
+    <div className='container1'>
+     
+      
+   
+    
+  
+  
+          <h4 className='logo'>Exploro</h4>
+          
+          
+         {mode === 'role-selection'? '' : <Button onClick={handleToggle} sx={{
+      position: 'fixed',
+      marginTop: '22px',
+      right: '100px',
+      bgcolor: 'black'
+      
+    }} variant='contained'>{mode === 'signup' ? 'Login' : 'Sign Up'}</Button>}
+
+    <img className='image-container' src="image/p.jpg" alt="Decorative" />  
+
+  
+  
+    </div>
+    <div className='container2'>
+      <div className='container3'>
+        
+      {renderContent()}
+      </div>
+       
+    </div>
+    
+    </div>
+  
+  )
+}
+
+export default Home
