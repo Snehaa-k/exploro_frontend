@@ -5,8 +5,10 @@ import PostsPage from '../../components/user-side/Posts-page/PostsPage'
 
 const UserPost = () => {
   return (
-    <div>
+    <div >
+      <div style={{position:'fixed',width:'100%'}}>
         <Navbar/>
+        </div>
         <PostsPage/>
     </div>
   )

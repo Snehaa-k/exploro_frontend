@@ -5,6 +5,8 @@ import { loginAdmin } from '../../../redux/actions/authActions'
 import { useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
 import Swal from 'sweetalert2'
+import { ThreeDots } from 'react-loader-spinner'
+
 
 
 
@@ -16,6 +18,12 @@ const AdminLogin = () => {
   const [errors,setErrors] = useState({})
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false);
+  const token = localStorage.removeItem('admin_accessToken');
+  
+  // if(!token){
+  //   navigate('/adminlog')
+  // }
 
   const validate = ()=>{
     const newErrors = {};
@@ -64,9 +72,9 @@ const AdminLogin = () => {
           text: 'An error occurred. Please try again later.',
         });
       }
-        
       
     }
+    setLoading(true)
   }
   
 
@@ -130,7 +138,16 @@ const AdminLogin = () => {
       marginLeft: '2px',
       bgcolor: 'black'
       
-    }} variant='contained' type='submit'>LOGIN</Button></Box>
+    }} variant='contained' type='submit'>{loading ? <ThreeDots
+      visible={true}
+      height="40"
+      width="80"
+      color="white"
+      
+      radius="9"
+      ariaLabel="three-dots-loading"
+          wrapperClass=""
+      />: 'LOGIN'}</Button></Box>
        
        </div> 
     </div>

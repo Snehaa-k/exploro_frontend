@@ -31,9 +31,11 @@ const EditProfile = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const [profile, setProfile] = useState({});
- console.log(profile,"profile")
+  console.log(profile,"profile")
   console.log(profile.is_travel_leader,"leader")
-console.log(profile.id,"id getting")
+  console.log(profile.id,"id getting")
+  const token = localStorage.getItem("accessToken");
+
   const [formData, setFormData] = useState({
     
     address: '',
@@ -72,11 +74,11 @@ console.log(profile.id,"id getting")
           address : response.data.address || '',
           bio: response.data.bio || '',
           country_state: response.data.country_state || '',
-          profile_image: response.data.profile_image || '',
+          profile_image: response.data.profile_image || null,
 
           
         });
-        setImage(response.data.profile_image||'')
+        setImage(response.data.profile_image || null)
        
        
         
@@ -111,6 +113,7 @@ console.log(profile.id,"id getting")
             'Authorization': `Bearer ${token}`
           }
         });
+        
         setProfile({
           id : response.data.id || '',
           username: response.data.username || '',
@@ -143,28 +146,51 @@ console.log(profile.id,"id getting")
       [name]: value
     }));
   };
+  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const imageURL = URL.createObjectURL(file);
-      setImage(imageURL);
+    
       setFormData(prev => ({ ...prev, profile_image: file }));
+      setImage(imageURL);
     }
   };
+
+
+  useEffect(() => {
+    console.log('Image URL updated:', image);
+  }, [image]);
 
   const handleClick = () => {
     fileInputRef.current.click();
   };
+
+  
+  
 
 
   // const formDataToSend = new FormData();
     
   const managedit = async (e) => {
     e.preventDefault();
+    if(!formData.address){
+      alert("please add address")
+      return;
+    }
+    if(!formData.bio){
+      alert("please add bio")
+      return;
 
+    }
+    if(!formData.country_state){
+      alert("please add country and state")
+      return;
+    }
     // Ensure you have the image file
     if (!formData.profile_image) {
+        alert("please add image")
         console.log('Please select an image to upload.');
         return;
     }
@@ -271,11 +297,13 @@ console.log(profile.id,"id getting")
               style={{ display: 'none' }}
             />
             <div className="circle-background" onClick={handleClick}>
-              {image ? (
+              
+              {image  ? (
                 <img src={`http://127.0.0.1:8000${image}`} alt="Uploaded" className="uploaded-image" />
               ) : (
                 <CameraRetroIcon className="camera-icon" />
               )}
+
             </div>
           </div>
           <div style={{ marginTop: '-40px' }}>

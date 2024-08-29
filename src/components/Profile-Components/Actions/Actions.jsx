@@ -38,7 +38,7 @@ const Actions = ({ avatarSrc, menuItems }) => {
               src={avatarSrc}
               sx={{ width: 56, height: 56, marginRight: '10px' }}
             />
-            <Typography variant="h6" component="span">
+            <Typography variant="h6" component="span" >
               Profile
             </Typography>
           </Box>

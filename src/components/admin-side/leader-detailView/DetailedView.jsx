@@ -33,7 +33,7 @@ const TravelLeaderDetails = () => {
                 Swal.fire({
                     icon: 'success',
                     title: 'Rejected Successfully!',
-                    text: 'Accepted Successfully!',
+                    text: 'Rejected Successfully!',
                     
                     timer: 3000, 
                     timerProgressBar: true,

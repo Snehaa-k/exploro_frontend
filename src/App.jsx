@@ -19,6 +19,7 @@ import Request from './components/admin-side/request/Request'
 import TravelLeaderDetails from './components/admin-side/leader-detailView/DetailedView'
 import ViewTravelLeaders from './components/admin-side/TravelLeaders/ViewTravelLeader'
 import TravellerProfile from './pages/Userside/Traveller/TravellerProfile'
+import NotFoundPage from './pages/404error/Error404'
 
 
 
@@ -38,19 +39,19 @@ function App() {
        <Router>
       
           <Routes>
-         
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/:mode" element={<Home/>} /> 
-            <Route path='/otp-verification' element={<OtpVerificationPage/>}/>
-            <Route path='/posts' element={<PostsPage/>}/>           
-            <Route path='/formsubmission' element={<FormSubmission/>}/>
+            <Route path ="/" element={<Navigate to="/login" />} />
+            <Route path ="/:mode" element={<Home/>} /> 
+            <Route path ='/otp-verification' element={<OtpVerificationPage/>}/>
+            {/* <Route path ='/posts' element={<PostsPage/>}/>            */}
+            <Route path ='/formsubmission' element={<FormSubmission/>}/>
             <Route path = '/adminlog' element = {<AdminLogin/>}/>
             <Route path = '/travellers' element = { <ViewTravellers/>}/>
             <Route path = '/requestss' element = { <Request/>}/>
-            <Route path="/request/:id" element={<TravelLeaderDetails />} />
+            <Route path = "/request/:id" element={<TravelLeaderDetails />} />
             <Route path = '/travelleaders' element = { <ViewTravelLeaders/>}/>
             <Route path = '/editprofile' element = { <EditProfile/>}/>
             <Route path = '/travellerprofile' element = { <TravellerProfile/>}/>
+            <Route path = '/posts' element = { <UserPost/>}/>
 
             
                

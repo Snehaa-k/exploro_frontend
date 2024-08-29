@@ -103,10 +103,10 @@ const ViewTravellers = () => {
                   <TableCell>{traveller.date_joined}</TableCell>
                  <TableCell>
                   {traveller.is_block ===true?
-                    <Button variant="contained" onClick={() => handleBlock(traveller.id)}  color={traveller.is_block === false ? 'error' : 'success'}>
-                    BLOCK
-                    </Button>:<Button variant="contained" onClick={() => handleBlock(traveller.id)} color={traveller.is_block === false ? 'error' : 'success'}>
-                      UBLOCK
+                    <Button variant="contained" onClick={() => handleBlock(traveller.id)}  color={traveller.is_block === false ? 'success' : 'error'}>
+                    UNBLOCK
+                    </Button>:<Button variant="contained" onClick={() => handleBlock(traveller.id)} color={traveller.is_block === false ? 'success' : 'error'}>
+                      BLOCK
                     </Button>}
                   </TableCell>
                 </TableRow>

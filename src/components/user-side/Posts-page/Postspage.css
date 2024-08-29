@@ -1,19 +1,23 @@
-body, html {
+/* body, html {
     height: 100%;
     margin: 0;
    scroll-behavior: auto;
   
-  }
+  } */
+
+.create-post{
+  width: 400px;
+}
 
 
 .sidebar-container{
     width: 300px;
     padding-left: 80px;
-    position: fixed;
 
    
 }
-.side-bar{
+
+/* .side-bar{
     
    
     overflow: hidden;
@@ -22,7 +26,7 @@ body, html {
     
     
     
-  }
+  } */
   .right-side-container {
     
     position: fixed;
@@ -32,4 +36,26 @@ body, html {
   .main-container {
     
     overflow-y: auto;
+}
+
+
+.create-post-container {
+  max-height: 500px; 
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.dashboard{
+  position: fixed;
+  margin-left: 50px;
+}
+.right-side-container{
+  margin-top:410px;
+  position: fixed;
+
+}
+.create-post{
+  
+
+  position: fixed;
 }

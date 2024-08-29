@@ -111,10 +111,10 @@ const ViewTravelLeaders = () => {
                   <TableCell>{traveller.user_id.date_joined}</TableCell>
                  <TableCell>
                   {traveller.user_id.is_block ===true?
-                    <Button variant="contained" onClick={() => handleBlock(traveller.user_id.id)}  color={traveller.user_id.is_block === false ? 'error' : 'success'}>
-                    BLOCK
-                    </Button>:<Button variant="contained" onClick={() => handleBlock(traveller.user_id.id)} color={traveller.user_id.is_block === false ? 'error' : 'success'}>
-                      UBLOCK
+                    <Button variant="contained" onClick={() => handleBlock(traveller.user_id.id)}  color={traveller.user_id.is_block === false ? 'success' : 'error'}>
+                    UNBLOCK
+                    </Button>:<Button variant="contained" onClick={() => handleBlock(traveller.user_id.id)} color={traveller.user_id.is_block === false ? 'success' : 'error'}>
+                      BLOCK
                     </Button>}
                   </TableCell>
                 </TableRow>

@@ -183,7 +183,7 @@ const SignupPage = () => {
         <Button sx={{
       position: 'fixed',
       marginTop: '320px',
-      
+      width:'200px',
       bgcolor: 'black'
       
     }} variant='contained' type='submit'   >  {loading ? <ThreeDots
@@ -191,7 +191,7 @@ const SignupPage = () => {
       height="40"
       width="80"
       color="white"
-     
+      
       radius="9"
       ariaLabel="three-dots-loading"
           wrapperClass=""

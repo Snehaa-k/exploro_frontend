@@ -28,27 +28,7 @@ api.interceptors.request.use(
 );
 
 
-// api.interceptors.request.use((config) => {
-//   const state = store.getState();
-//   // console.log(state.user.access,"my token");
-  
-//   // const accessToken = state.user.accessToken || localStorage.getItem('accessToken');
 
-
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-
-//   return config;
-// }, (error) => {
-//   console.log("asjdhbfasdf");
-  
-//   return Promise.reject(error);
-// });
-
-
-// Response interceptor for handling token refresh
-// Response interceptor for handling token refresh
 api.interceptors.response.use(
   (response) => {
     console.log(response);
@@ -72,8 +52,14 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         console.error("Failed to refresh token:", refreshError);
-        // Optionally, you can log out the user here
-        // store.dispatch(logoutUser());
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+
+        // Dispatch a logout action
+        store.dispatch(logoutUser());
+
+        // Optionally redirect the user to the login page
+        window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }
@@ -82,6 +68,7 @@ api.interceptors.response.use(
 
   }
 );
+
 
 // Function to refresh the access token
 async function refreshAccessToken(refreshToken, user, originalRequest) {
@@ -98,7 +85,7 @@ async function refreshAccessToken(refreshToken, user, originalRequest) {
 }catch (error) {
     console.error("Error refreshing token:", error);
     // Optionally, you can log out the user here
-    // store.dispatch(logoutUser());
+   
     throw error; // Rethrow the error to be caught in the interceptor
   }
 }

@@ -9,6 +9,7 @@ import RoleSelection from '../role-selection/RoleSelection';
 import UserPreference from '../userpreference/UserPreference';
 import ExploreIcon from '@mui/icons-material/Explore';
 import ExploroLogo from '../../../assets/image/logo.png';
+import NotFoundPage from '../../../pages/404error/Error404';
 
 
 
@@ -29,10 +30,12 @@ const Home = () => {
     else if(mode == 'userpreference'){
       return <UserPreference/>
     }
-    else {
+    else if(mode == 'role-selection') {
       return <RoleSelection/>
     }
-    
+    else{
+      return <NotFoundPage/>
+    }
 
     };
 
@@ -62,9 +65,10 @@ const Home = () => {
           
          {mode === 'role-selection' | 'userpreference'? '' : <Button onClick={handleToggle} sx={{
       position: 'fixed',
-      marginTop: '22px',
+      marginTop: '36px',
       right: '100px',
-      bgcolor: 'black'
+      bgcolor: 'black',
+      width:'120px',
       
     }} variant='contained'>{mode === 'signup' ? 'Login' : 'Sign Up'}</Button>}
    
