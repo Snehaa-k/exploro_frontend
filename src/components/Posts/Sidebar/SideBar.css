@@ -1,0 +1,10 @@
+/* General container responsiveness */
+@media (max-width: 600px) {
+    .dashboard-overview-container {
+      width: 100%;
+      margin-top: 20px;
+      padding-left: 10px;
+      height: auto;
+    }
+  }
+  

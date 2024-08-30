@@ -5,8 +5,17 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const DashboardOverview = ({ items }) => {
   return (
-   
-    <Box p={2} sx={{ backgroundColor: '#f9f9f9', marginTop: '120px', paddingLeft: '40px', height:'350px',width:'300px'}}>
+    <Box
+      p={2}
+      sx={{
+        backgroundColor: '#f9f9f9',
+        marginTop: { xs: '20px', sm: '120px' }, // Margin on top adjusts for different screen sizes
+        paddingLeft: { xs: '10px', sm: '40px' }, // Padding adjusts for different screen sizes
+        height: { xs: 'auto', sm: '350px' }, // Height adjusts for different screen sizes
+        width: { xs: '100%', sm: '300px' }, // Width adjusts for different screen sizes
+        overflowY: 'auto' // Ensure content scrolls if needed
+      }}
+    >
       <Typography variant="h6" sx={{ marginBottom: '20px', fontWeight: 'bold' }}>
         Dashboard Overview
       </Typography>
@@ -21,7 +30,6 @@ const DashboardOverview = ({ items }) => {
         ))}
       </List>
     </Box>
-  
   );
 };
 

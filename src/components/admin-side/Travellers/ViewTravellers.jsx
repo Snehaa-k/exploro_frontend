@@ -82,7 +82,7 @@ const ViewTravellers = () => {
     
     <div>
         
-        <TableContainer component={Paper} style={{ width: '70%', margin: '50px auto' ,marginLeft:'350px',marginTop:'-70px'}}>
+        <TableContainer component={Paper} style={{ width: '70%', margin: '50px auto' ,marginLeft:'350px',marginTop:'-300px'}}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>

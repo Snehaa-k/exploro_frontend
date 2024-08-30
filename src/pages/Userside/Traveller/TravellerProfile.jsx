@@ -124,6 +124,7 @@ const TravellerProfile = () => {
     { label: 'Destination', icon: <ExploreIcon />, onClick: () => console.log('Destination clicked') },
     { label: 'Profile', icon: <AccountCircleIcon />, onClick: () => console.log('Profile clicked') },
   ];
+  
   const menuItemsLead = [
     { label: 'Home', onClick: () => console.log('Home clicked') },
     { label: 'Create', onClick: () => console.log('create clicked') },

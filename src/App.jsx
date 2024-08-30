@@ -10,7 +10,7 @@ import { Bounce, ToastContainer } from 'react-toastify'
 import FormSubmission from './components/user-side/formsubmission/FormSubmission'
 import PostsPage from './components/user-side/Posts-page/PostsPage'
 import Navbar from './components/Navbar/Navbar'
-import UserPost from './pages/Userside/UserPost'
+import UserPost from './pages/Userside/User-Post/UserPost'
 import EditProfile from './pages/Userside/Traveller/edit-profile/EditProfile'
 import AdminLogin from './components/admin-side/Login/AdminLogin'
 import AdminHome from './components/admin-side/Common/AdminHome'
@@ -20,6 +20,10 @@ import TravelLeaderDetails from './components/admin-side/leader-detailView/Detai
 import ViewTravelLeaders from './components/admin-side/TravelLeaders/ViewTravelLeader'
 import TravellerProfile from './pages/Userside/Traveller/TravellerProfile'
 import NotFoundPage from './pages/404error/Error404'
+import PlanTrips from './pages/Userside/TravelLeader/Trip-page/planTrips/PlanTrips'
+import CreateTrip from './components/user-side/Travel-leader/PlanTripComponent/CreateTrip'
+import ViewTrip from './pages/Userside/TravelLeader/Trip-page/ViewTrips/ViewTrip'
+
 
 
 
@@ -52,6 +56,11 @@ function App() {
             <Route path = '/editprofile' element = { <EditProfile/>}/>
             <Route path = '/travellerprofile' element = { <TravellerProfile/>}/>
             <Route path = '/posts' element = { <UserPost/>}/>
+            <Route path = '/triplan' element = { <PlanTrips/>}/>
+            <Route path = '/viewtrip' element = { <ViewTrip/>}/>
+            
+            
+            
 
             
                

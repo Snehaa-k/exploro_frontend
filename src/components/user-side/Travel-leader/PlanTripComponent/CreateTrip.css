@@ -1,0 +1,53 @@
+/* General container styling */
+.trip-container {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Image upload section styling */
+.image-upload {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Text inputs container styling */
+.text-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Text input specific styling */
+.text-input-2 {
+  margin-left: 0;
+}
+
+/* Add button styling */
+.add {
+  display: inline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .text-inputs {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .text-input-2 {
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .text-inputs {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .text-input-2 {
+    margin-left: 0;
+  }
+}

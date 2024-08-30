@@ -1,0 +1,10 @@
+
+@media (max-width: 600px) {
+    .sidebar-container {
+      width: 100%;
+      position: static;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+  

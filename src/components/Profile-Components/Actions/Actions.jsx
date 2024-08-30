@@ -1,9 +1,13 @@
 import React from 'react';
 import { Avatar, Box, List, ListItem, ListItemText, ListItemIcon, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 const Actions = ({ avatarSrc, menuItems }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleItemClick = (onClick, path) => {
     if (onClick) {
@@ -14,12 +18,29 @@ const Actions = ({ avatarSrc, menuItems }) => {
   };
 
   const handleAvatarClick = () => {
-    navigate('/travellerprofile'); 
+    navigate('/travellerprofile');
   };
 
   return (
-    <div style={{ marginLeft: '40px', marginTop: '50px' }}>
-      <Box p={2} sx={{ backgroundColor: '#f9f9f9', height: '500px', paddingLeft: '50px', width: '300px' }}>
+    <div
+      style={{
+        marginLeft: isMobile ? '10px' : '40px',
+        marginTop: isMobile ? '20px' : '50px',
+        display: 'flex',
+        justifyContent: isMobile ? 'center' : 'flex-start',
+      }}
+    >
+      <Box
+        p={2}
+        sx={{
+          backgroundColor: '#f9f9f9',
+          height: isMobile ? 'auto' : '500px',
+          paddingLeft: isMobile ? '20px' : '50px',
+          paddingRight: isMobile ? '20px' : '50px',
+          width: isMobile ? '100%' : '300px',
+          boxSizing: 'border-box',
+        }}
+      >
         <List>
           <Box
             onClick={handleAvatarClick}
@@ -27,7 +48,8 @@ const Actions = ({ avatarSrc, menuItems }) => {
               display: 'flex',
               alignItems: 'center',
               cursor: 'pointer',
-              marginBottom: '20px',
+              marginBottom: isMobile ? '10px' : '20px',
+              justifyContent: isMobile ? 'center' : 'flex-start',
               '&:hover': {
                 opacity: 0.8,
               },
@@ -36,11 +58,13 @@ const Actions = ({ avatarSrc, menuItems }) => {
             <Avatar
               alt="User Avatar"
               src={avatarSrc}
-              sx={{ width: 56, height: 56, marginRight: '10px' }}
+              sx={{ width: 56, height: 56, marginRight: isMobile ? '0' : '10px' }}
             />
-            <Typography variant="h6" component="span" >
-              Profile
-            </Typography>
+            {!isMobile && (
+              <Typography variant="h6" component="span">
+                Profile
+              </Typography>
+            )}
           </Box>
           {menuItems.map((item, index) => (
             <ListItem
@@ -48,18 +72,19 @@ const Actions = ({ avatarSrc, menuItems }) => {
               key={index}
               onClick={() => handleItemClick(item.onClick, item.path)}
               sx={{
-                marginBottom: '20px',
+                marginBottom: isMobile ? '10px' : '20px',
                 '&:hover': {
                   backgroundColor: '#e0e0e0',
                   cursor: 'pointer',
                 },
                 transition: 'background-color 0.3s ease',
+                justifyContent: isMobile ? 'center' : 'flex-start',
               }}
             >
-              <ListItemIcon>
+              <ListItemIcon sx={{ minWidth: isMobile ? 'auto' : undefined }}>
                 {item.icon}
               </ListItemIcon>
-              <ListItemText primary={item.text} />
+              {!isMobile && <ListItemText primary={item.text} />}
             </ListItem>
           ))}
         </List>

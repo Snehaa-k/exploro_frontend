@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TablePagination } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AdminHome from '../Common/AdminHome';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,7 +15,8 @@ const Request = () => {
    console.log(leaders,"leadders")
    const id = leaders.id
    console.log(id)
-   
+   const [page, setPage] = useState(0);
+   const [rowsPerPage, setRowsPerPage] = useState(4);
    console.log(leaders)
 
    const navigate = useNavigate()
@@ -30,8 +31,11 @@ const Request = () => {
         navigate(`/request/${id}`)
   }
   
-  
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
  
+  const paginatedUsers = leaders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
 
   return (
@@ -40,7 +44,7 @@ const Request = () => {
     
     <div>
         
-        <TableContainer component={Paper} style={{ width: '70%', margin: '50px auto' ,marginLeft:'350px',marginTop:'-70px'}}>
+        <TableContainer component={Paper} style={{ width: '70%', margin: '50px auto' ,marginLeft:'350px',marginTop:'-300px'}}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -51,7 +55,7 @@ const Request = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {leaders.map((leader) => (
+          {paginatedUsers.map((leader) => (
             <TableRow key={leader.id}>
               <TableCell component="th" scope="row">
                 <AccountCircleIcon style={{ verticalAlign: 'middle', marginRight: '8px' }} />
@@ -79,6 +83,28 @@ const Request = () => {
         </TableBody>
       </Table>
     </TableContainer>
+    <TablePagination
+          component="div"
+          count={leaders.length}  
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          // onRowsPerPageChange={handleChangeRowsPerPage}
+         style={{marginLeft:'12px'}}   sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          padding: '16px',
+          marginLeft:'10px',
+          '& .MuiTablePagination-select': {
+            backgroundColor: '#f5f5f5',
+            borderRadius: '4px',
+          },
+          '& .MuiTablePagination-actions': {
+            '& .MuiIconButton-root': {
+              color: '#1976d2',  
+            },
+          },
+        }}/>
     </div>
     </>
   )

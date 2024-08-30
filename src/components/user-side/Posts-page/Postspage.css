@@ -34,7 +34,7 @@
   
   }
   .main-container {
-    
+    margin-left: 489px;
     overflow-y: auto;
 }
 
@@ -48,14 +48,20 @@
 .dashboard{
   position: fixed;
   margin-left: 50px;
+  z-index: 1;
 }
 .right-side-container{
   margin-top:410px;
   position: fixed;
+  z-index: 2;
 
 }
 .create-post{
   
-
+  z-index: 3;
   position: fixed;
+  
+}
+.right-side-container{
+  margin-top:80px ;
 }
