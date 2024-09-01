@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, verifyOtp,loginUser,fetchLeaders,fetchTravellers } from '../actions/authActions';
+import { registerUser, verifyOtp,loginUser,fetchLeaders,fetchTravellers,createTrip,updateTrip } from '../actions/authActions';
 
 
 
@@ -146,7 +146,27 @@ const userSlice = createSlice({
       .addCase(fetchTravellers.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      });
+      }).addCase(createTrip.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createTrip.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(createTrip.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateTrip.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(updateTrip.fulfilled, (state) => {
+      state.isLoading = false;
+    })
+    .addCase(updateTrip.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+
 
   },
 });

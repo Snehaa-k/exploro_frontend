@@ -68,8 +68,8 @@ const TravellerProfile = () => {
         { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
         { text: 'Inbox', icon: <MessageIcon />, path: '/inbox' },
         { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts' },
-        { text: 'Planned Journeys', icon: <FlightTakeoffIcon />, path: '/planned-journeys' }, 
-        { text: 'Manage Itineraries', icon: <EventNoteIcon />, path: '/manage-itineraries' },
+        { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/planned-journeys' }, 
+        { text: 'Create Trip', icon: <EventNoteIcon />, path: '/manage-itineraries' },
         { text: 'Log Out', icon: <ExitToAppIcon />, onClick: handlelogout },
       ];
       

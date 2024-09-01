@@ -185,7 +185,32 @@ export const fetchTravellers = createAsyncThunk(
 
 
 
+export const createTrip = createAsyncThunk(
+  'user/createTrip',
+  async (userData, { rejectWithValue }) => {
+    try {
+      
+      const response = await api.post('/createtrip/', userData);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+     
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
+export const updateTrip = createAsyncThunk(
+  'trips/updateTrip',
+  async ({  updatedTrip }, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`/updatetrip/`, updatedTrip);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 
 
@@ -195,6 +220,12 @@ export const logoutadmin = () => {
   localStorage.removeItem('admin_refresh_token');
   return { type: 'LOGOUT' };
 };
+
+
+
+
+
+
 
 // export const logoutUser = () => {
 //   localStorage.removeItem('access_token');

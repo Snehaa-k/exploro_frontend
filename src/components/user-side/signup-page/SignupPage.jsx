@@ -15,7 +15,7 @@ const SignupPage = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  // Validation schema using Yup
+ 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required('Username is required'),
     email: Yup.string().email('Invalid Email Address').required('Email is required'),

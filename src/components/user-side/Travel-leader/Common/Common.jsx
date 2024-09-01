@@ -22,8 +22,8 @@ const CommonLayout = ({ children }) => {
     { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
     { text: 'Inbox', icon: <MessageIcon />, path: '/inbox' },
     { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts' },
-    { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/planned-journeys' },
-    { text: 'Create Trip', icon: <EventNoteIcon />, path: '/manage-itineraries' },
+    { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/viewtrip' },
+    { text: 'Create Trip', icon: <EventNoteIcon />, path: '/triplan' },
     { text: 'LogOut', icon: <ExitToAppIcon /> },
   ];
 
