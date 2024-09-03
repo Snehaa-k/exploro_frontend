@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 
 
-const preferences = ['Historical Sites', 'Natural Wonders', 'Famous Cities', 'Hilly areas', 'Landmarks'];
+const preferences = ['Historical Sites', 'Natural Wonders', 'Famous Cities', 'Hilly areas', 'Adventure'];
 const UserPreference = () => {
     
     const [selectedPreference, setSelectedPreference] = useState('');

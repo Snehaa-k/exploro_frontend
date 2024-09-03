@@ -98,6 +98,8 @@ const TripList = () => {
     navigate('/triplan');
   };
 
+ 
+
   useEffect(() => {
     const fetchTrips = async () => {
       if (!token) {
@@ -113,8 +115,8 @@ const TripList = () => {
       }
     };
 
-    fetchTrips();
-  }, [token]);
+  fetchTrips();
+  }, [editTripOpen]);
 
   return (
     <div>

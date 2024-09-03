@@ -23,7 +23,9 @@ import NotFoundPage from './pages/404error/Error404'
 import PlanTrips from './pages/Userside/TravelLeader/Trip-page/planTrips/PlanTrips'
 import CreateTrip from './components/user-side/Travel-leader/PlanTripComponent/CreateTrip'
 import ViewTrip from './pages/Userside/TravelLeader/Trip-page/ViewTrips/ViewTrip'
-
+import Destination from './pages/Userside/User-Destination/Destination'
+import PlaceInformation from './components/user-side/user-destination-view/places-information/PlaceInformation'
+import DestinationTabs from './components/user-side/user-destination-view/destination-tabs/DestinationTabs'
 
 
 
@@ -58,7 +60,9 @@ function App() {
             <Route path = '/posts' element = { <UserPost/>}/>
             <Route path = '/triplan' element = { <PlanTrips/>}/>
             <Route path = '/viewtrip' element = { <ViewTrip/>}/>
-            
+            <Route path = '/destination' element = { <Destination/>}/>
+            <Route path = '/information' element = { <PlaceInformation/>}/>
+            <Route path = '/tab' element = { <DestinationTabs/>}/>
             
             
 

@@ -40,7 +40,16 @@ const Navbar = ({ title = 'Exploro', menuItems = [], onMenuClick }) => {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, 
+      position: 'fixed',
+      top: 0,
+      left: 0,
+     
+      width: '100%',
+      backgroundColor: '#fff', 
+      zIndex: 1100, 
+      boxShadow: '0 2px 4px rgba(0,0,0,0.2)', 
+    }}>
       <AppBar position="static" style={{ backgroundColor: '#025E73' }}>
         <Toolbar>
           <IconButton
@@ -63,8 +72,9 @@ const Navbar = ({ title = 'Exploro', menuItems = [], onMenuClick }) => {
           ) : (
             <div style={{ marginRight: '150px' }}>
               {menuItems.map((item, index) => (
-                <Button key={index} color="inherit" onClick={item.onClick}>
-                  {item.label}
+                <Button key={index} color="inherit" onClick={item.onClick}  sx={{ textTransform: 'none' }} >
+                   {item.icon}
+                   <Typography variant="body1" sx={{ marginTop: '4px' }}>{item.label}</Typography>
                 </Button>
               ))}
             </div>

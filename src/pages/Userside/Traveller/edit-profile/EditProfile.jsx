@@ -50,6 +50,15 @@ const EditProfile = () => {
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
   console.log(image)
+  const HandleProfile = ()=>{
+    navigate('/travellerprofile')
+  }
+  const HandleDestination = ()=>{
+    navigate('/destination')
+  }
+  const HandleHome = ()=>{
+    navigate('/posts')
+  }
 
   const handlelogout = async () =>{
       
@@ -250,19 +259,19 @@ const EditProfile = () => {
   
   }  
   const menuItemsn = [
-    { label: 'Home', icon: <HomeIcon />, onClick: () => console.log('Home clicked') },
-    { label: 'Destination', icon: <ExploreIcon />, onClick: () => console.log('Destination clicked') },
-    { label: 'Profile', icon: <AccountCircleIcon />, onClick: () => console.log('Profile clicked') },
+    { label: 'Home', icon: <HomeIcon />, onClick: HandleHome },
+    { label: 'Destination',  onClick: HandleDestination },
+    { label: 'Profile', icon: <AccountCircleIcon />, onClick:HandleProfile },
   ];
  
   const menuItemsLead = [
-    { label: 'Home', onClick: () => console.log('Home clicked') },
-    { label: 'Create', onClick: () => console.log('create clicked') },
-    { label: 'Destination', onClick: () => console.log('Destination clicked') },
+    { label: 'Home',icon: <HomeIcon />, onClick: HandleHome },
+    { label: 'Profile', icon: <AccountCircleIcon />, onClick: HandleProfile },
+    { label: 'Destination',icon: <ExploreIcon />, onClick: HandleDestination },
   ];
 
   return (
-    <div>
+    <div style={{marginTop:'100px'}}>
       {profile.is_travel_leader?<Navbar title="Exploro" menuItems={menuItemsLead} onMenuClick={handleMenuClick} />:<Navbar title="Exploro" menuItems={menuItemsn} onMenuClick={handleMenuClick} />}
   
       {profile.is_travel_leader?<Actions
@@ -271,8 +280,8 @@ const EditProfile = () => {
           { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
           { text: 'Inbox', icon: <MessageIcon />, path: '/inbox' },
           { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts' },
-          { text: 'Planned Journeys', icon: <FlightTakeoffIcon />, path: '/planned-journeys' }, 
-          { text: 'Manage Itineraries', icon: <EventNoteIcon />, path: '/manage-itineraries' }, 
+          { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/planned-journeys' }, 
+          { text: 'Create Trip', icon: <EventNoteIcon />, path: '/manage-itineraries' }, 
           { text: 'Log Out', icon: <ExitToAppIcon />, onClick: handlelogout },
         ]}
       />:<Actions

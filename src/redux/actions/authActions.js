@@ -200,6 +200,7 @@ export const createTrip = createAsyncThunk(
   }
 );
 
+
 export const updateTrip = createAsyncThunk(
   'trips/updateTrip',
   async ({  updatedTrip }, { rejectWithValue }) => {
@@ -212,6 +213,18 @@ export const updateTrip = createAsyncThunk(
   }
 );
 
+export const updatePlaces = createAsyncThunk(
+  'trips/',
+  async ({  updatePlaces }, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`/editplaces/`, updatePlaces);
+      console.log(response.data,"my places")
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 
 

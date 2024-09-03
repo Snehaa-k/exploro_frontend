@@ -81,6 +81,15 @@ const PostsPage = () => {
         likes="99 likes"
         onComment={handleCommentChange} />
     </div>
+    <div className='main-container'>
+    <MainPost  profileImage="https://via.placeholder.com/50"
+        name="Karim Saif"
+        role="Travel Leader"
+        postImage="https://via.placeholder.com/300x200"
+        likes="99 likes"
+        onComment={handleCommentChange} />
+    </div>
+    
     
 
     </div>

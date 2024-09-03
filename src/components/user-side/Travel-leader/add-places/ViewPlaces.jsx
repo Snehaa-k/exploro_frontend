@@ -13,7 +13,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditPlaceModal from '../add-places-edit/AddPlacesEdit'; 
-import api from '../../../../axios-interceptors/AxiosInterceptors'; // Ensure correct path
+import api from '../../../../axios-interceptors/AxiosInterceptors'; 
 import { useNavigate } from 'react-router';
 
 const ViewPlacesModal = ({ open, onClose, trip, onPlaceUpdated, onPlaceDeleted }) => {
@@ -49,38 +49,38 @@ const ViewPlacesModal = ({ open, onClose, trip, onPlaceUpdated, onPlaceDeleted }
     }
   };
 
+  useEffect(()=>{
+    fetchPlaces()
+  },[])
+
   const handleEditClick = (place) => {
     setSelectedPlace(place);
+    console.log(place);
+    
     setEditPlaceOpen(true);
+    
   };
 
-//   const handleDeleteClick = async (placeId) => {
-//     if (!window.confirm('Are you sure you want to delete this place?')) return;
-//     try {
-//       await api.delete(`/places/${placeId}`); // Adjust endpoint as needed
-//       setPlaces(places.filter((place) => place.id !== placeId));
-//       if (onPlaceDeleted) onPlaceDeleted(placeId);
-//     } catch (err) {
-//       console.error('Error deleting place:', err);
-//       setError('Failed to delete place.');
-//     }
-//   };
-
-  const handleEditSave = async (updatedPlace) => {
+  const handleDeleteClick = async (placeId) => {
+    if (!window.confirm('Are you sure you want to delete this place?')) return;
     try {
-      const response = await api.put(`/places/${updatedPlace.id}`, updatedPlace); 
-      setPlaces(
-        places.map((place) => (place.id === updatedPlace.id ? response.data.place : place))
-      );
-      if (onPlaceUpdated) onPlaceUpdated(response.data.place);
-      setEditPlaceOpen(false);
-      setSelectedPlace(null);
+      await api.delete(`/deleteplaces/${placeId}`); 
+      setPlaces(places.filter((place) => place.id !== placeId));
+      alert("Place deleted successfully!");
+
+      if (onPlaceDeleted) onPlaceDeleted(placeId);
+      onClose()
     } catch (err) {
-      console.error('Error updating place:', err);
-      setError('Failed to update place.');
+      console.error('Error deleting place:', err);
+      setError('Failed to delete place.');
     }
   };
 
+  const handleEditSave = async (updatedPlace) => {
+   
+      setEditPlaceOpen(false);
+      setSelectedPlace(null);
+  }
   const handleAddPlace = (newPlace) => {
     setPlaces([...places, newPlace]);
   };
@@ -96,7 +96,8 @@ const ViewPlacesModal = ({ open, onClose, trip, onPlaceUpdated, onPlaceDeleted }
         ) : places.length === 0 ? (
           <Typography>No places added yet.</Typography>
         ) : (
-          places.map((place) => (
+          places.flat().map((place) => (
+
             <Grid
               container
               spacing={2}
@@ -104,11 +105,12 @@ const ViewPlacesModal = ({ open, onClose, trip, onPlaceUpdated, onPlaceDeleted }
               alignItems="center"
               style={{ marginBottom: '10px' }}
             >
+        
               <Grid item xs={10}>
-                <Typography variant="h6">{place.place_namee}</Typography>
+                <Typography variant="h6">{place.place_name}</Typography>
                 <Typography variant="body2"><strong>Description:</strong> {place.description}</Typography>
-                <Typography variant="body2"><strong>Accommodation:</strong> {place.accommodation}</Typography>
-                <Typography variant="body2"><strong>Transportation:</strong> {place.transportation}</Typography>
+                <Typography variant="body2"><strong>Accommodation:</strong> {place.accomodation}</Typography>
+                <Typography variant="body2"><strong>Transportation:</strong> {place.Transportation}</Typography>
               </Grid>
               <Grid item xs={2}>
                 <IconButton onClick={() => handleEditClick(place)} color="primary">
