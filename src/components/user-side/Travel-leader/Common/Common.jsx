@@ -12,6 +12,8 @@ import './Common.css';
 
 const CommonLayout = ({ children }) => {
 
+
+
   const menuItemsNavbar = [
     { label: 'Home', onClick: () => console.log('Home clicked') },
     { label: 'Create', onClick: () => console.log('Create clicked') },
@@ -34,7 +36,7 @@ const CommonLayout = ({ children }) => {
       </div>
       <div className="main-content">
         <div className='actions'>
-          <Actions menuItems={menuItemsActions} />
+          <Actions   menuItems={menuItemsActions} />
         </div>
         <div className="trip-creation medium-size">
           {children}

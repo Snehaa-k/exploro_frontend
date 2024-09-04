@@ -1,71 +1,86 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Stack, Typography, Avatar, Button, IconButton } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import api from '../../../../axios-interceptors/AxiosInterceptors';
 
-const TripDetails = () => {
+const TripDetails = ({tripId}) => {
+  console.log(tripId);
+  const [trip,setTrip] = useState([])
+  console.log(trip,"my trips");
+  
+  
+
+  useEffect(()=>{
+    const fetchTrip = async () => {
+      const response = await api.get(`/viewonetrip/${tripId}/`);
+      setTrip(response.data.trip);
+    };
+
+    fetchTrip();
+  }, [tripId]);
+
+
+
   return (
     <Box sx={{ padding: 4, maxWidth: 800, margin: 'auto' }}>
       {/* Title */}
-      <Typography variant="h4" fontWeight="bold" gutterBottom>
+      {/* <Typography variant="h4" fontWeight="bold" gutterBottom>
         Discovering Two Places: Chapter Two of Our Global Adventure
-      </Typography>
+      </Typography> */}
 
       {/* Location */}
       <Stack direction="row" alignItems="center" spacing={1} sx={{ marginBottom: 2 }}>
         <LocationOnIcon fontSize="small" />
-        <Typography variant="h6">Wayanad</Typography>
+        <Typography variant="h6" fontWeight="bold">{trip.location}</Typography>
       </Stack>
 
    
       <Stack direction="row" spacing={2} alignItems="center" sx={{ marginBottom: 3 }}>
-        <Avatar src="https://via.placeholder.com/100" sx={{ width: 56, height: 56 }} />
-        <Typography variant="body1">Hosted by Sneha</Typography>
+        <Avatar src={trip.travelead_profile_image} sx={{ width: 56, height: 56 }} />
+        <Typography variant="body1">Hosted by {trip.travelead_username}</Typography>
         <IconButton color="primary">
-        {/* Replace with a real icon for messaging */}
          <ChatBubbleOutlineIcon/>
         </IconButton>
       </Stack>
 
-      {/* Image and Description */}
       <Box sx={{ display: 'flex', marginBottom: 3 }}>
         <img
-          src="https://via.placeholder.com/200"
+          src={trip.Trip_image}
           alt="Trip"
-          style={{ width: 200, height: 150, marginRight: 20, objectFit: 'cover' }}
+          style={{ width: 200, height: 150, marginRight: 20, objectFit: 'cover'}}
         />
         <Typography variant="body1">
-          Hey Adventure Seekers!
-          <br />
-          Join us for an exciting journey to Wayanad, where you’ll experience breathtaking views...
+         {trip.description}
         </Typography>
       </Box>
 
-      {/* Amount and Slots */}
       <Stack direction="row" justifyContent="space-between" sx={{ marginBottom: 3 }}>
         <Box>
           <Typography variant="h6">Amount</Typography>
           <Typography variant="h5" color="primary">
-            ₹ 1,000
+            ₹{trip.amount}
           </Typography>
-        </Box>
+          </Box>
+          <Box>
+    <Typography variant="h6">Duration</Typography>
+    <Typography variant="h5" color="primary">
+      {trip.duration}
+    </Typography>
+  </Box>
         <Box>
           <Typography variant="h6">Slots</Typography>
-          <Typography variant="h5">2 Only</Typography>
+          <Typography variant="h5">{trip.participant_limit} Only</Typography>
         </Box>
       </Stack>
 
-      {/* Next Button */}
-      <Button variant="contained" color="primary" sx={{ marginBottom: 3 }}>
-        Next
-      </Button>
+     
 
-      {/* Contact Section */}
       <Box sx={{ padding: 2, border: '1px solid #ccc', borderRadius: 2, display: 'flex', alignItems: 'center' }}>
-        <Avatar src="https://via.placeholder.com/50" sx={{ width: 40, height: 40, marginRight: 2 }} />
+        <Avatar src={trip.travelead_profile_image} sx={{ width: 40, height: 40, marginRight: 2 }} />
         <Box>
           <Typography variant="body1">For more concerns, your trip leader</Typography>
-          <Typography variant="body2">Sneha | Contact: your.contact@example.com</Typography>
+          <Typography variant="body2">{trip.travelead_username} | Contact: {trip.travelead_email}</Typography>
         </Box>
       </Box>
     </Box>

@@ -211,17 +211,12 @@ const EditProfile = () => {
     formDatasend.append('country_state', formData.country_state);
 
     try {
-        const response = await axios.post(`${API_URL}/profile/`, formDatasend, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-                // Do not set 'Content-Type' header manually with FormData
-            }
-        });
+        const response = await api.post(`${API_URL}/profile/`, formDatasend)
          if (response){
           Swal.fire({
             icon: 'success',
-            title: 'Registration Successful',
-            text: 'Redirecting to home page...',
+            title: 'Edited Successfully..',
+            text: 'Redirecting to Profile Page',
             timer: 2000, 
             timerProgressBar: true,
             showConfirmButton: false
@@ -280,8 +275,8 @@ const EditProfile = () => {
           { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
           { text: 'Inbox', icon: <MessageIcon />, path: '/inbox' },
           { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts' },
-          { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/planned-journeys' }, 
-          { text: 'Create Trip', icon: <EventNoteIcon />, path: '/manage-itineraries' }, 
+          { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/viewtrip' }, 
+          { text: 'Create Trip', icon: <EventNoteIcon />, path: '/triplan' }, 
           { text: 'Log Out', icon: <ExitToAppIcon />, onClick: handlelogout },
         ]}
       />:<Actions

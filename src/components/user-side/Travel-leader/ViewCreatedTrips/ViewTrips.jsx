@@ -143,7 +143,7 @@ const TripList = () => {
                     <PlaceholderImage src="path_to_placeholder_image" alt="No trips available" />
                     <div>No trips available</div>
                     <StyledButton variant="contained" onClick={handleNavigate}>
-                      Go to Another Page
+                      Create Trip
                     </StyledButton>
                   </TableCell>
                 </TableRow>

@@ -1,26 +1,44 @@
 import React, { useState } from 'react';
-import { Modal, Box, Button, TextField, Typography, IconButton } from '@mui/material';
+import { Modal, Box, Button, TextField, Typography, IconButton ,InputLabel,FormControl,Select,MenuItem} from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
+import { createPosts } from '../../../redux/actions/authActions';
+import { useDispatch } from 'react-redux';
 
 const PhotoModal = ({ open, handleClose, onPhotoSubmit }) => {
+  const dispatch = useDispatch();
   const [photo, setPhoto] = useState(null);
   const [description, setDescription] = useState('');
+  const [destinationType, setDestinationType] = useState(''); 
+  const [photoPreview, setPhotoPreview] = useState(null);
 
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setPhoto(URL.createObjectURL(file)); // Show preview of the image
+
+      setPhoto(file); 
+      setPhotoPreview(URL.createObjectURL(file));
     }
   };
 
+
   const handleSubmit = () => {
-    if (onPhotoSubmit) {
-      onPhotoSubmit({ photo, description });
-    }
-    handleClose();
-    setPhoto(null);
-    setDescription('');
+   
+      const formData = new FormData();
+      formData.append('post_image', photo);
+      formData.append('description', description);
+      formData.append('destination_type', destinationType);
+  
+    dispatch(createPosts(formData));
+      
+      handleClose();
+      setPhoto(null);
+      setDescription('');
+      setDestinationType(''); 
+   
   };
+
+  
+
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -46,7 +64,7 @@ const PhotoModal = ({ open, handleClose, onPhotoSubmit }) => {
         >
           {photo ? (
             <img
-              src={photo}
+            src={photoPreview}
               alt="Uploaded"
               style={{
                 width: '100%',
@@ -86,8 +104,23 @@ const PhotoModal = ({ open, handleClose, onPhotoSubmit }) => {
           onChange={(e) => setDescription(e.target.value)}
           sx={{ marginBottom: 2 }}
         />
+         <FormControl fullWidth >
+          <InputLabel id="destination-type-label">Preferred Destination Type</InputLabel>
+          <Select
+            labelId="destination-type-label"
+            // value={destinationType}
+            onChange={(e) => setDestinationType(e.target.value)}
+            label="Preferred Destination Type"
+          >
+            <MenuItem value="Adventures">Adventures</MenuItem>
+            <MenuItem value="Natural Wonders">Natural Wonders</MenuItem>
+            <MenuItem value="Cultural Experiences">Historical Sites</MenuItem>
+            <MenuItem value="Beaches">Famous Cities</MenuItem>
+            <MenuItem value="Mountains">Hilly areas</MenuItem>
+          </Select>
+        </FormControl>
 
-        <Button variant="contained" color="primary" fullWidth onClick={handleSubmit}>
+        <Button variant="contained" color="primary" fullWidth onClick={handleSubmit} style={{marginTop:'2px'}}>
           Add Post
         </Button>
       </Box>

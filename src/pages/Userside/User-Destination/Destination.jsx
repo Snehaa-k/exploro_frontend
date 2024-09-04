@@ -52,6 +52,7 @@ const Destination = () => {
   const [trips,setTrips] = useState([])
   const navigate = useNavigate()
   const token = localStorage.getItem("accessToken")
+  
   console.log(trips);
   
   const HandleProfile = ()=>{
@@ -63,15 +64,15 @@ const Destination = () => {
   const HandleHome = ()=>{
     navigate('/posts')
   }
+  const handleClick = (id) => {
+    navigate(`/viewdestination/${id}`);
+  };
 
  
 
   useEffect(() => {
     const fetchTrips = async () => {
-      if (!token) {
-        setError("profile not found");
-        return;
-      }
+     
       try {
         const response = await api.get(`/viewalltrips/`);
         const tripsWithMonth = response.data.trip.map((trip) => ({
@@ -83,7 +84,7 @@ const Destination = () => {
         setTrips(tripsWithMonth);
         setTrips([response.data.trip]);
       } catch (error) {
-        setError('Error fetching trips');
+        // setError('Error fetching trips');
         console.error('Error fetching trips:', error.message);
       }
     };
@@ -255,8 +256,10 @@ const Destination = () => {
         <Grid container spacing={4}>
           {filteredTrips.length ? (
             filteredTrips.flat().map((trip) => (
-              <Grid item xs={12} sm={4} md={4} key={trip.id}>
-                <MainView trip={trip} />
+              <Grid item xs={12} sm={4} md={4} key={trip.id}  >
+               <Box  onClick={()=>handleClick(trip.id)}  sx={{ cursor: 'pointer' }}>
+                  <MainView trip={trip} />
+              </Box>
               </Grid>
             ))
           ) : (

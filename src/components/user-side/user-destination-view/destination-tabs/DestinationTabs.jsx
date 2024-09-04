@@ -1,10 +1,15 @@
 import React from 'react'
 import  { useState } from 'react';
 import { Box, Tabs, Tab, Button,  Container } from '@mui/material';
+import TourPlan from '../destination-information/DestinationInformation';
+import TripDetails from '../places-information/PlaceInformation';
+import { useNavigate } from 'react-router';
 
-const DestinationTabs = () => {
+const DestinationTabs = ({tripId}) => {
     const [value, setValue] = useState(0);
-
+    const token = localStorage.getItem("accessToken")
+    const navigate = useNavigate()
+   
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
@@ -34,8 +39,8 @@ const DestinationTabs = () => {
           <Tab label="Payment" />
         </Tabs>
         <Box p={3}>
-          {value === 0 }
-          {value === 1  }
+          {value === 0 && <TripDetails tripId={tripId} /> }
+          {value === 1 && <TourPlan tripId={tripId} />  }
           {value === 2 }
           {value === 3 }
         </Box>

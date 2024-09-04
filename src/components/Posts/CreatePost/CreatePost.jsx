@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Box, TextField, Paper, IconButton, Avatar, Select, MenuItem, FormControl, Typography } from '@mui/material';
 import { PhotoCamera, Article, Send } from '@mui/icons-material';
 import EmojiPicker from 'emoji-picker-react';
-import PhotoModal from './PhotoModal'; // Import the new PhotoModal component
+import PhotoModal from './PhotoModal';
+import {  createPosts } from '../../../redux/actions/authActions';
 
-const CreatePost = ({ onPostSubmit }) => {
+const CreatePost = () => {
   const [content, setContent] = useState('');
   const [postType, setPostType] = useState('Text');
   const [chosenEmoji, setChosenEmoji] = useState(null);
@@ -12,20 +13,31 @@ const CreatePost = ({ onPostSubmit }) => {
   const [image, setImage] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newPost = { content, postType, chosenEmoji, image };
+  const handleSubmit =  () => {
+    e.preventDefault();
 
-    if (onPostSubmit) onPostSubmit(newPost);
+   
+    const formData = new FormData();
+    
+    formData.append('description', description);
 
-    setContent(''); setPostType('Text'); setChosenEmoji(null); setImage(null);
+   const response =  dispatch(createarticle(formData));
+   if(response){
+    alert("created")
+   }
+    
+    
+
+    setContent(''); setPostType('Text'); setChosenEmoji(null); 
   };
+
+  
 
   const handleEmojiClick = (event, emojiObject) => {
-    setChosenEmoji(emojiObject.emoji);
-    setContent(content + emojiObject.emoji);
-    setShowEmojiPicker(false);
-  };
+    setContent(content + emojiObject.emoji); 
+    setShowEmojiPicker(false); 
+};
+
 
   const handlePhotoSubmit = ({ photo, description }) => {
     setImage(photo);
@@ -43,8 +55,8 @@ const CreatePost = ({ onPostSubmit }) => {
           fullWidth
           multiline
           rows={1}
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
+          value={content} // Controlled component for the text field value
+          onChange={(e) => setContent(e.target.value)} // Update content state on text change
           InputProps={{
             endAdornment: (
               <IconButton onClick={handleSubmit} size="small">
@@ -67,21 +79,6 @@ const CreatePost = ({ onPostSubmit }) => {
           </IconButton>
         </Box>
 
-        {/* Post Type Selection */}
-        <FormControl sx={{ minWidth: 80 }}>
-          <Select
-            value={postType}
-            onChange={(e) => setPostType(e.target.value)}
-            displayEmpty
-            inputProps={{ 'aria-label': 'Post Type' }}
-            sx={{ width: 100, height: 30, fontSize: 12 }}
-          >
-            <MenuItem value="Text">Text</MenuItem>
-            <MenuItem value="Photo">Photo</MenuItem>
-            <MenuItem value="Article">Article</MenuItem>
-          </Select>
-        </FormControl>
-
         {/* Emoji picker */}
         <Box sx={{ position: 'relative' }}>
           <IconButton onClick={() => setShowEmojiPicker(!showEmojiPicker)} size="small">
@@ -94,6 +91,7 @@ const CreatePost = ({ onPostSubmit }) => {
           )}
         </Box>
       </Box>
+
 
      
 

@@ -62,6 +62,7 @@ const TravellerProfile = () => {
   
       }
     }
+   
 
     const tabs = [
         { value: 'one', label: 'Upcoming Trips', content: <div>Content for Upcoming Trips</div> },
@@ -78,7 +79,7 @@ const TravellerProfile = () => {
         { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
         { text: 'Inbox', icon: <MessageIcon />, path: '/inbox' },
         { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts' },
-        { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/viewtrip' }, 
+        { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/viewtrip', }, 
         { text: 'Create Trip', icon: <EventNoteIcon />, path: '/triplan' },
         { text: 'Log Out', icon: <ExitToAppIcon />, onClick: handlelogout },
       ];

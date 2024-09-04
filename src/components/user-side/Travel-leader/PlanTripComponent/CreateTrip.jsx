@@ -75,7 +75,18 @@ const CreateTrip = () => {
 
     const response = await dispatch(createTrip(formDatasend)).unwrap();
     if (response) {
-      navigate('/login');
+      Swal.fire({
+        icon: 'success',
+        title: 'Trip created successfully',
+        text: 'Redirecting to trips page',
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      }).then(() => {
+        navigate('/viewtrip');
+      });
+
+      
     }
 
     setSubmitting(false);

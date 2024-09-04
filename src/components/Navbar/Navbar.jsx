@@ -82,6 +82,7 @@ const Navbar = ({ title = 'Exploro', menuItems = [], onMenuClick }) => {
         </Toolbar>
       </AppBar>
     </Box>
+    
   );
 };
 

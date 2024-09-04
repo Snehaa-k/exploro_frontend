@@ -200,6 +200,35 @@ export const createTrip = createAsyncThunk(
   }
 );
 
+export const createPosts = createAsyncThunk(
+  'user/createPosts',
+  async (userData, { rejectWithValue }) => {
+    try {
+      
+      const response = await api.post('/posts/', userData);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+     
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const createarticle = createAsyncThunk(
+  'user/createarticle',
+  async (userData, { rejectWithValue }) => {
+    try {
+      
+      const response = await api.post('/article/', userData);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+     
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 
 export const updateTrip = createAsyncThunk(
   'trips/updateTrip',

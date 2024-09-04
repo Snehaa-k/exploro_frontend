@@ -26,7 +26,8 @@ import ViewTrip from './pages/Userside/TravelLeader/Trip-page/ViewTrips/ViewTrip
 import Destination from './pages/Userside/User-Destination/Destination'
 import PlaceInformation from './components/user-side/user-destination-view/places-information/PlaceInformation'
 import DestinationTabs from './components/user-side/user-destination-view/destination-tabs/DestinationTabs'
-
+import TourPlan from './components/user-side/user-destination-view/destination-information/DestinationInformation'
+import UserDestination from './pages/UserDestinationView/UserDestination'
 
 
 // import './App.css'
@@ -59,10 +60,17 @@ function App() {
             <Route path = '/travellerprofile' element = { <TravellerProfile/>}/>
             <Route path = '/posts' element = { <UserPost/>}/>
             <Route path = '/triplan' element = { <PlanTrips/>}/>
-            <Route path = '/viewtrip' element = { <ViewTrip/>}/>
-            <Route path = '/destination' element = { <Destination/>}/>
-            <Route path = '/information' element = { <PlaceInformation/>}/>
-            <Route path = '/tab' element = { <DestinationTabs/>}/>
+            <Route path = '/viewtrip' element = {<ViewTrip/>}/>
+            <Route path = '/destination' element = {<Destination/>}/>
+           
+           
+            <Route path = '/information' element = {<PlaceInformation/>}/>
+            <Route path = '/tab' element = {<DestinationTabs/>}/>
+            <Route path = '/places' element = {<TourPlan/>}/>
+           
+            <Route path = '/viewdestination/:id' element = {<UserDestination/>}/>
+
+            
             
             
 

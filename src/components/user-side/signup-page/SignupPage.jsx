@@ -60,7 +60,7 @@ const SignupPage = () => {
 
   return (
     <div>
-      <h4 className='text-container'>Sign Up</h4>
+      <h4 className='text-container'>SIGN UP</h4>
       <Formik
         initialValues={{
           username: '',

@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { Box, Typography, Card, CardContent, CardMedia, Avatar, IconButton, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, List, ListItem, ListItemText } from '@mui/material';
+import { Box, Typography, Card, CardContent, CardMedia, Avatar, IconButton, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, List, ListItem } from '@mui/material';
 import { Favorite, Comment } from '@mui/icons-material';
 import './MainPost.css';
 
-const MainPost = ({ avatarUrl, username, role, postImage, likes }) => {
+const MainPost = ({ avatarUrl, username, role, postImage, article, imageLikes, articleLikes }) => {
   const [isCommentModalOpen, setCommentModalOpen] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState({
+    image: imageLikes || 0,
+    article: articleLikes || 0,
+  });
 
   const handleCommentClick = () => {
     setCommentModalOpen(true);
@@ -16,11 +20,18 @@ const MainPost = ({ avatarUrl, username, role, postImage, likes }) => {
     if (comment) {
       const newComment = {
         text: comment,
-        timestamp: new Date().toLocaleString(),
+        timestamp: new Date().toLocaleString(), // Includes date and time
       };
       setComments([...comments, newComment]);
       setComment('');
     }
+  };
+
+  const handleLike = (type) => {
+    setLikes({
+      ...likes,
+      [type]: likes[type] + 1,
+    });
   };
 
   const handleClose = () => {
@@ -43,6 +54,28 @@ const MainPost = ({ avatarUrl, username, role, postImage, likes }) => {
             </Typography>
           </Box>
         </CardContent>
+
+        {/* Article Content */}
+        {article && (
+          <CardContent>
+            <Typography variant="body1" sx={{ marginBottom: 2 }}>
+              {article}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton onClick={() => handleLike('article')}>
+                <Favorite />
+              </IconButton>
+              <Typography variant="body2" color="textSecondary">
+                {likes.article} likes
+              </Typography>
+              <IconButton onClick={handleCommentClick} sx={{ marginLeft: 2 }}>
+                <Comment />
+              </IconButton>
+            </Box>
+          </CardContent>
+        )}
+
+        {/* Post Image */}
         <CardMedia
           component="img"
           height="200"
@@ -51,7 +84,7 @@ const MainPost = ({ avatarUrl, username, role, postImage, likes }) => {
         />
         <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box>
-            <IconButton>
+            <IconButton onClick={() => handleLike('image')}>
               <Favorite />
             </IconButton>
             <IconButton onClick={handleCommentClick}>
@@ -59,7 +92,7 @@ const MainPost = ({ avatarUrl, username, role, postImage, likes }) => {
             </IconButton>
           </Box>
           <Typography variant="body2" color="textSecondary">
-            {likes || "0"} likes
+            {likes.image} likes
           </Typography>
         </CardContent>
       </Card>
@@ -76,7 +109,7 @@ const MainPost = ({ avatarUrl, username, role, postImage, likes }) => {
                   <Box sx={{ width: '100%' }}>
                     <Typography variant="body1">{comment.text}</Typography>
                     <Typography variant="caption" color="textSecondary" sx={{ display: 'block', marginTop: '4px' }}>
-                      {comment.timestamp}
+                      {comment.timestamp} {/* Display timestamp including time */}
                     </Typography>
                   </Box>
                 </ListItem>
