@@ -33,7 +33,7 @@ const UserDestination = () => {
   return (
     <div>
         <Navbar title="Exploro" menuItems={menuItemsLead} />
-        <div style={{ paddingTop: '60px',marginLeft:'700px',marginTop:'40px' }}> {/* Adjust this value based on Navbar height */}
+        <div style={{ paddingTop: '60px',marginLeft:'700px',marginTop:'40px' }}> 
         <Typography variant='h5'>Details</Typography>
       </div>
         <div style={{marginTop:'50px'}}>

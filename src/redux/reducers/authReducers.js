@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, verifyOtp,loginUser,fetchLeaders,fetchTravellers,createTrip,updateTrip } from '../actions/authActions';
+import { registerUser, verifyOtp,loginUser,fetchLeaders,fetchTravellers,createTrip,updateTrip ,createPosts} from '../actions/authActions';
 
 
 
@@ -10,6 +10,7 @@ const userSlice = createSlice({
     refreshToken: null,
     leaders: [],
     travellers: [],
+  
     user: null,
     isLoading: false,
     error: null,

@@ -27,7 +27,12 @@ const AddPlaceModal = ({ open, onClose, onSave, tripId }) => {
     try {
       const response = await api.post('/addplaces/', placeData);
       onSave(response.data); 
+      
       onClose();
+      setPlaceName('')
+      setDescription('')
+      setAccomodation('')
+      setTransportation('')
     } catch (err) {
       console.error('Error saving place:', err);
       setError('Failed to save place.');

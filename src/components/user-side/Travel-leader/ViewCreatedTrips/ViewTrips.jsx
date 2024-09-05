@@ -52,6 +52,8 @@ const TripList = () => {
   const [error, setError] = useState('');
   const token = localStorage.getItem('accessToken');
   const navigate = useNavigate();
+  console.log(plans);
+  
 
   const handleAddTrip = (newTrip) => {
     setTrips([...trip, newTrip]);
@@ -148,10 +150,10 @@ const TripList = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                plans.map((trip) => (
+                plans.flat().map((trip) => (
                   <TableRow key={trip.id}>
                     <TableCell>
-                      <StyledImage src={`${API_URL}${trip.Trip_image}`} alt={trip.location} />
+                      <StyledImage src={trip.Trip_image} alt={trip.location} />
                     </TableCell>
                     <TableCell>{trip.location}</TableCell>
                     <TableCell>{trip.accomodation}</TableCell>

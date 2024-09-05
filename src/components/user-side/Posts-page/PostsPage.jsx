@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ListItem,ListItemText,List,Box,Typography,Paper ,Avatar,ListItemIcon} from '@mui/material'
 import ChatIcon from '@mui/icons-material/Chat'; 
 import NotificationsIcon from '@mui/icons-material/Notifications'; 
@@ -10,14 +10,45 @@ import DashboardOverview from '../../Posts/Sidebar/SideBar';
 import Sidebar from '../../Posts/RightSideBar/RightSide';
 import MainPost from '../../Posts/MainPost/MainPost';
 import CreatePost from '../../Posts/CreatePost/CreatePost';
+import { fetchuser } from '../../../redux/actions/authActions';
+import { useDispatch } from 'react-redux';
+import { API_URL } from '../../../apiservice/Apiservice';
 
 
 
 const PostsPage = () => {
+  const dispatch = useDispatch()
+  const [user,setUser] = useState([])
+  const [profile,setProfile] = useState([])
+  console.log(profile,"imagee")
+  const token = localStorage.getItem('accessToken')
+  console.log(user,"hai user");
+  
+  useEffect(()=>{
+  
+  const fetchUserData = async () => {
+    try {
+      const response = await dispatch(fetchuser()); 
+      console.log(response.payload);
+      
+      if (response) {
+        setUser(response.payload.user); 
+        setProfile(response.payload.profile)
+      }
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+    }
+  };
+
+  fetchUserData();
+}, [dispatch])
+
+
+  
   const items = [
     {
       icon: <PeopleIcon color="primary" />,
-      primaryText: 'Following Travel Leaders',
+      primaryText: `${user.is_travel_leader?"followers":"followeing"}`,
       secondaryText: '0',
     },
     {
@@ -56,37 +87,21 @@ const PostsPage = () => {
     
 
     <div className='right-side-container'>
-     <Sidebar profileImage="https://via.placeholder.com/50"
-        name="Steve Jobs"
-        role="Travel Leader"
-        bio="Bio information goes here"
+     <Sidebar profileImage={`${API_URL}${profile.profile_image}`}
+        name={user.username}
+        role={user.is_travel_leader?"Travel Leader" : "Traveller"}
         menuItems={menuItems} />
     </div>
     <div className='create-post'>
-   <CreatePost/>
+   {user.is_travel_leader && (
+        <div className='create-post'>
+          <CreatePost />
+        </div>
+      )}
    </div>
    <div className='main-container' >
-    <MainPost  profileImage="https://via.placeholder.com/50"
-        name="Karim Saif"
-        role="Travel Leader"
-        postImage="https://via.placeholder.com/300x200"
-        likes="99 likes"
-        onComment={handleCommentChange} />
-    </div>
-    <div className='main-container'>
-    <MainPost  profileImage="https://via.placeholder.com/50"
-        name="Karim Saif"
-        role="Travel Leader"
-        postImage="https://via.placeholder.com/300x200"
-        likes="99 likes"
-        onComment={handleCommentChange} />
-    </div>
-    <div className='main-container'>
-    <MainPost  profileImage="https://via.placeholder.com/50"
-        name="Karim Saif"
-        role="Travel Leader"
-        postImage="https://via.placeholder.com/300x200"
-        likes="99 likes"
+    <MainPost  
+        name={user.username}
         onComment={handleCommentChange} />
     </div>
     

@@ -3,6 +3,8 @@ import { Modal, Box, Button, TextField, Typography, IconButton ,InputLabel,FormC
 import { PhotoCamera } from '@mui/icons-material';
 import { createPosts } from '../../../redux/actions/authActions';
 import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
+import { setUser } from '../../../redux/reducers/authReducers';
 
 const PhotoModal = ({ open, handleClose, onPhotoSubmit }) => {
   const dispatch = useDispatch();
@@ -21,20 +23,34 @@ const PhotoModal = ({ open, handleClose, onPhotoSubmit }) => {
   };
 
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
    
       const formData = new FormData();
       formData.append('post_image', photo);
       formData.append('description', description);
-      formData.append('destination_type', destinationType);
+      formData.append('type_of_trip', destinationType);
   
-    dispatch(createPosts(formData));
+      const response = await dispatch(createPosts(formData));
       
+      
+      if(response){
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Post created sucussfully',
+      text: 'Redirecting to home',
+      timer: 2000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+    }).then(() => {
+      navigate('/posts');
+    });
+  } 
       handleClose();
       setPhoto(null);
       setDescription('');
       setDestinationType(''); 
-   
+  
   };
 
   
@@ -108,7 +124,6 @@ const PhotoModal = ({ open, handleClose, onPhotoSubmit }) => {
           <InputLabel id="destination-type-label">Preferred Destination Type</InputLabel>
           <Select
             labelId="destination-type-label"
-            // value={destinationType}
             onChange={(e) => setDestinationType(e.target.value)}
             label="Preferred Destination Type"
           >

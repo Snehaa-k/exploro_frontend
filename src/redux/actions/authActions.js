@@ -214,6 +214,8 @@ export const createPosts = createAsyncThunk(
     }
   }
 );
+
+
 export const createarticle = createAsyncThunk(
   'user/createarticle',
   async (userData, { rejectWithValue }) => {
@@ -251,6 +253,20 @@ export const updatePlaces = createAsyncThunk(
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchuser = createAsyncThunk(
+  'user/fetchuser',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/viewusers/')
+      console.log(response.data);
+       
+      return response.data; 
+    } catch (error) {
+      return rejectWithValue(error.response.data); 
     }
   }
 );

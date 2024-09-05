@@ -31,9 +31,11 @@ const EditProfile = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const [profile, setProfile] = useState({});
+  const [photo,setPhoto] = useState(null)
   console.log(profile,"profile")
   console.log(profile.is_travel_leader,"leader")
   console.log(profile.id,"id getting")
+
   const token = localStorage.getItem("accessToken");
 
   const [formData, setFormData] = useState({
@@ -164,13 +166,14 @@ const EditProfile = () => {
     
       setFormData(prev => ({ ...prev, profile_image: file }));
       setImage(imageURL);
+      setPhoto(imageURL)
     }
   };
 
 
-  useEffect(() => {
-    console.log('Image URL updated:', image);
-  }, [image]);
+  // useEffect(() => {
+  //   console.log('Image URL updated:', image);
+  // }, [formData]);
 
   const handleClick = () => {
     fileInputRef.current.click();
@@ -301,12 +304,13 @@ const EditProfile = () => {
               style={{ display: 'none' }}
             />
             <div className="circle-background" onClick={handleClick}>
-              
-              {image  ? (
-                <img src={`http://127.0.0.1:8000${image}`} alt="Uploaded" className="uploaded-image" />
-              ) : (
-                <CameraRetroIcon className="camera-icon" />
-              )}
+                    {photo ? (
+          <img src={photo} alt="Uploaded" className="uploaded-image" />
+        ) : image ? (
+          <img src={`http://127.0.0.1:8000${image}`} alt="Uploaded" className="uploaded-image" />
+        ) : (
+          <CameraRetroIcon className="camera-icon" />
+        )}
 
             </div>
           </div>

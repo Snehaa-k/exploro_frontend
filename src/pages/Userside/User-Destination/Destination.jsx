@@ -171,10 +171,11 @@ const Destination = () => {
       <div >
       <Navbar title="Exploro" menuItems={menuItems} />
       </div>
-      
-        <Typography align='center' variant='h5'  >Find Your Destination</Typography>
+      <div style={{ paddingTop: '60px',marginLeft:'0px',marginTop:'45px' }}> 
+      <Typography align='center' variant='h5'>Find Your Destination</Typography>
+      </div>
    
-      <Container maxWidth="md" sx={{ marginTop: '70px' }}>
+      <Container maxWidth="md" sx={{ marginTop: '40px' }}>
         <SearchBar
           variant="outlined"
           fullWidth

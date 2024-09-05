@@ -3,25 +3,31 @@ import { Box, TextField, Paper, IconButton, Avatar, Select, MenuItem, FormContro
 import { PhotoCamera, Article, Send } from '@mui/icons-material';
 import EmojiPicker from 'emoji-picker-react';
 import PhotoModal from './PhotoModal';
-import {  createPosts } from '../../../redux/actions/authActions';
+import {  createarticle } from '../../../redux/actions/authActions';
+import { useDispatch } from 'react-redux';
 
 const CreatePost = () => {
+  const dispatch = useDispatch()
   const [content, setContent] = useState('');
   const [postType, setPostType] = useState('Text');
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [image, setImage] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  console.log(content);
+  
 
-  const handleSubmit =  () => {
+  const handleSubmit =  (e) => {
     e.preventDefault();
 
    
     const formData = new FormData();
     
-    formData.append('description', description);
+    formData.append('article', content);
 
    const response =  dispatch(createarticle(formData));
+   console.log(response);
+   
    if(response){
     alert("created")
    }
@@ -33,8 +39,12 @@ const CreatePost = () => {
 
   
 
-  const handleEmojiClick = (event, emojiObject) => {
-    setContent(content + emojiObject.emoji); 
+  const handleEmojiClick = (event) => {
+    console.log(event.emoji);
+    
+    
+    setContent(content + event.emoji); 
+
     setShowEmojiPicker(false); 
 };
 
@@ -55,8 +65,8 @@ const CreatePost = () => {
           fullWidth
           multiline
           rows={1}
-          value={content} // Controlled component for the text field value
-          onChange={(e) => setContent(e.target.value)} // Update content state on text change
+          value={content} 
+          onChange={(e) => setContent(e.target.value)} 
           InputProps={{
             endAdornment: (
               <IconButton onClick={handleSubmit} size="small">
@@ -100,6 +110,7 @@ const CreatePost = () => {
         open={openModal}
         handleClose={() => setOpenModal(false)}
         onPhotoSubmit={handlePhotoSubmit}
+        
       />
     </Paper>
   );

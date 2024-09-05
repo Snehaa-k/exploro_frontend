@@ -9,6 +9,7 @@ import { createTrip } from '../../../../redux/actions/authActions';
 import { Formik, Form, Field, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
 import { addDays, format } from 'date-fns';
+import Swal from 'sweetalert2';
 
 // Custom text field component
 const CustomTextField = ({ label, ...props }) => {
@@ -74,6 +75,7 @@ const CreateTrip = () => {
     });
 
     const response = await dispatch(createTrip(formDatasend)).unwrap();
+    
     if (response) {
       Swal.fire({
         icon: 'success',

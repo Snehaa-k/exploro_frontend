@@ -28,7 +28,7 @@ import PlaceInformation from './components/user-side/user-destination-view/place
 import DestinationTabs from './components/user-side/user-destination-view/destination-tabs/DestinationTabs'
 import TourPlan from './components/user-side/user-destination-view/destination-information/DestinationInformation'
 import UserDestination from './pages/UserDestinationView/UserDestination'
-
+import UserProfile from './components/user-side/Userprofileview/UserProfile'
 
 // import './App.css'
 
@@ -69,6 +69,7 @@ function App() {
             <Route path = '/places' element = {<TourPlan/>}/>
            
             <Route path = '/viewdestination/:id' element = {<UserDestination/>}/>
+            <Route path = '/userprofile' element = {<UserProfile/>}/>
 
             
             
