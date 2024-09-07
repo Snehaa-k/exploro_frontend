@@ -13,16 +13,44 @@ import CreatePost from '../../Posts/CreatePost/CreatePost';
 import { fetchuser } from '../../../redux/actions/authActions';
 import { useDispatch } from 'react-redux';
 import { API_URL } from '../../../apiservice/Apiservice';
-
+import api from '../../../axios-interceptors/AxiosInterceptors';
+import TravelPostCard from '../../Posts/MainPost/PhotoPost/PhotoPost';
+import TravelArticleCard from '../../Posts/MainPost/articlePost/ArticlePost';
 
 
 const PostsPage = () => {
   const dispatch = useDispatch()
   const [user,setUser] = useState([])
   const [profile,setProfile] = useState([])
+  const [posts, setPosts] = useState([]);
+  const [article, setArticle] = useState([]);
+  const [likes, setLikes] = useState();
+  const [reloadPosts, setReloadPosts] = useState(false);
   console.log(profile,"imagee")
   const token = localStorage.getItem('accessToken')
   console.log(user,"hai user");
+  console.log(likes,"likess");
+  
+  
+  
+  const handleLike = async (postId) => {
+    try {
+      const response = await api.post(`/likeposts/${postId}/`)
+      if(response){
+        console.log('Post liked:',response.data.data.likes);
+        setLikes(response.data.likes)
+       
+
+      }
+        
+    
+    } catch (error) {
+      console.error('Error liking post:', error);
+    }
+  };
+   
+  
+
   
   useEffect(()=>{
   
@@ -44,7 +72,44 @@ const PostsPage = () => {
 }, [dispatch])
 
 
-  
+useEffect(() => {
+  const fetchPosts = async () => {
+   
+    try {
+      const response = await api.get(`/viewposts/`);
+      
+      setPosts(response.data.posts);
+    } catch (error) {
+      console.error('Error fetching trips:', error.message);
+    }
+  };
+
+fetchPosts();
+}, [token,reloadPosts]);
+
+useEffect(() => {
+  const fetchArticle = async () => {
+   
+    try {
+      const response = await api.get(`/viewarticle/`);
+      
+      setArticle(response.data.article);
+    } catch (error) {
+      console.error('Error fetching trips:', error.message);
+    }
+  };
+
+fetchArticle();
+}, [token,reloadPosts]);
+
+const getLatestPost = (posts) => {
+  return posts.reduce((latest, post) => {
+    return new Date(post.created_at) > new Date(latest.created_at) ? post : latest;
+  }, posts[0]);
+};
+
+const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
   const items = [
     {
       icon: <PeopleIcon color="primary" />,
@@ -54,7 +119,7 @@ const PostsPage = () => {
     {
       icon: <CheckCircleIcon color="success" />,
       primaryText: 'Completed Trips',
-      secondaryText: '2',
+      secondaryText: '0',
     },
     
   ];
@@ -95,15 +160,35 @@ const PostsPage = () => {
     <div className='create-post'>
    {user.is_travel_leader && (
         <div className='create-post'>
-          <CreatePost />
+          <CreatePost setReloadPosts={setReloadPosts} />
         </div>
       )}
    </div>
-   <div className='main-container' >
-    <MainPost  
-        name={user.username}
-        onComment={handleCommentChange} />
-    </div>
+   <div className='main-container'>
+        {combinedPosts.map((post) => {
+          // Check if it's a travel post (e.g., it has an `image` field)
+          if (post.post_image) {
+            return (
+              <TravelPostCard
+                key={post.id}
+                post={post}
+                likes={likes || 0} 
+                handleLike={handleLike}
+              />
+            );
+          } else {
+            // Otherwise, render it as an article post
+            return (
+              <TravelArticleCard
+                key={post.id}
+                post={post}
+                // likes={like[post.id] || { image: 0 }} 
+                // handleLike={handleLike}
+              />
+            );
+          }
+        })}
+      </div>
     
     
 

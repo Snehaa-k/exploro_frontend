@@ -9,11 +9,11 @@ const DashboardOverview = ({ items }) => {
       p={2}
       sx={{
         backgroundColor: '#f9f9f9',
-        marginTop: { xs: '20px', sm: '120px' }, // Margin on top adjusts for different screen sizes
-        paddingLeft: { xs: '10px', sm: '40px' }, // Padding adjusts for different screen sizes
-        height: { xs: 'auto', sm: '350px' }, // Height adjusts for different screen sizes
-        width: { xs: '100%', sm: '300px' }, // Width adjusts for different screen sizes
-        overflowY: 'auto' // Ensure content scrolls if needed
+        marginTop: { xs: '20px', sm: '120px' }, 
+        paddingLeft: { xs: '10px', sm: '40px' }, 
+        height: { xs: 'auto', sm: '350px' },
+        width: { xs: '100%', sm: '300px' }, 
+        overflowY: 'auto' 
       }}
     >
       <Typography variant="h6" sx={{ marginBottom: '20px', fontWeight: 'bold' }}>

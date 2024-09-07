@@ -21,6 +21,7 @@ const validationSchema = Yup.object().shape({
 const EditTripModal = ({ open, onClose, trip, onSave }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  console.log(trip.id)
 
   // Handle form submission
   const handleSubmit = async (values) => {
@@ -31,7 +32,7 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
         onClose(values)
         Swal.fire({
           icon: 'success',
-          title: 'Registration Successful',
+          title: 'Successfully Edited..',
           text: 'Redirecting to home page...',
           timer: 2000,
           timerProgressBar: true,
@@ -53,6 +54,7 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
       <DialogContent>
         <Formik
           initialValues={{
+            id : trip.id ||'',
             location: trip.location || '',
             accommodation: trip.accomodation || '',
             transportation: trip.transportation || '',

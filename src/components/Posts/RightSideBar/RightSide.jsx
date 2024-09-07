@@ -10,11 +10,11 @@ const Sidebar = ({ profileImage, name, role, bio, menuItems }) => {
       p={2}
       sx={{
         backgroundColor: '#f9f9f9',
-        width: { xs: '100%', sm: '300px' }, // Full width on mobile, fixed width on larger screens
-        position: { xs: 'static', sm: 'fixed' }, // Static positioning on mobile, fixed on larger screens
-        right: { sm: '20px' }, // Position from the right on larger screens
-        marginTop: { xs: '0', sm: '20px' }, // Margin on larger screens
-        marginBottom: { xs: '20px', sm: '0' } // Margin on smaller screens
+        width: { xs: '100%', sm: '300px' }, 
+        position: { xs: 'static', sm: 'fixed' }, 
+        right: { sm: '20px' }, 
+        marginTop: { xs: '0', sm: '20px' }, 
+        marginBottom: { xs: '20px', sm: '0' }
       }}
     >
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
@@ -25,9 +25,8 @@ const Sidebar = ({ profileImage, name, role, bio, menuItems }) => {
             sx={{ marginRight: 2 }}
           />
           <Box>
-            <Typography variant="body2">{name || "Steve Jobs"}</Typography>
+            <Typography variant="body2">{name}</Typography>
             <Typography variant="body2" color="textSecondary">{role || "Travel Leader"}</Typography>
-            <Typography variant="body2" color="textSecondary">{bio || "Bio"}</Typography>
           </Box>
         </Box>
       </Paper>

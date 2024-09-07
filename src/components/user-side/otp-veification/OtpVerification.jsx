@@ -74,7 +74,7 @@ const OtpVerificationPage = () => {
         if (response) {
           Swal.fire({
             icon: 'success',
-            title: 'Sucussfully Verified',
+            title: 'Successfully Verified',
             text: 'Redirecting to role section page...',
             timer: 2000, 
             timerProgressBar: true,

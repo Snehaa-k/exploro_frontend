@@ -131,8 +131,8 @@ const TravellerProfile = () => {
   }
     
   const menuItemsn = [
-    { label: 'Home', icon: <HomeIcon />, onClick: () => console.log('Home clicked') },
-    { label: 'Destination', icon: <ExploreIcon />, onClick: () => console.log('Destination clicked') },
+    { label: 'Home', icon: <HomeIcon />, onClick: HandleHome },
+    { label: 'Destination', icon: <ExploreIcon />, onClick: HandleDestination },
     { label: 'Profile', icon: <AccountCircleIcon />, onClick:HandleProfile  },
   ];
   

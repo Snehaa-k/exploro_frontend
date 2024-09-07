@@ -5,13 +5,15 @@ import { createPosts } from '../../../redux/actions/authActions';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 import { setUser } from '../../../redux/reducers/authReducers';
+import { useNavigate } from 'react-router';
 
-const PhotoModal = ({ open, handleClose, onPhotoSubmit }) => {
+const PhotoModal = ({ open, handleClose, onPhotoSubmit ,setReloadPosts}) => {
   const dispatch = useDispatch();
   const [photo, setPhoto] = useState(null);
   const [description, setDescription] = useState('');
   const [destinationType, setDestinationType] = useState(''); 
   const [photoPreview, setPhotoPreview] = useState(null);
+  const navigate = useNavigate()
 
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
@@ -45,6 +47,7 @@ const PhotoModal = ({ open, handleClose, onPhotoSubmit }) => {
     }).then(() => {
       navigate('/posts');
     });
+    setReloadPosts((prev) => !prev);
   } 
       handleClose();
       setPhoto(null);

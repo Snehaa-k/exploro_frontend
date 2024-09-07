@@ -38,6 +38,7 @@ const AdminLogin = () => {
   const handleadLogin = async (e)=>{
     e.preventDefault();
     if (validate()){
+      setLoading(true)
       try{
         const response = await dispatch(loginAdmin({email, password})).unwrap();
        
@@ -74,7 +75,7 @@ const AdminLogin = () => {
       }
       
     }
-    setLoading(true)
+    setLoading(false)
   }
   
 

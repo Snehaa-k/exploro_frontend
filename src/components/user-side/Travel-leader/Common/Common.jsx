@@ -11,11 +11,22 @@ import './Common.css';
 import { API_URL } from '../../../../apiservice/Apiservice';
 import { useDispatch } from 'react-redux';
 import { fetchuser } from '../../../../redux/actions/authActions';
+import { useNavigate } from 'react-router';
 
 
 const CommonLayout = ({ children }) => {
   const [profile,setProfile] = useState([])
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const HandleProfile = ()=>{
+    navigate('/travellerprofile')
+  }
+  const HandleDestination = ()=>{
+    navigate('/destination')
+  }
+  const HandleHome = ()=>{
+    navigate('/posts')
+  }
   useEffect(()=>{
   
     const fetchUserData = async () => {
@@ -35,9 +46,9 @@ const CommonLayout = ({ children }) => {
   }, [dispatch])
 
   const menuItemsNavbar = [
-    { label: 'Home', onClick: () => console.log('Home clicked') },
-    { label: 'Create', onClick: () => console.log('Create clicked') },
-    { label: 'Destination', onClick: () => console.log('Destination clicked') },
+    { label: 'Home', onClick: HandleHome },
+    { label: 'Profile', onClick:HandleProfile},
+    { label: 'Destination', onClick:HandleDestination },
   ];
 
   const menuItemsActions = [

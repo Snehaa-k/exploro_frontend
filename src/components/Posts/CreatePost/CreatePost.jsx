@@ -6,7 +6,7 @@ import PhotoModal from './PhotoModal';
 import {  createarticle } from '../../../redux/actions/authActions';
 import { useDispatch } from 'react-redux';
 
-const CreatePost = () => {
+const CreatePost = ({setReloadPosts}) => {
   const dispatch = useDispatch()
   const [content, setContent] = useState('');
   const [postType, setPostType] = useState('Text');
@@ -26,12 +26,13 @@ const CreatePost = () => {
     formData.append('article', content);
 
    const response =  dispatch(createarticle(formData));
+
    console.log(response);
    
    if(response){
     alert("created")
    }
-    
+   setReloadPosts((prev) => !prev);
     
 
     setContent(''); setPostType('Text'); setChosenEmoji(null); 
@@ -78,7 +79,6 @@ const CreatePost = () => {
         />
       </Box>
 
-      {/* Bottom row with post type selection and icons */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: 1, backgroundColor: '#e6f7ff', borderRadius: '0 0 8px 8px' }}>
         <Box>
           <IconButton onClick={() => setOpenModal(true)} size="small">
@@ -105,11 +105,11 @@ const CreatePost = () => {
 
      
 
-      {/* Include the PhotoModal */}
       <PhotoModal
         open={openModal}
         handleClose={() => setOpenModal(false)}
         onPhotoSubmit={handlePhotoSubmit}
+        setReloadPosts = {setReloadPosts}
         
       />
     </Paper>

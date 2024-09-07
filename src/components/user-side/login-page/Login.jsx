@@ -36,7 +36,7 @@ const Login = () => {
         try {
           const response = await dispatch(loginUser({ email, password })).unwrap();
           dispatch(setUser(response));
-          console.log(response);
+          console.log(response,"response of login");
     
           if (response) {
             const { is_travel_leader, is_verified, is_blocked, is_approve_leader } = response.user;
@@ -116,7 +116,7 @@ const Login = () => {
     <div>
      
         <h4 className='text-container'>LOGIN</h4>
-        <h6 className='text-container-sub' style={{ paddingTop: '40px', color: 'red', fontSize: '15px', textAlign: 'center', maxWidth: '400px' ,marginLeft:'60px'}}>
+        <h6 className='text-container-sub' style={{ paddingTop: '40px', color: 'blue', fontSize: '15px', textAlign: 'center', maxWidth: '400px' ,marginLeft:'60px'}}>
     Please log in to explore. New here? Sign up and start your journey!
   </h6>        {/* <input type="text" placeholder='goolge' className='inputfeild' style ={{marginTop:'40px', marginLeft:'180px'}} /> */}
         {/* <h6 style={{marginTop:'30px',marginLeft:'240px'}}>OR</h6> */}
