@@ -64,8 +64,6 @@ function App() {
             <Route path = '/destination' element = {<Destination/>}/>
            
            
-            <Route path = '/information' element = {<PlaceInformation/>}/>
-            <Route path = '/tab' element = {<DestinationTabs/>}/>
             <Route path = '/places' element = {<TourPlan/>}/>
            
             <Route path = '/viewdestination/:id' element = {<UserDestination/>}/>

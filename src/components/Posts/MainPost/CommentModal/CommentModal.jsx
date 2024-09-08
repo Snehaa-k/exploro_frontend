@@ -11,6 +11,16 @@ import {
   TextField,
   Button,
 } from '@mui/material';
+const parseCommentText = (text) => {
+  try {
+    const jsonText = text.replace(/'/g, '"');
+    return JSON.parse(jsonText);
+  } catch (error) {
+    console.error('Error parsing comment text:', error);
+    return { text: '', timestamp: '' };
+  }
+};
+
 
 const CommentModal = ({
   isOpen,
@@ -24,22 +34,25 @@ const CommentModal = ({
     <Dialog open={isOpen} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>Comments</DialogTitle>
       <DialogContent>
-        <List>
+      <List>
           {comments.length > 0 ? (
-            comments.map((comment, index) => (
-              <ListItem key={index} alignItems="flex-start">
-                <Box sx={{ width: '100%' }}>
-                  <Typography variant="body1">{comment.text}</Typography>
-                  <Typography
-                    variant="caption"
-                    color="textSecondary"
-                    sx={{ display: 'block', marginTop: '4px' }}
-                  >
-                    {comment.timestamp}
-                  </Typography>
-                </Box>
-              </ListItem>
-            ))
+            comments.map((comment, index) => {
+              const { text, timestamp } = parseCommentText(comment.text);
+              return (
+                <ListItem key={index} alignItems="flex-start">
+                  <Box sx={{ width: '100%' }}>
+                    <Typography variant="body1">{text}</Typography>
+                    <Typography
+                      variant="caption"
+                      color="textSecondary"
+                      sx={{ display: 'block', marginTop: '4px' }}
+                    >
+                      {new Date(timestamp).toLocaleString()}
+                    </Typography>
+                  </Box>
+                </ListItem>
+              );
+            })
           ) : (
             <Typography variant="body2" color="textSecondary">
               No comments yet.

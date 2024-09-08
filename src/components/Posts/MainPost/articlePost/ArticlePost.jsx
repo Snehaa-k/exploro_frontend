@@ -8,10 +8,31 @@ const TravelArticleCard = ({ post, likes, handleLike }) => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]); 
+  const [like,setLike] = useState(post.likes)
+  console.log(like,"kiess");
+  console.log(post,"my postsss")
+  
+  const isUser = like.includes(post.travel_leader)
+  console.log(isUser,"hai user");
+  
 
   const handleCommentClick = () => {
     setIsCommentModalOpen(true);
   };
+  
+  const handleLikeClick = () => {
+    let updatedLikes;
+
+    if (isUser) {
+        updatedLikes = like.filter(id => id !== post.travel_leader);
+    } else {
+        updatedLikes = [...like, post.travel_leader];
+    }
+
+    setLike(updatedLikes); 
+    handleLike(post.id);   
+};
+
 
   const handleCloseCommentModal = () => {
     setIsCommentModalOpen(false);
@@ -48,15 +69,16 @@ const TravelArticleCard = ({ post, likes, handleLike }) => {
             {post.article}
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton onClick={() => handleLike('article')}>
-              <Favorite />
+            <IconButton onClick={handleLikeClick}>
+            <Favorite sx={{ color: isUser ? 'red' : 'grey' }} />
             </IconButton>
-            <Typography variant="body2" color="textSecondary" sx={{ marginLeft: 1 }}>
-              {/* {likes.article} likes */}
-            </Typography>
+           
             <IconButton onClick={handleCommentClick} sx={{ marginLeft: 2 }}>
               <Comment />
             </IconButton>
+            <Typography variant="body2" color="textSecondary" sx={{ marginLeft: 1 }}>
+              {likes} likes
+            </Typography>
           </Box>
         </CardContent>
       )}

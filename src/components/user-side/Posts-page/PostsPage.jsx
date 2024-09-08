@@ -25,11 +25,14 @@ const PostsPage = () => {
   const [posts, setPosts] = useState([]);
   const [article, setArticle] = useState([]);
   const [likes, setLikes] = useState();
+  const [likearticle,setLikesarticle] =useState()
   const [reloadPosts, setReloadPosts] = useState(false);
   console.log(profile,"imagee")
   const token = localStorage.getItem('accessToken')
   console.log(user,"hai user");
   console.log(likes,"likess");
+  console.log(posts,"posts pagessss");
+  
   
   
   
@@ -39,6 +42,9 @@ const PostsPage = () => {
       if(response){
         console.log('Post liked:',response.data.data.likes);
         setLikes(response.data.likes)
+        setReloadPosts((prev) => !prev);
+
+        
        
 
       }
@@ -49,6 +55,25 @@ const PostsPage = () => {
     }
   };
    
+  const handleLikearticle = async (postId) => {
+    try {
+      const response = await api.post(`/likearticle/${postId}/`)
+      if(response){
+        console.log('Post liked:',response.data.data.likes);
+        setLikesarticle(response.data.likes)
+       
+        setReloadPosts((prev) => !prev);
+
+        
+       
+
+      }
+        
+    
+    } catch (error) {
+      console.error('Error liking post:', error);
+    }
+  };
   
 
   
@@ -166,24 +191,23 @@ const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_a
    </div>
    <div className='main-container'>
         {combinedPosts.map((post) => {
-          // Check if it's a travel post (e.g., it has an `image` field)
+
           if (post.post_image) {
             return (
               <TravelPostCard
                 key={post.id}
                 post={post}
-                likes={likes || 0} 
+                likes={post.likes.length || 0} 
                 handleLike={handleLike}
               />
             );
           } else {
-            // Otherwise, render it as an article post
             return (
               <TravelArticleCard
                 key={post.id}
                 post={post}
-                // likes={like[post.id] || { image: 0 }} 
-                // handleLike={handleLike}
+                likes={post.likes.length || 0} 
+                handleLike={handleLikearticle}
               />
             );
           }
