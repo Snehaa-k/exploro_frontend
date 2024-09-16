@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import api from '../../../../axios-interceptors/AxiosInterceptors';
 import { useNavigate } from 'react-router';
 import { API_URL } from '../../../../apiservice/Apiservice';
+import { format, isAfter } from 'date-fns';
 
 const StyledTableContainer = styled(TableContainer)({
   maxWidth: '100%',
@@ -54,7 +55,7 @@ const TripList = () => {
   const navigate = useNavigate();
   console.log(plans);
   
-
+  const today = format(new Date(), 'yyyy-MM-dd');
   const handleAddTrip = (newTrip) => {
     setTrips([...trip, newTrip]);
   };
@@ -150,9 +151,15 @@ const TripList = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                plans.flat().map((trip) => (
+                plans.flat().map((trip) => {
+                  const isCompleted = isAfter(new Date(today), new Date(trip.end_date));
+                  
+                  return(
+                  
                   <TableRow key={trip.id}>
+                    
                     <TableCell>
+                      
                       <StyledImage src={trip.Trip_image} alt={trip.location} />
                     </TableCell>
                     <TableCell>{trip.location}</TableCell>
@@ -163,21 +170,28 @@ const TripList = () => {
                     <TableCell>{trip.start_date}</TableCell>
                     <TableCell>{trip.end_date}</TableCell>
                     <TableCell>
-                      <IconButton onClick={() => handleEditTripClick(trip)}>
-                        <EditIcon />
-                      </IconButton>
-                      <StyledButton variant="contained" onClick={() => handleAddPlace(trip.id)}>
-                        Add Place
-                      </StyledButton>
-                      <StyledButton variant="contained" onClick={() => handleViewPlacesClick(trip.id)}>
-                        View Places
-                      </StyledButton>
-                      <IconButton onClick={() => handleDeleteTrip(trip.id)} color="error">
-                        <DeleteIcon />
-                      </IconButton>
+                    {isCompleted ? (
+                        <div>Completed</div>
+                      ) : (
+                        <>
+                          <IconButton onClick={() => handleEditTripClick(trip)}>
+                            <EditIcon />
+                          </IconButton>
+                          <StyledButton variant="contained" onClick={() => handleAddPlace(trip.id)}>
+                            Add Place
+                          </StyledButton>
+                          <StyledButton variant="contained" onClick={() => handleViewPlacesClick(trip)}>
+                            View Places
+                          </StyledButton>
+                          <IconButton onClick={() => handleDeleteTrip(trip.id)} color="error">
+                            <DeleteIcon />
+                          </IconButton>
+                        </>
+                      )}
+                   
                     </TableCell>
                   </TableRow>
-                ))
+                )})
               )}
             </TableBody>
           )}

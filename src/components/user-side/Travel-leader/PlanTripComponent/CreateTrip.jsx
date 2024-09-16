@@ -74,23 +74,36 @@ const CreateTrip = () => {
       formDatasend.append(key, values[key]);
     });
 
-    const response = await dispatch(createTrip(formDatasend)).unwrap();
-    
-    if (response) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Trip created successfully',
-        text: 'Redirecting to trips page',
-        timer: 2000,
-        timerProgressBar: true,
-        showConfirmButton: false,
-      }).then(() => {
-        navigate('/viewtrip');
-      });
-
+    try {
+      const response = await dispatch(createTrip(formDatasend)).unwrap();
       
+      if (response && response.message) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Trip created successfully',
+          text: 'Redirecting to trips page',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        }).then(() => {
+          navigate('/viewtrip');
+        });
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Unexpected response',
+          text: 'The trip was created, but the response was not as expected.',
+        });
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Trip creation failed',
+        text: error.error || error.message || 'An unexpected error occurred while creating the trip. Please try again.',
+      });
     }
-
+    
     setSubmitting(false);
   };
 

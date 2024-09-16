@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchLeaders } from '../../../redux/actions/authActions';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 
 
@@ -17,6 +18,7 @@ const ViewTravelLeaders = () => {
 
   const dispatch = useDispatch()
   const leaders = useSelector((state)=>state.reducer.user.leaders)
+  const navigate = useNavigate()
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(4);
   console.log(leaders,"leadders")
@@ -61,7 +63,10 @@ const ViewTravelLeaders = () => {
       });
 };
 
-
+const handleDetails = (id) => {
+        console.log(id);
+        navigate(`/viewleadertrip/${id}`);  
+     };
   // const traveller = [users.travellers]
 
  
@@ -97,6 +102,8 @@ const ViewTravelLeaders = () => {
             <TableCell style={{ fontWeight: 'bold' }}>User Name</TableCell>
             <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
             <TableCell style={{ fontWeight: 'bold' }}>Joined Date</TableCell>
+            <TableCell style={{ fontWeight: 'bold' }}>Trips</TableCell>
+
             <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
           </TableRow>
         </TableHead>
@@ -109,6 +116,10 @@ const ViewTravelLeaders = () => {
                   </TableCell> 
                   <TableCell>{traveller.user_id.email}</TableCell> 
                   <TableCell>{traveller.user_id.date_joined}</TableCell>
+                  <TableCell>
+                  <Button variant="contained" onClick={()=>{handleDetails(traveller.user_id.id)}}>view </Button>
+                  </TableCell>
+
                  <TableCell>
                   {traveller.user_id.is_block ===true?
                     <Button variant="contained" onClick={() => handleBlock(traveller.user_id.id)}  color={traveller.user_id.is_block === false ? 'success' : 'error'}>

@@ -36,8 +36,6 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    console.log("I am working inside of the error statement");
-     
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       console.log("Attempting to refresh token");
@@ -48,7 +46,7 @@ api.interceptors.response.use(
         
         await refreshAccessToken(refreshToken, "user", originalRequest);
         
-        // The original request will be retried in the refreshAccessToken function
+        // Retry the original request after refreshing the token
         return api(originalRequest);
       } catch (refreshError) {
         console.error("Failed to refresh token:", refreshError);
@@ -64,7 +62,8 @@ api.interceptors.response.use(
       }
     }
 
-    return new Promise(() => {});
+    // return new Promise(() => {});
+    return Promise.reject(error.response ? error.response.data : error.message);
 
   }
 );

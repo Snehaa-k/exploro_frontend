@@ -4,6 +4,7 @@ import { Box, Tabs, Tab, Button,  Container } from '@mui/material';
 import TourPlan from '../destination-information/DestinationInformation';
 import TripDetails from '../places-information/PlaceInformation';
 import { useNavigate } from 'react-router';
+import BookingForm from '../book-trip/BookingForm';
 
 const DestinationTabs = ({tripId}) => {
     const [value, setValue] = useState(0);
@@ -35,14 +36,14 @@ const DestinationTabs = ({tripId}) => {
         >
           <Tab label="Information" />
           <Tab label="Places" />
-          <Tab label="Book Trips" />
-          <Tab label="Payment" />
+          <Tab label="Book Trip" />
+          {/* <Tab label="Payment" /> */}
         </Tabs>
         <Box p={3}>
           {value === 0 && <TripDetails tripId={tripId} /> }
           {value === 1 && <TourPlan tripId={tripId} />  }
-          {value === 2 }
-          {value === 3 }
+          {value === 2 && <BookingForm tripId = {tripId}/>}
+          {/* {value === 3 } */}
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
           <Button onClick={handleBack} disabled={value === 0}>

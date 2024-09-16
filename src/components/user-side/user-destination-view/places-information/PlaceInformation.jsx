@@ -33,7 +33,9 @@ const TripDetails = ({tripId}) => {
       <Stack direction="row" alignItems="center" spacing={1} sx={{ marginBottom: 2 }}>
         <LocationOnIcon fontSize="small" />
         <Typography variant="h6" fontWeight="bold">{trip.location}</Typography>
+
       </Stack>
+
 
    
       <Stack direction="row" spacing={2} alignItems="center" sx={{ marginBottom: 3 }}>
@@ -50,10 +52,14 @@ const TripDetails = ({tripId}) => {
           alt="Trip"
           style={{ width: 200, height: 150, marginRight: 20, objectFit: 'cover'}}
         />
+
         <Typography variant="body1">
          {trip.description}
         </Typography>
+
       </Box>
+      <Typography variant="h6"><b>Starting from </b>    {trip.start_date}</Typography>
+
 
       <Stack direction="row" justifyContent="space-between" sx={{ marginBottom: 3 }}>
         <Box>

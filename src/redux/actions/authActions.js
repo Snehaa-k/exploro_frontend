@@ -195,7 +195,11 @@ export const createTrip = createAsyncThunk(
       return response.data;
     } catch (error) {
      
-      return rejectWithValue(error.response.data);
+      console.log("haii",error);
+      
+    //  throw error
+
+    return rejectWithValue(error);
     }
   }
 );
@@ -270,6 +274,8 @@ export const fetchuser = createAsyncThunk(
     }
   }
 );
+
+
 
 
 
