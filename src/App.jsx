@@ -32,6 +32,7 @@ import UserProfile from './components/user-side/Userprofileview/UserProfile'
 import ProfileView from './pages/Userside/TravelLeader/profileview/ProfileView'
 import SuccessPage from './components/user-side/user-destination-view/success-page/Success'
 import TripDetails from './components/admin-side/Trip-details/TripDetails'
+import BookedCustomers from './components/admin-side/Booked-customers/BookedCustomers'
 
 // import './App.css'
 
@@ -71,14 +72,14 @@ function App() {
             <Route path = '/places' element = {<TourPlan/>}/>
            
             <Route path = '/viewdestination/:id' element = {<UserDestination/>}/>
-            <Route path = '/userprofile' element = {<ProfileView/>}/>
+            <Route path = '/userprofile/:id' element = {<ProfileView/>}/>
             <Route path = '/success' element = {<SuccessPage/>}/>
             <Route path = '/viewleadertrip/:id' element = {<TripDetails/>}/>
+            {/* <Route path = '/viewcustomers/:id' element = {<BookedCustomers/>}/> */}
 
             
             
-            
-
+          
             
                
 

@@ -57,6 +57,9 @@ const MainPost = ({ avatarUrl, name, role, postImage, article, imageLikes, artic
   }, [token]);
 
   
+  // const handleAvatarClick = () => {
+  //   navigate(`/userprofile/${posts.travel_leader}`);
+  // };
   
   const handleLike = (type) => {
     setLikes({
@@ -77,6 +80,7 @@ const MainPost = ({ avatarUrl, name, role, postImage, article, imageLikes, artic
             src={avatarUrl || post.travelead_profile_image}
             alt={name}
             sx={{ marginRight: 2 }}
+            // onClick={handleAvatarClick} 
           />
           <Box>
             <Typography variant="h6">{post.travelead_username}</Typography>

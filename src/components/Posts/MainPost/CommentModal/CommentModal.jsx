@@ -10,6 +10,7 @@ import {
   Typography,
   TextField,
   Button,
+  Avatar,
 } from '@mui/material';
 const parseCommentText = (text) => {
   try {
@@ -30,24 +31,32 @@ const CommentModal = ({
   setComment,
   handleCommentSubmit,
 }) => {
+  console.log(comments);
+  
   return (
     <Dialog open={isOpen} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>Comments</DialogTitle>
       <DialogContent>
-      <List>
+        <List>
           {comments.length > 0 ? (
             comments.map((comment, index) => {
               const { text, timestamp } = parseCommentText(comment.text);
+              const { name, profileImage } = comment.user; 
+
               return (
                 <ListItem key={index} alignItems="flex-start">
+                  <Avatar alt={name} src={profileImage} sx={{ marginRight: 2 }} />
                   <Box sx={{ width: '100%' }}>
-                    <Typography variant="body1">{text}</Typography>
+                    <Typography variant="body1" fontWeight="bold">
+                      {comment.user} 
+                    </Typography>
+                    <Typography variant="body2">{text}</Typography>
                     <Typography
                       variant="caption"
                       color="textSecondary"
                       sx={{ display: 'block', marginTop: '4px' }}
                     >
-                      {new Date(timestamp).toLocaleString()}
+                      {new Date(timestamp).toLocaleString()} {/* Timestamp */}
                     </Typography>
                   </Box>
                 </ListItem>

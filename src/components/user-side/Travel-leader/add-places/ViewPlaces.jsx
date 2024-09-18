@@ -39,7 +39,7 @@ const ViewPlacesModal = ({ open, onClose, trip, onPlaceUpdated, onPlaceDeleted }
     setLoading(true);
     setError('');
     try {
-      const response = await api.get(`/viewplaces/${trip}/`); 
+      const response = await api.get(`/viewplaces/${trip.id}/`); 
       setPlaces([response.data.trip]); 
     } catch (err) {
       console.error('Error fetching places:', err);

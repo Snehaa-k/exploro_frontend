@@ -21,6 +21,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import ExploreIcon from '@mui/icons-material/Explore';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import api from '../../../axios-interceptors/AxiosInterceptors';
+import UpcomingTrips from '../../../components/user-side/Profiletabs/UpcomingTrips/UpcommingTrips';
+import PastTrips from '../../../components/user-side/Profiletabs/Completed-trips/CompletedTrips';
 
 
 
@@ -65,8 +67,8 @@ const TravellerProfile = () => {
    
 
     const tabs = [
-        { value: 'one', label: 'Upcoming Trips', content: <div>Content for Upcoming Trips</div> },
-        { value: 'two', label: 'Past Trips', content: <div>Content for Past Trips</div> },
+        { value: 'one', label: 'Upcoming Trips', content: <UpcomingTrips/>},
+        { value: 'two', label: 'Past Trips', content: <PastTrips/> },
       ];
     const menuItems = [
         { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },

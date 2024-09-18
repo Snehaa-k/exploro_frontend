@@ -33,6 +33,7 @@ const PostsPage = () => {
   console.log(likes,"likess");
   console.log(posts,"posts pagessss");
   
+
   
   
   
@@ -97,6 +98,7 @@ const PostsPage = () => {
 }, [dispatch])
 
 
+
 useEffect(() => {
   const fetchPosts = async () => {
    
@@ -108,11 +110,14 @@ useEffect(() => {
       console.error('Error fetching trips:', error.message);
     }
   };
+  
+  
 
 fetchPosts();
 }, [token,reloadPosts]);
 
 useEffect(() => {
+ 
   const fetchArticle = async () => {
    
     try {
@@ -124,8 +129,12 @@ useEffect(() => {
     }
   };
 
+
 fetchArticle();
 }, [token,reloadPosts]);
+
+
+
 
 const getLatestPost = (posts) => {
   return posts.reduce((latest, post) => {
@@ -139,7 +148,7 @@ const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_a
     {
       icon: <PeopleIcon color="primary" />,
       primaryText: `${user.is_travel_leader?"followers":"followeing"}`,
-      secondaryText: '0',
+      secondaryText:'0',
     },
     {
       icon: <CheckCircleIcon color="success" />,

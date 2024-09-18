@@ -3,12 +3,13 @@ import { Box, Stack, Typography, Avatar, Button, IconButton } from '@mui/materia
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import api from '../../../../axios-interceptors/AxiosInterceptors';
+import { useNavigate } from 'react-router';
 
 const TripDetails = ({tripId}) => {
   console.log(tripId);
   const [trip,setTrip] = useState([])
   console.log(trip,"my trips");
-  
+  const navigate = useNavigate()
   
 
   useEffect(()=>{
@@ -20,7 +21,9 @@ const TripDetails = ({tripId}) => {
     fetchTrip();
   }, [tripId]);
 
-
+  const handleAvatarClick = () => {
+    navigate(`/userprofile/${trip.travelead}`);
+  };
 
   return (
     <Box sx={{ padding: 4, maxWidth: 800, margin: 'auto' }}>
@@ -39,7 +42,8 @@ const TripDetails = ({tripId}) => {
 
    
       <Stack direction="row" spacing={2} alignItems="center" sx={{ marginBottom: 3 }}>
-        <Avatar src={trip.travelead_profile_image} sx={{ width: 56, height: 56 }} />
+        <Avatar src={trip.travelead_profile_image} sx={{ width: 56, height: 56 }}  onClick={handleAvatarClick} 
+          style={{ cursor: 'pointer' }}   />
         <Typography variant="body1">Hosted by {trip.travelead_username}</Typography>
         <IconButton color="primary">
          <ChatBubbleOutlineIcon/>
