@@ -257,15 +257,15 @@ const EditProfile = () => {
   
   }  
   const menuItemsn = [
-    { label: 'Home', icon: <HomeIcon />, onClick: HandleHome },
+    { label: 'Home', onClick: HandleHome },
     { label: 'Destination',  onClick: HandleDestination },
-    { label: 'Profile', icon: <AccountCircleIcon />, onClick:HandleProfile },
+    { label: 'Profile', onClick:HandleProfile },
   ];
  
   const menuItemsLead = [
-    { label: 'Home',icon: <HomeIcon />, onClick: HandleHome },
-    { label: 'Profile', icon: <AccountCircleIcon />, onClick: HandleProfile },
-    { label: 'Destination',icon: <ExploreIcon />, onClick: HandleDestination },
+    { label: 'Home', onClick: HandleHome },
+    { label: 'Profile', onClick: HandleProfile },
+    { label: 'Destination', onClick: HandleDestination },
   ];
 
   return (

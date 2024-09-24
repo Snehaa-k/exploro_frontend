@@ -45,14 +45,14 @@ const DestinationTabs = ({tripId}) => {
           {value === 2 && <BookingForm tripId = {tripId}/>}
           {/* {value === 3 } */}
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+        {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
           <Button onClick={handleBack} disabled={value === 0}>
             Back
           </Button>
           <Button onClick={handleNext} disabled={value === 3}>
             Next
           </Button>
-        </Box>
+        </Box> */}
       </Box>
     </Container>
     </div>

@@ -12,6 +12,7 @@ import { API_URL } from '../../../../apiservice/Apiservice';
 import { useDispatch } from 'react-redux';
 import { fetchuser } from '../../../../redux/actions/authActions';
 import { useNavigate } from 'react-router';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 
 const CommonLayout = ({ children }) => {
@@ -53,6 +54,7 @@ const CommonLayout = ({ children }) => {
 
   const menuItemsActions = [
     { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
+    { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
     { text: 'Inbox', icon: <MessageIcon />, path: '/inbox' },
     { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts' },
     { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/viewtrip' },

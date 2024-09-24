@@ -23,6 +23,9 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import api from '../../../axios-interceptors/AxiosInterceptors';
 import UpcomingTrips from '../../../components/user-side/Profiletabs/UpcomingTrips/UpcommingTrips';
 import PastTrips from '../../../components/user-side/Profiletabs/Completed-trips/CompletedTrips';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ChatDrawer from '../../../components/user-side/ChatDialog/ChatDialog';
+import CancelledTrips from '../../../components/user-side/Profiletabs/Cancelled-trips/CancelledTrips';
 
 
 
@@ -31,12 +34,23 @@ import PastTrips from '../../../components/user-side/Profiletabs/Completed-trips
 const TravellerProfile = () => {
   const token = localStorage.getItem("accessToken")
   console.log(token);
-  
+
+  const handleOpenChat = () => {
+    setIsChatOpen(true);
+  };
+
+  const handleCloseChat = () => {
+    setIsChatOpen(false);
+  };
+
   const navigate = useNavigate()
   const [profile,setProfile] = useState(null)
   const [error, setError] = useState(null);
   const [value, setValue] = useState('one');
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const dispatch = useDispatch()
+  console.log(profile,"users pro");
+  
 
   const HandleProfile = ()=>{
     navigate('/travellerprofile')
@@ -69,17 +83,19 @@ const TravellerProfile = () => {
     const tabs = [
         { value: 'one', label: 'Upcoming Trips', content: <UpcomingTrips/>},
         { value: 'two', label: 'Past Trips', content: <PastTrips/> },
+        { value: 'three', label: 'Cancelled Trips', content: <CancelledTrips/> },
       ];
     const menuItems = [
         { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
-        { text: 'Messages', icon: <MessageIcon />, path: '/messages' },
+        { text: 'Messages', icon: <MessageIcon />, onClick:handleOpenChat },
         { text: 'Notifications', icon: <NotificationsIcon />, path: '/notifications' },
         { text: 'Logout', icon: <LogoutIcon />, onClick:handlelogout },
       ];
     
       const menuItemsLeader = [
         { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
-        { text: 'Inbox', icon: <MessageIcon />, path: '/inbox' },
+        { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' }, 
+        { text: 'Inbox', icon: <MessageIcon />,  onClick:handleOpenChat},
         { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts' },
         { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/viewtrip', }, 
         { text: 'Create Trip', icon: <EventNoteIcon />, path: '/triplan' },
@@ -133,15 +149,15 @@ const TravellerProfile = () => {
   }
     
   const menuItemsn = [
-    { label: 'Home', icon: <HomeIcon />, onClick: HandleHome },
-    { label: 'Destination', icon: <ExploreIcon />, onClick: HandleDestination },
-    { label: 'Profile', icon: <AccountCircleIcon />, onClick:HandleProfile  },
+    { label: 'Home', onClick: HandleHome },
+    { label: 'Destination', onClick: HandleDestination },
+    { label: 'Profile', onClick:HandleProfile  },
   ];
   
   const menuItemsLead = [
-    { label: 'Home', icon: <HomeIcon />, onClick:HandleHome },
+    { label: 'Home', onClick:HandleHome },
     { label: 'Destination', onClick:HandleDestination  },
-    { label: 'Profile', icon: <AccountCircleIcon />, onClick: HandleProfile },
+    { label: 'Profile', onClick: HandleProfile },
   ];
 
 
@@ -200,7 +216,9 @@ const TravellerProfile = () => {
   </>
 )}
 
-      <TabContainer value={value} handleChange={handleChange} tabs={tabs} />
+      <TabContainer value={value} handleChange={handleChange} tabs={tabs} />  
+      <ChatDrawer isOpen={isChatOpen} onClose={handleCloseChat} />
+
     </div>
   )
 }

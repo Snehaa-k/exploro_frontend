@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography, Button, Grid,CardMedia } from '@mui/material';
-import { format, isAfter } from 'date-fns'; // Import isAfter for date comparison
+import { format, isAfter } from 'date-fns'; 
 import api from '../../../../axios-interceptors/AxiosInterceptors';
 import { useNavigate } from 'react-router';
 import { API_URL } from '../../../../apiservice/Apiservice';
@@ -23,6 +23,19 @@ const UpcomingTrips = () => {
     const handleViewTrip = (id) => {
         navigate(`/viewdestination/${id}`);
     };
+   
+    const handleCancelTrip = (tripId) => {
+        api.post('/canceltrip/', { trip_id: tripId })
+          .then(response => {
+              // Remove the canceled trip from the list of upcoming trips
+              setUpcomingTrips(upcomingTrips.filter(trip => trip.id !== tripId));
+              alert('Trip canceled and wallet updated.');
+          })
+          .catch(err => {
+              console.error('Error canceling trip:', err);
+              alert('Failed to cancel the trip.');
+          });
+    };
 
     const today = new Date();
 
@@ -31,12 +44,12 @@ const UpcomingTrips = () => {
     );
 
     return (
-        <Grid container spacing={2} style={{ marginTop: '20px', marginLeft: '10px' }}>
+        <Grid container spacing={2} style={{ marginTop: '20px', marginLeft: '10px'  }}>
             {filteredTrips.length > 0 ? (
                 filteredTrips.map((trip, index) => (
                     <Grid item xs={12} sm={6} key={index}>
                         <Card
-                            sx={{ height: '300px', position: 'relative', cursor: 'pointer' }}
+                            sx={{ height: '350px', position: 'relative', cursor: 'pointer' }}
                             onClick={() => handleViewTrip(trip.id)}
                         >
                              <CardMedia
@@ -44,6 +57,8 @@ const UpcomingTrips = () => {
                                 height="100"
                                 image={`${API_URL}${trip.image_url}`}  
                                 alt={trip.name}
+                                sx={{ cursor: 'pointer' }} // Add pointer cursor for visual feedback
+                                onClick={() => handleViewTrip(trip.id)}
                             />
                             <CardContent>
                                 <Typography variant="h6">{trip.name}</Typography>
@@ -63,7 +78,7 @@ const UpcomingTrips = () => {
                                     variant="contained"
                                     color="primary"
                                     sx={{ position: 'absolute', bottom: '16px', right: '16px' }}
-                                    onClick={() => handleViewTrip(trip.id)}
+                                    onClick={() => handleCancelTrip(trip.id)}
                                 >
                                     Cancel trip
                                 </Button>

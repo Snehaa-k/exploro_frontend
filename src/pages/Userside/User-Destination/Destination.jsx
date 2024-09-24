@@ -161,9 +161,9 @@ const Destination = () => {
   });
   
   const menuItems = [
-    { label: 'Home', icon: <HomeIcon />, onClick: HandleHome },
-    { label: 'Destination', icon: <ExploreIcon />, onClick: HandleDestination },
-    { label: 'Profile', icon: <AccountCircleIcon />, onClick: HandleProfile},
+    { label: 'Home', onClick: HandleHome },
+    { label: 'Destination', onClick: HandleDestination },
+    { label: 'Profile', onClick: HandleProfile},
   ];
 
   return (

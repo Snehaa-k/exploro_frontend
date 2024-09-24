@@ -6,11 +6,15 @@ import LockIcon from '@mui/icons-material/Lock';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import api from '../../../../axios-interceptors/AxiosInterceptors';
 import { loadStripe } from '@stripe/stripe-js';
+import Swal from 'sweetalert2';
 
 const stripePromise = loadStripe('pk_test_51PxSrYJiQplpQ67p3kTF3bBrVzigdJZPFHmLiY67aVcv66vff1cTyW4g9NCtjn1ZCbiMVi23UmvSyflOGJiiejIF005mqPKxuk'); 
 
 const TripCard = ({tripId}) => {
   const [trips,setTrip] = useState([])
+  const [wallet, setWallet] = useState(null);
+  const [walletError, setWalletError] = useState(null); 
+  const [walletSuccess, setWalletSuccess] = useState(null); 
 
   useEffect(()=>{
     const fetchTrip = async () => {
@@ -41,6 +45,48 @@ const TripCard = ({tripId}) => {
     }
   };
 
+  useEffect(() => {
+    const fetchWallet = async () => {
+      try {
+        const response = await api.get('/showwallet/');
+        if (response) {
+          setWallet(response.data.wallet);
+        }
+      } catch (error) {
+        console.error('Failed to fetch wallet data:', error.message);
+      }
+    };
+    fetchWallet();
+  }, []);
+
+  const handleWalletPaymentClick = async () => {
+    if (!wallet) {
+      Swal.fire("Error", "No wallet found! You cannot use wallet payment.", "error");
+      return;
+    }
+
+    if (wallet.wallet < trips.amount) {
+      Swal.fire("Insufficient Balance", "Your wallet balance is insufficient to complete this payment.", "error");
+      return;
+    }
+
+    try {
+      const response = await api.post('/wallet_payment/', {
+        trip_id: tripId,
+      });
+
+      if (response.data.success) {
+        Swal.fire("Success", "Payment completed successfully using your wallet!", "success");
+      } else {
+        Swal.fire("Error", "Payment failed due to insufficient balance.", "error");
+      }
+    } catch (error) {
+      console.error('Wallet Payment Error:', error);
+      Swal.fire("Error", "An error occurred while processing wallet payment.", "error");
+    }
+  
+  };
+
 
 
   return (
@@ -68,6 +114,18 @@ const TripCard = ({tripId}) => {
         </Typography>
 
         {/* Reserve Button */}
+        <Button
+          variant="contained"
+          fullWidth
+          color="success"
+          sx={{ marginTop: 2 }}
+          onClick={handleWalletPaymentClick}
+        >
+          Wallet Pay
+        </Button>
+
+
+
         <Button
           variant="contained"
           fullWidth

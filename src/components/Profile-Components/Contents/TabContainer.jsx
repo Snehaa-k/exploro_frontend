@@ -4,7 +4,7 @@ import { Box, Tabs, Tab } from '@mui/material';
 const TabContainer = ({ value, handleChange, tabs }) => {
   return (
     <div style={{ marginLeft: '970px',marginTop:'30px' }}>
-      <Box ml={4} p={2} sx={{ width: '500px', backgroundColor: '#f9f9f9', borderRadius: '8px', marginTop: '-320px', height: '560px' }}>
+      <Box ml={4} p={2} sx={{ width: '500px', backgroundColor: '#f9f9f9', borderRadius: '8px', marginTop: '-400px', height: '560px' }}>
         <Tabs
           value={value}
           onChange={handleChange}

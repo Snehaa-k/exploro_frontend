@@ -15,6 +15,8 @@ import {
 import { useParams, useNavigate } from "react-router"; 
 import api from "../../../axios-interceptors/AxiosInterceptors";
 import moment from 'moment';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+
 
 const ITEMS_PER_PAGE = 3; 
 
@@ -81,7 +83,7 @@ const UserProfile = () => {
   };
 
   const handleFollow = () => {
-    api.post(`/follow/`)
+    api.post(`/follow/${id}`)
       .then(response => {
         setIsFollowing(!isFollowing); 
       })
@@ -199,7 +201,10 @@ const UserProfile = () => {
                     {trip.location}
                   </Typography>
                   <Typography variant="h6" sx={{ mt: 2 }}>
-                    Start date: {trip.start_date}
+                  <CalendarTodayIcon />
+        <Typography variant="body2" ml={1}>
+          {trip.start_date} ➔ {trip.end_date}
+        </Typography>
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                     {trip.description}

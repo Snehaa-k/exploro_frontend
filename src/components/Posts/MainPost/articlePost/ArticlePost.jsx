@@ -51,7 +51,7 @@ const TravelArticleCard = ({ post, likes, handleLike }) => {
   };
 
   return (
-    <Box p={2} sx={{ marginTop: '100px', marginX: 'auto' }}>
+    <Box p={2} sx={{ marginTop: '250px', marginX: 'auto' }}>
 
     <Card sx={{ width:'450px' ,marginLeft:'40px' }}>
       {/* Travel Leader Information */}

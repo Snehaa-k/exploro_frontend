@@ -1,6 +1,40 @@
 import { motion } from 'framer-motion';
+import api from '../../../../axios-interceptors/AxiosInterceptors';
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const SuccessPage = () => {
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.search);
+    const sessionId = query.get('session_id');
+    const tripId = query.get('trip_id'); 
+    console.log('Session ID:', sessionId);
+    // console.log('Trip ID:', tripId);
+
+    const confirmPayment = async () => {
+      try {
+        const response = await api.post('/confirm-payment/', {
+          session_id: sessionId,
+          trip_id: tripId,
+        });
+        if (response.data.success) {
+          console.log('Payment confirmed successfully!');
+        }
+      } catch (error) {
+        console.error('Error confirming payment:', error);
+      }
+    };
+
+    if (sessionId) {
+      confirmPayment();
+    }
+  }, []);
+
+
+
   return (
     <div style={styles.container}>
       <motion.div

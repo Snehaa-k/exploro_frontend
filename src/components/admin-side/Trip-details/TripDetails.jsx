@@ -90,7 +90,10 @@ const TripDetails = () => {
                                              <TableCell style={{ fontWeight: 'bold' }}>Customer Name</TableCell>
                                              <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
                                              <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
-                                             <TableCell style={{ fontWeight: 'bold' }}>Actions</TableCell>
+                                             {/* <TableCell style={{ fontWeight: 'bold' }}>payment Type</TableCell> */}
+
+                                             
+                                             {/* <TableCell style={{ fontWeight: 'bold' }}>Actions</TableCell> */}
                                           </TableRow>
                                        </TableHead>
                                        <TableBody>
@@ -106,11 +109,9 @@ const TripDetails = () => {
                                                    <TableCell>{customer.user_username}</TableCell>
                                                    <TableCell>{customer.user_email}</TableCell>
                                                    <TableCell>{customer.status ? 'Confirmed' : 'Pending'}</TableCell>
-                                                   <TableCell>
-                                                      <Button variant="outlined">
-                                                         Refund
-                                                      </Button>
-                                                   </TableCell>
+                                                   {/* <TableCell>
+                                                      {customer.payment_type}
+                                                   </TableCell> */}
                                                 </TableRow>
                                              ))
                                           )}

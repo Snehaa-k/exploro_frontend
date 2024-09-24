@@ -28,16 +28,18 @@ const Actions = ({ avatarSrc, menuItems }) => {
         marginTop: isMobile ? '20px' : '50px',
         display: 'flex',
         justifyContent: isMobile ? 'center' : 'flex-start',
+        
       }}
     >
       <Box
         p={2}
         sx={{
           backgroundColor: '#f9f9f9',
-          height: isMobile ? 'auto' : '500px',
+          height: isMobile ? 'auto' : '590px',
           paddingLeft: isMobile ? '20px' : '50px',
           paddingRight: isMobile ? '20px' : '50px',
           width: isMobile ? '100%' : '300px',
+
           boxSizing: 'border-box',
         }}
       >

@@ -16,6 +16,7 @@ const TravelPostCard = ({ post, likes, handleLike }) => {
     console.log(post,"my postsss")
     console.log(comments,"comments")
     const [reload,setload] = useState(false)
+    const token = localStorage.getItem('accessToken')
     
     const isUser = like.includes(post.travel_leader)
     console.log(isUser,"hai user");
@@ -41,7 +42,7 @@ const TravelPostCard = ({ post, likes, handleLike }) => {
       };
 
       fetchComments();
-  }, [reload]);
+  }, [token,reload]);
     
     
     const handleCommentClick = () => {
@@ -98,8 +99,8 @@ const TravelPostCard = ({ post, likes, handleLike }) => {
           updatedLikes = [...like, post.travel_leader];
       }
 
-      setLike(updatedLikes); // Update local like state
-      handleLike(post.id);    // Call parent function to update global state
+      setLike(updatedLikes); 
+      handleLike(post.id);    
   };
   
     return (

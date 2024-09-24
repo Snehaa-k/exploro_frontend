@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, Box, Button, Modal, Paper, Typography, Tab, Tabs } from '@mui/material';
-
+import api from '../../../axios-interceptors/AxiosInterceptors';
 
 
 const ViewProfile = ({
@@ -19,6 +19,11 @@ const ViewProfile = ({
 }) => {
   const [value, setValue] = useState('one');
   const [open, setOpen] = useState(false);
+  const [travelLeaders,setTravelLeaders] = useState([])
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); 
+  console.log(travelLeaders,"travel leaders");
+  
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -31,11 +36,28 @@ const ViewProfile = ({
 
   const handleClose = () => setOpen(false);
 
+  useEffect(() => {
+    const fetchFollowedLeaders = async () => {
+      try {
+        const response = await api.get('/following-leaders/')
+
+        setTravelLeaders(response.data.followed_travel_leaders);
+        setTotalFollowing(response.data.total_following);
+        setLoading(false); 
+      } catch (error) {
+        setError('Unable to fetch followed travel leaders');
+        console.error('Error fetching travel leaders:', error);
+      }
+    };
+
+    fetchFollowedLeaders();
+  }, []);
+
   return (
     <div>
      
       
-      <Box ml={4} p={2} sx={{ flex: 1, backgroundColor: '#f9f9f9', borderRadius: '8px', width: '500px', marginLeft: '450px', marginTop: '-500px' }}>
+      <Box ml={4} p={2} sx={{ flex: 1, backgroundColor: '#f9f9f9', borderRadius: '8px', width: '500px', marginLeft: '450px', marginTop: '-520px' }}>
         {/* Modal for Followers */}
         <Modal open={open} onClose={handleClose} aria-labelledby="followers-modal-title" aria-describedby="followers-modal-description">
           <Paper
@@ -55,7 +77,31 @@ const ViewProfile = ({
             </Typography>
             <Typography id="followers-modal-description" sx={{ mt: 2 }}>
               List of {following_r}...
-              {/* You can add the list of followers dynamically here */}
+              <ul>
+              {travelLeaders.length === 0 ? (
+        <p>You are not following any travel leaders yet.</p> 
+      ) : (
+        <ul>
+          {travelLeaders.map((leader) => (
+            <li key={leader.id}>
+              <div>
+                <img
+                  src={leader.profile_image || 'default-avatar.png'}
+                  alt={`${leader.username}'s profile`}
+                  width="50"
+                  height="50"
+                />
+                <div>
+                  <h3>{leader.full_name}</h3>
+                  <p>{leader.username}</p>
+                  <p>{leader.bio}</p>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      </ul>
             </Typography>
           </Paper>
         </Modal>

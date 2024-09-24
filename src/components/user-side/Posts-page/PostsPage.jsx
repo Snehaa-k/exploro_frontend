@@ -16,7 +16,7 @@ import { API_URL } from '../../../apiservice/Apiservice';
 import api from '../../../axios-interceptors/AxiosInterceptors';
 import TravelPostCard from '../../Posts/MainPost/PhotoPost/PhotoPost';
 import TravelArticleCard from '../../Posts/MainPost/articlePost/ArticlePost';
-
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 const PostsPage = () => {
   const dispatch = useDispatch()
@@ -27,11 +27,13 @@ const PostsPage = () => {
   const [likes, setLikes] = useState();
   const [likearticle,setLikesarticle] =useState()
   const [reloadPosts, setReloadPosts] = useState(false);
+  const [wallet, setWallet] = useState(null);
   console.log(profile,"imagee")
   const token = localStorage.getItem('accessToken')
   console.log(user,"hai user");
   console.log(likes,"likess");
   console.log(posts,"posts pagessss");
+  console.log(wallet,"wallet_amount");
   
 
   
@@ -133,6 +135,20 @@ useEffect(() => {
 fetchArticle();
 }, [token,reloadPosts]);
 
+useEffect(() => {
+  const fetchWallet = async () => {
+    try {
+      const response = await api.get('/showwallet/');
+      if (response) {
+        setWallet(response.data.wallet);
+      }
+    } catch (error) {
+      console.error('Failed to fetch wallet data:', error.message);
+    }
+  };
+  fetchWallet();
+}, [token]);
+
 
 
 
@@ -155,6 +171,11 @@ const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_a
       primaryText: 'Completed Trips',
       secondaryText: '0',
     },
+    {
+      icon: <AccountBalanceWalletIcon color="success" />,
+      primaryText: 'Wallet',
+      secondaryText:  wallet ? `₹${wallet.wallet}` : 0,
+    }
     
   ];
   const menuItems = [

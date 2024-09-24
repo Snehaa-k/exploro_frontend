@@ -23,9 +23,9 @@ const UserPost = () => {
   };
 
   const menuItemsLead = [
-    { label: 'Home',icon: <HomeIcon />, onClick: HandleHome },
-    { label: 'Profile', icon: <ExploreIcon />, onClick:HandleProfile },
-    { label: 'Destination',icon: <AccountCircleIcon />, onClick:HandleDestination },
+    { label: 'Home', onClick: HandleHome },
+    { label: 'Profile', onClick:HandleProfile },
+    { label: 'Destination', onClick:HandleDestination },
   ];
   return (
 

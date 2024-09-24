@@ -56,7 +56,7 @@ const CommentModal = ({
                       color="textSecondary"
                       sx={{ display: 'block', marginTop: '4px' }}
                     >
-                      {new Date(timestamp).toLocaleString()} {/* Timestamp */}
+                      {new Date(timestamp).toLocaleString()} 
                     </Typography>
                   </Box>
                 </ListItem>

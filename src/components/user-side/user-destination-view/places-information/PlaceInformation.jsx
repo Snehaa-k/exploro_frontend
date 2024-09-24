@@ -4,18 +4,33 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import api from '../../../../axios-interceptors/AxiosInterceptors';
 import { useNavigate } from 'react-router';
+import ChatDrawer from '../../ChatDialog/ChatDialog';
 
 const TripDetails = ({tripId}) => {
   console.log(tripId);
   const [trip,setTrip] = useState([])
+  const [user,setUser] = useState([])
   console.log(trip,"my trips");
+  console.log(user,"my user_id");
+  
   const navigate = useNavigate()
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const handleOpenChat = () => {
+    setIsChatOpen(true);
+  };
+
+  const handleCloseChat = () => {
+    setIsChatOpen(false);
+  };
   
 
   useEffect(()=>{
     const fetchTrip = async () => {
       const response = await api.get(`/viewonetrip/${tripId}/`);
       setTrip(response.data.trip);
+      setUser(response.data.userId);
+
     };
 
     fetchTrip();
@@ -45,9 +60,12 @@ const TripDetails = ({tripId}) => {
         <Avatar src={trip.travelead_profile_image} sx={{ width: 56, height: 56 }}  onClick={handleAvatarClick} 
           style={{ cursor: 'pointer' }}   />
         <Typography variant="body1">Hosted by {trip.travelead_username}</Typography>
-        <IconButton color="primary">
-         <ChatBubbleOutlineIcon/>
-        </IconButton>
+        <IconButton color="primary" onClick={handleOpenChat}>
+        {user !== trip.travelead && (
+          <IconButton color="primary" onClick={handleOpenChat}>
+            <ChatBubbleOutlineIcon />
+          </IconButton>
+        )} </IconButton>
       </Stack>
 
       <Box sx={{ display: 'flex', marginBottom: 3 }}>
@@ -62,7 +80,7 @@ const TripDetails = ({tripId}) => {
         </Typography>
 
       </Box>
-      <Typography variant="h6"><b>Starting from </b>    {trip.start_date}</Typography>
+      <Typography variant="h6"><b>Starting from </b> {trip.start_date}</Typography>
 
 
       <Stack direction="row" justifyContent="space-between" sx={{ marginBottom: 3 }}>
@@ -93,6 +111,15 @@ const TripDetails = ({tripId}) => {
           <Typography variant="body2">{trip.travelead_username} | Contact: {trip.travelead_email}</Typography>
         </Box>
       </Box>
+      {user !== trip.travelead && (
+        <ChatDrawer
+          isOpen={isChatOpen}
+          onClose={handleCloseChat}
+          currentUserId={user}
+          receiverId={trip.travelead}
+          receiverName={trip.travelead_username}
+        />
+      )}
     </Box>
   );
 };
