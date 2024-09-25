@@ -15,7 +15,7 @@ import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { logoutUser } from '../../../redux/reducers/authReducers';
 import HomeIcon from '@mui/icons-material/Home';
 import ExploreIcon from '@mui/icons-material/Explore';
@@ -32,22 +32,27 @@ import CancelledTrips from '../../../components/user-side/Profiletabs/Cancelled-
 
 
 const TravellerProfile = () => {
+  // const { userId, travelLeadId } = useParams();
+  // console.log(travelLeadId,"idd")
   const token = localStorage.getItem("accessToken")
+  const [receiverId, setReceiverId] = useState(null); 
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   console.log(token);
 
-  const handleOpenChat = () => {
+  const handleOpenChat = (receiverId) => {
+    setReceiverId(receiverId);
     setIsChatOpen(true);
   };
-
   const handleCloseChat = () => {
     setIsChatOpen(false);
+    setReceiverId(null); // Reset receiver ID on chat close
   };
 
   const navigate = useNavigate()
   const [profile,setProfile] = useState(null)
   const [error, setError] = useState(null);
   const [value, setValue] = useState('one');
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const dispatch = useDispatch()
   console.log(profile,"users pro");
   
@@ -197,6 +202,7 @@ const TravellerProfile = () => {
       Followers="Followers"
       following_r="followers"
       onFollowersClick={() => console.log('Traveler followers clicked')}
+      
     />:<ViewProfile
     profilePic={
       profile?.profile?.profile_image 
@@ -217,7 +223,7 @@ const TravellerProfile = () => {
 )}
 
       <TabContainer value={value} handleChange={handleChange} tabs={tabs} />  
-      <ChatDrawer isOpen={isChatOpen} onClose={handleCloseChat} />
+      <ChatDrawer isOpen={isChatOpen} onClose={handleCloseChat} currentUserId={profile?.user?.id} receiverId={receiverId} receiverName={null} />
 
     </div>
   )

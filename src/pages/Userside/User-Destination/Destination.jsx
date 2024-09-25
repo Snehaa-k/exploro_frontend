@@ -50,10 +50,17 @@ const Destination = () => {
   const [priceRange, setPriceRange] = useState([0, 500]);
   const [tripType, setTripType] = useState('');
   const [trips,setTrips] = useState([])
+  const [travelead,setTravelLeads] = useState([])
+  
+  console.log(travelead,"travel_id");
+  
+  const [user,setUser] = useState()
+  console.log(user,"i am user");
+  
   const navigate = useNavigate()
   const token = localStorage.getItem("accessToken")
   
-  console.log(trips);
+  console.log(trips,"mytripssssss");
   
   const HandleProfile = ()=>{
     navigate('/travellerprofile')
@@ -83,6 +90,10 @@ const Destination = () => {
         }));
         setTrips(tripsWithMonth);
         setTrips([response.data.trip]);
+        setUser(response.data.user)
+
+        const ids = response.data.trip.map(trip => trip?.travelead || null);
+        setTravelLeads(ids); 
       } catch (error) {
         // setError('Error fetching trips');
         console.error('Error fetching trips:', error.message);

@@ -3,7 +3,7 @@ import {
   Box,
   TextField,
   Button,
-  List,
+  List,  
   ListItem,
   ListItemText,
   Avatar,
@@ -11,200 +11,189 @@ import {
   Drawer,
   Divider,
 } from '@mui/material';
+import api from '../../../axios-interceptors/AxiosInterceptors';
 
-const ChatDrawer = ({ isOpen, onClose,currentUserId,receiverId,receiverName }) => {  // Accept isOpen and onClose as props
+const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [chatPartners, setChatPartners] = useState([]);
+  const [selectedPartner, setSelectedPartner] = useState(null);
 
+  useEffect(() => {
+    if (isOpen) {
+      fetchChatPartners();
+    }
+  }, [isOpen]);
 
-//   const handleSendMessage = () => {
-//     if (newMessage.trim()) {
-//       setMessages([...messages, { text: newMessage, sender: 'user', time: new Date().toLocaleTimeString() }]);
-//       setNewMessage('');
-//     }
-//   };
+  const fetchChatPartners = async () => {
+    try {
+      const response = await api.get('/chat-partners/'); 
+      setChatPartners(response.data,"haiiiii responses");
+    } catch (error) {
+      console.error('Error fetching chat partners:', error);
+    }
+  };
 
-useEffect(() => {
-    console.log('hai i am working');
-    const roomName = [currentUserId, receiverId].sort().join('_');
-    
-    const chatSocket = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
-    
-    chatSocket.onopen = () => {
-        setIsConnected(true);
-        console.log('WebSocket connected');
-
-
+  useEffect(() => {
+    if (selectedPartner) {
+      console.log(selectedPartner,"seleted P");
+      
+      const fetchMessages = async () => {
+        try {
+          const response = await api.get(`/messages/${selectedPartner.id}/`);
+          const fetchedMessages = response.data.map(msg => ({
+            text: msg.content,
+            sender: msg.sender === currentUserId ? 'user' : 'partner',
+            time: new Date(msg.timestamp).toLocaleTimeString(),
+          }));
+          setMessages(fetchedMessages);
+        } catch (error) {
+          console.error('Error fetching messages:', error);
+        }
       };
-  
-    chatSocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setMessages((prevMessages) => [...prevMessages, {
-        text: data.message,
-        sender: data.sender_id === currentUserId ? 'user' : 'receiver',
-        time: new Date().toLocaleTimeString()
-      }]);    };
 
-    chatSocket.onerror = (error) => {
-      console.error('WebSocket Error:', error);
-    };
+      fetchMessages();
+    }
+  }, [selectedPartner]);
 
-    chatSocket.onclose = () => {
-      setIsConnected(false);
-      console.log('Chat socket closed');
-    };
+  useEffect(() => {
+    if (isOpen && currentUserId && (receiverId || selectedPartner)) {
+      const partnerIdToUse = receiverId || selectedPartner.id;
+      const chatSocket = new WebSocket(`ws://localhost:8000/ws/chat/?receiver_id=${partnerIdToUse}&user_id=${currentUserId}`);
 
-    setSocket(chatSocket);
+      chatSocket.onopen = () => {
+        setIsConnected(true);
+      };
 
-    return () => {
-      chatSocket.close(); 
-    };
-  }, [currentUserId,receiverId]);
+      chatSocket.onmessage = function(e) {
+        try {
+          const data = JSON.parse(e.data);
+          if (data.type === 'chat_message') {
+            console.log(data,"hai data");
+            
+            const isUserSender = data.sender === currentUserId;
+            console.log(isUserSender,"is user")
+            setMessages(prevMessages => [
+              ...prevMessages,
+              {
+                text: data.content,
+                sender: isUserSender ? 'user' : 'partner',
+                time: new Date().toLocaleTimeString(),
+              },
+            ]);
+          }
+        } catch (error) {
+          console.error('Error parsing message:', error);
+        }
+      };
 
+      chatSocket.onclose = () => {
+        setIsConnected(false);
+      };
+
+      setSocket(chatSocket);
+
+      return () => {
+        chatSocket.close();
+      };
+    }
+  }, [isOpen, currentUserId, receiverId, selectedPartner]);
 
   const handleSendMessage = () => {
     if (newMessage.trim() && socket) {
       const messageData = {
         message: newMessage,
-        sender_id: currentUserId, // Include the sender ID
-        receiver_id: receiverId, // Include the receiver ID
+        sender_id: currentUserId,
+        receiver_id: receiverId || selectedPartner.id,
       };
+
       socket.send(JSON.stringify(messageData));
-      setMessages((prevMessages) => [...prevMessages, { text: newMessage, sender: 'user', time: new Date().toLocaleTimeString() }]);
       setNewMessage('');
     }
   };
 
+  const handlePartnerSelect = (partner) => {
+    setSelectedPartner(partner);
+  };
+
   return (
     <Drawer
-    anchor="right"
-    open={isOpen}
-    onClose={onClose}
-    PaperProps={{
-      sx: {
-        width: '70vw',
-        display: 'flex',
-        flexDirection: 'row',
-      },
-    }}
-  >
-    {/* Receiver info */}
-    <Box
-      sx={{
-        width: '40%',
-        padding: 2,
-        bgcolor: '#f9f9f9',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-      }}
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-        <Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>
-          {receiverName}
-        </Avatar>
-        <Box>
-          <Typography variant="h6">{receiverName}</Typography>
-          <Typography variant="body2" color="textSecondary">
-            ID: {receiverId}
-          </Typography>
-        </Box>
-      </Box>
-      <Divider sx={{ marginY: 2, width: '100%' }} />
-    </Box>
-
-    {/* Chat area */}
-    <Box
-      sx={{
-        width: '60%',
-        display: 'flex',
-        flexDirection: 'column',
-        borderLeft: '1px solid #e0e0e0',
-      }}
-    >
-      <Box
-        sx={{
+      anchor="right"
+      open={isOpen}
+      onClose={onClose}
+      PaperProps={{
+        sx: {
+          width: '70vw',
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: 2,
-          bgcolor: 'primary.main',
-          color: 'white',
-        }}
-      >
-        <Typography variant="h6">Chat</Typography>
-        <Button onClick={onClose} style={{ color: 'white' }}>
-          Close
-        </Button>
+          flexDirection: 'row',
+        },
+      }}
+    >
+      {/* Chat partners list */}
+      <Box sx={{ width: '30%', borderRight: '1px solid #e0e0e0', overflowY: 'auto' }}>
+        <Typography variant="h6" sx={{ p: 2 }}>Chat Partners</Typography>
+        <List>
+          {chatPartners.map((partner) => (
+            <ListItem 
+              button 
+              key={partner.id} 
+              onClick={() => handlePartnerSelect(partner)}
+              selected={selectedPartner?.id === partner.id}
+            >
+              <Avatar alt={partner.username} src={partner.avatarUrl || ''} />
+              <ListItemText 
+                primary={partner.username} 
+                secondary={partner.unreadMessages > 0 ? `(${partner.unreadMessages} unread)` : ''}
+              />
+            </ListItem>
+          ))}
+        </List>
       </Box>
 
-      <List
-        sx={{
-          flexGrow: 1,
-          overflowY: 'auto',
-          padding: 2,
-          bgcolor: 'background.paper',
-        }}
-      >
-        {messages.map((msg, index) => (
-          <ListItem
-            key={index}
-            sx={{
-              display: 'flex',
-              justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-              marginBottom: 1,
-            }}
-          >
-            {msg.sender !== 'user' && (
-              <Avatar sx={{ marginRight: 2, width: 40, height: 40 }}>
-                {receiverName}
-              </Avatar>
-            )}
-            <Box
-              sx={{
-                border: `2px solid ${msg.sender === 'user' ? '#007bff' : '#b0bec5'}`,
-                backgroundColor: msg.sender === 'user' ? '#e3f2fd' : '#f1f1f1',
-                padding: 1,
-                borderRadius: 10,
-                maxWidth: '75%',
-                boxShadow: 1,
-                position: 'relative',
+      {/* Chat area */}
+      <Box sx={{ width: '70%', display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ flexGrow: 1, overflowY: 'auto', padding: 2 }}>
+          {messages.map((msg, index) => (
+            <Box 
+              key={index} 
+              sx={{ 
+                margin: 1, 
+                textAlign: msg.sender === 'user' ? 'right' : 'left',
+                display: 'flex',
+                justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start'
               }}
             >
-              <ListItemText primary={msg.text} />
-              <Typography
-                variant="caption"
-                sx={{ position: 'absolute', right: 10, bottom: -20, fontSize: '0.75rem' }}
+              <Box 
+                sx={{ 
+                  maxWidth: '70%', 
+                  borderRadius: 1, 
+                  bgcolor: msg.sender === 'user' ? '#d1e7dd' : '#f8d7da',
+                  padding: 1,
+                  boxShadow: 1
+                }}
               >
-                {msg.time}
-              </Typography>
+                <Typography variant="body1">{msg.text}</Typography>
+                <Typography variant="caption" color="textSecondary">{msg.time}</Typography>
+              </Box>
             </Box>
-          </ListItem>
-        ))}
-      </List>
-
-      <Box
-        sx={{
-          display: 'flex',
-          padding: 2,
-          borderTop: '1px solid #e0e0e0',
-        }}
-      >
-        <TextField
-          fullWidth
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type your message..."
-          variant="outlined"
-        />
-        <Button onClick={handleSendMessage} variant="contained" sx={{ marginLeft: 1 }}>
-          Send
-        </Button>
+          ))}
+        </Box>
+        <Divider />
+        <Box sx={{ display: 'flex', padding: 1 }}>
+          <TextField
+            variant="outlined"
+            size="small"
+            fullWidth
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type a message..."
+          />
+          <Button variant="contained" onClick={handleSendMessage}>Send</Button>
+        </Box>
       </Box>
-    </Box>
-  </Drawer>
+    </Drawer>
   );
 };
 

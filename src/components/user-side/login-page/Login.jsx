@@ -64,9 +64,9 @@ const Login = () => {
                 Swal.fire({
                   icon: 'success',
                   title: 'Login Successful',
-                  text: 'Redirecting to your travel leader profile...',
+                  text: 'Redirecting to destination',
                 }).then(() => {
-                  navigate('/travellerprofile');
+                  navigate('/destination');
                 });
               } else {
                 Swal.fire({
@@ -81,9 +81,9 @@ const Login = () => {
               Swal.fire({
                 icon: 'success',
                 title: 'Login Successful',
-                text: 'Redirecting to your traveler profile...',
+                text: 'Redirecting to destination',
               }).then(() => {
-                navigate('/travellerprofile');
+                navigate('/destination');
               });
             }
           } else {

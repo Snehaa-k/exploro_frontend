@@ -36,22 +36,22 @@ const ViewProfile = ({
 
   const handleClose = () => setOpen(false);
 
-  useEffect(() => {
-    const fetchFollowedLeaders = async () => {
-      try {
-        const response = await api.get('/following-leaders/')
+  // useEffect(() => {
+  //   const fetchFollowedLeaders = async () => {
+  //     try {
+  //       const response = await api.get('/following-leaders/')
 
-        setTravelLeaders(response.data.followed_travel_leaders);
-        setTotalFollowing(response.data.total_following);
-        setLoading(false); 
-      } catch (error) {
-        setError('Unable to fetch followed travel leaders');
-        console.error('Error fetching travel leaders:', error);
-      }
-    };
+  //       setTravelLeaders(response.data.followed_travel_leaders);
+  //       setTotalFollowing(response.data.total_following);
+  //       setLoading(false); 
+  //     } catch (error) {
+  //       setError('Unable to fetch followed travel leaders');
+  //       console.error('Error fetching travel leaders:', error);
+  //     }
+  //   };
 
-    fetchFollowedLeaders();
-  }, []);
+  //   fetchFollowedLeaders();
+  // }, []);
 
   return (
     <div>
