@@ -1,39 +1,49 @@
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../../axios-interceptors/AxiosInterceptors';
-import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const SuccessPage = () => {
-
   const location = useLocation();
+  const navigate = useNavigate();
+  const paymentConfirmed = useRef(false);
+  const query = new URLSearchParams(location.search);
 
-  useEffect(() => {
+  const sessionId = query.get('session_id');
+
+
+  const handleBackToHome = async () => {
     const query = new URLSearchParams(location.search);
     const sessionId = query.get('session_id');
     const tripId = query.get('trip_id'); 
-    console.log('Session ID:', sessionId);
-    // console.log('Trip ID:', tripId);
 
-    const confirmPayment = async () => {
+    console.log('Session ID:', sessionId);
+
+    // Only confirm payment if it hasn't been confirmed yet
+    if (sessionId && !paymentConfirmed.current) {
       try {
         const response = await api.post('/confirm-payment/', {
           session_id: sessionId,
           trip_id: tripId,
         });
+        console.log(response.data.success);
+
         if (response.data.success) {
+          paymentConfirmed.current = true;
           console.log('Payment confirmed successfully!');
         }
       } catch (error) {
         console.error('Error confirming payment:', error);
       }
-    };
-
-    if (sessionId) {
-      confirmPayment();
     }
-  }, []);
 
-
+    // Navigate back to home after confirmation
+    navigate('/destination');
+  };
+  const handleNavigateToHome = () => {
+    // Navigate to destination without handling payment confirmation
+    navigate('/destination');
+  };
 
   return (
     <div style={styles.container}>
@@ -62,7 +72,7 @@ const SuccessPage = () => {
           style={styles.icon}
         >
           <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 7L9 19L3 13" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M21 7L9 19L3 13" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </motion.div>
 
@@ -76,15 +86,27 @@ const SuccessPage = () => {
           Your Payment was successful!
         </motion.p>
 
-        <motion.a
-          href="/destination"
-          className="success-btn"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          style={styles.button}
-        >
-          Back to Home
-        </motion.a>
+        {sessionId ? (
+          <motion.button
+            className="success-btn"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            style={styles.button}
+            onClick={handleBackToHome} 
+          >
+            Back to Home
+          </motion.button>
+        ) : (
+          <motion.button
+            className="success-btn"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            style={styles.button}
+            onClick={handleNavigateToHome} 
+          >
+            Back to Home
+          </motion.button>
+        )}
       </motion.div>
     </div>
   );
@@ -124,6 +146,8 @@ const styles = {
     backgroundColor: '#007bff',
     textDecoration: 'none',
     borderRadius: '4px',
+    border: 'none',
+    cursor: 'pointer',
   },
 };
 

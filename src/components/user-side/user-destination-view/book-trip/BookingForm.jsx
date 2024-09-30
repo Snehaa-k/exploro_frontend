@@ -7,6 +7,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import api from '../../../../axios-interceptors/AxiosInterceptors';
 import { loadStripe } from '@stripe/stripe-js';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router';
 
 const stripePromise = loadStripe('pk_test_51PxSrYJiQplpQ67p3kTF3bBrVzigdJZPFHmLiY67aVcv66vff1cTyW4g9NCtjn1ZCbiMVi23UmvSyflOGJiiejIF005mqPKxuk'); 
 
@@ -15,11 +16,25 @@ const TripCard = ({tripId}) => {
   const [wallet, setWallet] = useState(null);
   const [walletError, setWalletError] = useState(null); 
   const [walletSuccess, setWalletSuccess] = useState(null); 
+  const [is_booked,setBooked] = useState(null)
+  const[user,setUser] = useState()
+  console.log(is_booked,"booked");
+  console.log(trips,"ya trip");
+  
+  
+  const navigate = useNavigate()
+  
+  
+  
+  
+  
 
   useEffect(()=>{
     const fetchTrip = async () => {
       const response = await api.get(`/viewonetrip/${tripId}/`);
       setTrip(response.data.trip);
+      setBooked(response.data.is_booked)
+      setUser(response.data.userId)
     };
 
     fetchTrip();
@@ -77,6 +92,8 @@ const TripCard = ({tripId}) => {
 
       if (response.data.success) {
         Swal.fire("Success", "Payment completed successfully using your wallet!", "success");
+        navigate('/success')
+        
       } else {
         Swal.fire("Error", "Payment failed due to insufficient balance.", "error");
       }
@@ -105,7 +122,9 @@ const TripCard = ({tripId}) => {
 
       {/* Total Price */}
       <CardContent>
-        <Grid container justifyContent="space-between" alignItems="center">
+      <Typography variant="h6" style={{ color: is_booked ? 'red' : 'inherit' }}>
+  {is_booked && is_booked ? 'You have already booked' : ''}
+</Typography>      <Grid container justifyContent="space-between" alignItems="center">
           <Typography variant="h6">TOTAL PRICE</Typography>
           <Typography variant="h5" color="primary"> Rs {trips.amount}</Typography>
         </Grid>
@@ -120,6 +139,7 @@ const TripCard = ({tripId}) => {
           color="success"
           sx={{ marginTop: 2 }}
           onClick={handleWalletPaymentClick}
+          disabled={is_booked}
         >
           Wallet Pay
         </Button>
@@ -132,6 +152,7 @@ const TripCard = ({tripId}) => {
           color="success"
           sx={{ marginTop: 2 }}
           onClick={handleReserveClick}
+          disabled={is_booked}
         >
           RESERVE SPOT
         </Button>

@@ -29,13 +29,14 @@ const SignupPage = () => {
     setLoading(true);
     try {
       const response = await dispatch(registerUser(values)).unwrap();
+      
       dispatch(setUser(response));
 
       if (response) {
         Swal.fire({
           icon: 'success',
           title: 'Registration Successful',
-          text: 'Redirecting to home page...',
+          text: 'Redirecting to OTP verification...',
           timer: 2000,
           timerProgressBar: true,
           showConfirmButton: false,
@@ -48,7 +49,7 @@ const SignupPage = () => {
       Swal.fire({
         icon: 'error',
         title: 'Registration Failed',
-        text: 'Please try again.',
+        text: `${error.error}`,
       }).then(() => {
         navigate('/signup');
       });
@@ -173,7 +174,8 @@ const SignupPage = () => {
                 sx={{
                   position: 'fixed',
                   marginTop: '320px',
-                  width: '200px',
+                  width: '280px',
+                  height:'40px',
                   bgcolor: 'black',
                 }}
                 variant='contained'

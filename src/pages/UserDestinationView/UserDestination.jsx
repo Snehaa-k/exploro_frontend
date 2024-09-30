@@ -25,9 +25,9 @@ const UserDestination = () => {
       }
 
     const menuItemsLead = [
-        { label: 'Home', icon: <HomeIcon />, onClick:HandleHome },
+        { label: 'Home', onClick:HandleHome },
         { label: 'Destination', onClick:HandleDestination  },
-        { label: 'Profile', icon: <AccountCircleIcon />, onClick: HandleProfile },
+        { label: 'Profile', onClick: HandleProfile },
       ];
     
   return (

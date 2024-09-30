@@ -17,6 +17,7 @@ import api from '../../../axios-interceptors/AxiosInterceptors';
 import TravelPostCard from '../../Posts/MainPost/PhotoPost/PhotoPost';
 import TravelArticleCard from '../../Posts/MainPost/articlePost/ArticlePost';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import NotificationSystem from '../Notification/Notification';
 
 const PostsPage = () => {
   const dispatch = useDispatch()
@@ -28,6 +29,24 @@ const PostsPage = () => {
   const [likearticle,setLikesarticle] =useState()
   const [reloadPosts, setReloadPosts] = useState(false);
   const [wallet, setWallet] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  
+
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+
+  const handleOpenNotification = () => {
+    setIsNotificationOpen(true);
+  };
+
+  const handleCloseNotification = () => {
+    setIsNotificationOpen(false);
+  };
+
+  const handleNewNotification = (message) => {
+    setNotificationMessage(message);
+    setSnackbarOpen(true);
+  };
   console.log(profile,"imagee")
   const token = localStorage.getItem('accessToken')
   console.log(user,"hai user");
@@ -166,11 +185,11 @@ const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_a
       primaryText: `${user.is_travel_leader?"followers":"followeing"}`,
       secondaryText:'0',
     },
-    {
-      icon: <CheckCircleIcon color="success" />,
-      primaryText: 'Completed Trips',
-      secondaryText: '0',
-    },
+    // {
+    //   icon: <CheckCircleIcon color="success" />,
+    //   primaryText: 'Completed Trips',
+    //   secondaryText: '0',
+    // },
     {
       icon: <AccountBalanceWalletIcon color="success" />,
       primaryText: 'Wallet',
@@ -244,7 +263,7 @@ const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_a
         })}
       </div>
     
-    
+    <NotificationSystem open={isNotificationOpen} onClose={handleCloseNotification}  userId={user.id} />
 
     </div>
 

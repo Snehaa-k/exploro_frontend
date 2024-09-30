@@ -3,6 +3,7 @@ import { Avatar, Box, List, ListItem, ListItemText, ListItemIcon, Typography } f
 import { useNavigate } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import './Actions.css';
 
 const Actions = ({ avatarSrc, menuItems }) => {
   const navigate = useNavigate();
@@ -85,7 +86,25 @@ const Actions = ({ avatarSrc, menuItems }) => {
             >
               <ListItemIcon sx={{ minWidth: isMobile ? 'auto' : undefined }}>
                 {item.icon}
+                {item.count !== undefined && item.count > 0 && (
+                                    <Box
+                                        sx={{
+                                            backgroundColor: 'red', 
+                                            color: 'white', 
+                                            borderRadius: '50%', 
+                                            padding: '3px 6px',
+                                            fontSize: '12px',
+                                            position: 'absolute', 
+                                            top: '0',
+                                            right: '0',
+                                            transform: 'translate(-600%, 10%)',
+                                        }}
+                                    >
+                                        {item.count}
+                                    </Box>
+                                )}
               </ListItemIcon>
+
               {!isMobile && <ListItemText primary={item.text} />}
             </ListItem>
           ))}

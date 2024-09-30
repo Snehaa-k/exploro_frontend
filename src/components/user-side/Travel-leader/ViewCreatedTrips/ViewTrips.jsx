@@ -11,6 +11,7 @@ import api from '../../../../axios-interceptors/AxiosInterceptors';
 import { useNavigate } from 'react-router';
 import { API_URL } from '../../../../apiservice/Apiservice';
 import { format, isAfter } from 'date-fns';
+import Swal from 'sweetalert2';
 
 const StyledTableContainer = styled(TableContainer)({
   maxWidth: '100%',
@@ -53,9 +54,9 @@ const TripList = () => {
   const [error, setError] = useState('');
   const token = localStorage.getItem('accessToken');
   const navigate = useNavigate();
-  console.log(plans);
-  
+
   const today = format(new Date(), 'yyyy-MM-dd');
+
   const handleAddTrip = (newTrip) => {
     setTrips([...trip, newTrip]);
   };
@@ -65,13 +66,10 @@ const TripList = () => {
   };
 
   const handleAddPlace = (tripId) => {
-    console.log('handleAddPlace called with tripId:', tripId); 
     setSelectedID(tripId);
-
     setAddPlaceOpen(true);
   };
-  console.log(selectedTrip);
-  
+
   const handleEditTripClick = (trip) => {
     setSelectedTrip(trip);
     setEditTripOpen(true);
@@ -88,20 +86,44 @@ const TripList = () => {
   };
 
   const handleDeleteTrip = async (tripId) => {
-    try {
-      await api.delete(`/trips/${tripId}`);
-      setTrips(trip.filter((trip) => trip.id !== tripId));
-    } catch (error) {
-      console.error('Error deleting trip:', error.message);
-      setError('Error deleting trip');
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to cancel the trip?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, cancel it!',
+      cancelButtonText: 'No, keep it',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await api.post(`/trip_cancel/${tripId}`);
+        setTrips((prevTrips) => prevTrips.filter((trip) => trip.id !== tripId));
+        Swal.fire({
+          icon: 'success',
+          title: 'Cancelled!',
+          text: 'The trip has been canceled.',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        console.error('Error canceling trip:', error.message);
+        setError('Error canceling trip');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'There was a problem canceling the trip.',
+        });
+      }
     }
   };
 
   const handleNavigate = () => {
     navigate('/triplan');
   };
-
- 
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -118,8 +140,8 @@ const TripList = () => {
       }
     };
 
-  fetchTrips();
-  }, [editTripOpen]);
+    fetchTrips();
+  }, [editTripOpen, trip]);
 
   return (
     <div>
@@ -132,6 +154,7 @@ const TripList = () => {
               <TableCell>Accommodation</TableCell>
               <TableCell>Transportation</TableCell>
               <TableCell>Participants</TableCell>
+              <TableCell>Duration</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Start Date</TableCell>
               <TableCell>End Date</TableCell>
@@ -153,51 +176,52 @@ const TripList = () => {
               ) : (
                 plans.flat().map((trip) => {
                   const isCompleted = isAfter(new Date(today), new Date(trip.end_date));
-                  
-                  return(
-                  
-                  <TableRow key={trip.id}>
-                    
-                    <TableCell>
-                      
-                      <StyledImage src={trip.Trip_image} alt={trip.location} />
-                    </TableCell>
-                    <TableCell>{trip.location}</TableCell>
-                    <TableCell>{trip.accomodation}</TableCell>
-                    <TableCell>{trip.transportation}</TableCell>
-                    <TableCell>{trip.participant_limit}</TableCell>
-                    <TableCell>{trip.amount}</TableCell>
-                    <TableCell>{trip.start_date}</TableCell>
-                    <TableCell>{trip.end_date}</TableCell>
-                    <TableCell>
-                    {isCompleted ? (
-                        <div>Completed</div>
-                      ) : (
-                        <>
-                          <IconButton onClick={() => handleEditTripClick(trip)}>
-                            <EditIcon />
-                          </IconButton>
-                          <StyledButton variant="contained" onClick={() => handleAddPlace(trip.id)}>
-                            Add Place
-                          </StyledButton>
-                          <StyledButton variant="contained" onClick={() => handleViewPlacesClick(trip)}>
-                            View Places
-                          </StyledButton>
-                          <IconButton onClick={() => handleDeleteTrip(trip.id)} color="error">
-                            <DeleteIcon />
-                          </IconButton>
-                        </>
-                      )}
-                   
-                    </TableCell>
-                  </TableRow>
-                )})
+                  const isCancelled = trip.is_completed === "cancelled";
+
+                  return (
+                    <TableRow key={trip.id}>
+                      <TableCell>
+                        <StyledImage src={trip.Trip_image} alt={trip.location} />
+                      </TableCell>
+                      <TableCell>{trip.location}</TableCell>
+                      <TableCell>{trip.accomodation}</TableCell>
+                      <TableCell>{trip.transportation}</TableCell>
+                      <TableCell>{trip.participant_limit}</TableCell>
+                      <TableCell>{trip.duration}</TableCell>
+                      <TableCell>{trip.amount}</TableCell>
+                      <TableCell>{trip.start_date}</TableCell>
+                      <TableCell>{trip.end_date}</TableCell>
+                      <TableCell>
+                        {isCancelled ? (
+                          <div style={{color:'red'}}>Cancelled</div>
+                        ) : isCompleted ? (
+                          <div >Completed</div>
+                        ) : (
+                          <>
+                            <IconButton onClick={() => handleEditTripClick(trip)}>
+                              <EditIcon />
+                            </IconButton>
+                            <StyledButton variant="contained" onClick={() => handleAddPlace(trip.id)}>
+                              Add Place
+                            </StyledButton>
+                            <StyledButton variant="contained" onClick={() => handleViewPlacesClick(trip)}>
+                              View Places
+                            </StyledButton>
+                            <IconButton onClick={() => handleDeleteTrip(trip.id)} color="error">
+                              <DeleteIcon />
+                            </IconButton>
+                          </>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
               )}
             </TableBody>
           )}
         </StyledTable>
       </StyledTableContainer>
-      
+
       <AddPlaceModal
         open={addPlaceOpen}
         onClose={() => setAddPlaceOpen(false)}

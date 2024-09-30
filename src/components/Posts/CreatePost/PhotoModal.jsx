@@ -123,7 +123,7 @@ const PhotoModal = ({ open, handleClose, onPhotoSubmit ,setReloadPosts}) => {
           onChange={(e) => setDescription(e.target.value)}
           sx={{ marginBottom: 2 }}
         />
-         <FormControl fullWidth >
+         {/* <FormControl fullWidth >
           <InputLabel id="destination-type-label">Preferred Destination Type</InputLabel>
           <Select
             labelId="destination-type-label"
@@ -136,7 +136,7 @@ const PhotoModal = ({ open, handleClose, onPhotoSubmit ,setReloadPosts}) => {
             <MenuItem value="Beaches">Famous Cities</MenuItem>
             <MenuItem value="Mountains">Hilly areas</MenuItem>
           </Select>
-        </FormControl>
+        </FormControl> */}
 
         <Button variant="contained" color="primary" fullWidth onClick={handleSubmit} style={{marginTop:'2px'}}>
           Add Post

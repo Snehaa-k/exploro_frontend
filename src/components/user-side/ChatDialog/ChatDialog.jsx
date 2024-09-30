@@ -10,16 +10,25 @@ import {
   Typography,
   Drawer,
   Divider,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import api from '../../../axios-interceptors/AxiosInterceptors';
+
+
+
 
 const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [socket, setSocket] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [chatPartners, setChatPartners] = useState([]);
   const [selectedPartner, setSelectedPartner] = useState(null);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  console.log(chatPartners,"hai chatpartners");
+  
 
   useEffect(() => {
     if (isOpen) {
@@ -30,11 +39,29 @@ const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId }) => {
   const fetchChatPartners = async () => {
     try {
       const response = await api.get('/chat-partners/'); 
-      setChatPartners(response.data,"haiiiii responses");
+      const sortedChatPartners = response.data.sort((a, b) => {
+        const aTimestamp = a.last_message?.timestamp ? new Date(a.last_message.timestamp) : 0;
+        const bTimestamp = b.last_message?.timestamp ? new Date(b.last_message.timestamp) : 0;
+        return bTimestamp - aTimestamp; // Sort in descending order
+      });
+      setChatPartners(sortedChatPartners);
     } catch (error) {
       console.error('Error fetching chat partners:', error);
     }
   };
+
+//  read or unread.......................
+const markMessagesAsRead = async (partnerId) => {
+  try {
+    await api.post('/mark-all-messages-as-read/', { partner_id: partnerId });
+    // Update the local state to reflect that the messages are read
+    setMessages(prevMessages =>
+      prevMessages.map(msg => ({ ...msg, isRead: true })) // Mark all messages as read
+    );
+  } catch (error) {
+    console.error('Error marking messages as read:', error);
+  }
+};
 
   useEffect(() => {
     if (selectedPartner) {
@@ -44,9 +71,13 @@ const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId }) => {
         try {
           const response = await api.get(`/messages/${selectedPartner.id}/`);
           const fetchedMessages = response.data.map(msg => ({
+            id: msg.id,
             text: msg.content,
             sender: msg.sender === currentUserId ? 'user' : 'partner',
+
             time: new Date(msg.timestamp).toLocaleTimeString(),
+            isRead: msg.is_read,
+
           }));
           setMessages(fetchedMessages);
         } catch (error) {
@@ -74,6 +105,13 @@ const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId }) => {
             console.log(data,"hai data");
             
             const isUserSender = data.sender === currentUserId;
+
+            if (!isUserSender) {
+              setNotificationMessage(`New message from ${selectedPartner.username}: ${data.content}`);
+              // onNewNotification(`New message from ${selectedPartner.username}: ${data.content}`);
+              setSnackbarOpen(true);
+            }
+
             console.log(isUserSender,"is user")
             setMessages(prevMessages => [
               ...prevMessages,
@@ -113,6 +151,10 @@ const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId }) => {
       setNewMessage('');
     }
   };
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
 
   const handlePartnerSelect = (partner) => {
     setSelectedPartner(partner);
@@ -132,7 +174,7 @@ const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId }) => {
       }}
     >
       {/* Chat partners list */}
-      <Box sx={{ width: '30%', borderRight: '1px solid #e0e0e0', overflowY: 'auto' }}>
+      <Box sx={{ width: '30%', borderRight: '1px solid #e0e0e0', overflowY: 'auto', cursor: 'pointer' }}  onClick={() =>  markMessagesAsRead(selectedPartner.id)}>
         <Typography variant="h6" sx={{ p: 2 }}>Chat Partners</Typography>
         <List>
           {chatPartners.map((partner) => (
@@ -157,13 +199,14 @@ const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId }) => {
         <Box sx={{ flexGrow: 1, overflowY: 'auto', padding: 2 }}>
           {messages.map((msg, index) => (
             <Box 
-              key={index} 
-              sx={{ 
-                margin: 1, 
-                textAlign: msg.sender === 'user' ? 'right' : 'left',
-                display: 'flex',
-                justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start'
-              }}
+            key={msg.id}  // Use message ID as the key
+            sx={{ 
+              margin: 1, 
+              textAlign: msg.sender === 'user' ? 'right' : 'left',
+              display: 'flex',
+              justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start',
+             
+            }}
             >
               <Box 
                 sx={{ 
@@ -193,6 +236,16 @@ const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId }) => {
           <Button variant="contained" onClick={handleSendMessage}>Send</Button>
         </Box>
       </Box>
+      {/* <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="info" sx={{ width: '100%' }}>
+          {notificationMessage}
+        </Alert>
+      </Snackbar> */}
     </Drawer>
   );
 };

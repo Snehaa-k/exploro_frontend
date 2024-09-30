@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TablePagination, Collapse, IconButton } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TablePagination, Collapse, IconButton, Typography } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import AdminHome from '../Common/AdminHome';
 import { useNavigate, useParams } from 'react-router';
@@ -43,11 +43,24 @@ const TripDetails = () => {
 
    const paginatedTrips = details.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
+   // Function to calculate the total amount for non-cancelled customers
+   const calculateTotalAmount = (trip) => {
+      const nonCancelledCustomers = trip.booked_customers.filter(
+         (customer) => customer.status !== 'cancelled'
+      );
+      return Number.isFinite(trip.amount) && nonCancelledCustomers.length > 0
+         ? trip.amount * nonCancelledCustomers.length
+         : 0;
+   };
+
    return (
       <>
          <AdminHome />
+         <div style={{ textAlign: 'center', marginTop: '-350px' }}>
+            <Typography variant='h4' style={{ fontWeight: 'bold' }}>Trip Details</Typography>
+         </div>
          <div>
-            <TableContainer component={Paper} style={{ width: '70%', margin: '50px auto', marginLeft: '350px', marginTop: '-300px' }}>
+            <TableContainer component={Paper} style={{ width: '70%', margin: '50px auto', marginLeft: '350px' }}>
                <Table aria-label="simple table">
                   <TableHead>
                      <TableRow>
@@ -58,70 +71,87 @@ const TripDetails = () => {
                         <TableCell style={{ fontWeight: 'bold' }}>Amount</TableCell>
                         <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
                         <TableCell style={{ fontWeight: 'bold' }}>Booked Customers</TableCell>
-                        {/* <TableCell style={{ fontWeight: 'bold' }}>Actions</TableCell> */}
+                        <TableCell style={{ fontWeight: 'bold' }}>Total Amount</TableCell>
+                        <TableCell style={{ fontWeight: 'bold' }}>Payment</TableCell>
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {paginatedTrips.map((trip) => (
-                        <React.Fragment key={trip.id}>
-                           <TableRow>
-                              <TableCell>
-                                 <IconButton onClick={() => handleToggleRow(trip.id)}>
-                                    {openRows[trip.id] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-                                 </IconButton>
-                              </TableCell>
-                              <TableCell component="th" scope="row">{trip.location}</TableCell>
-                              <TableCell>{new Date(trip.start_date).toLocaleDateString()}</TableCell>
-                              <TableCell>{new Date(trip.end_date).toLocaleDateString()}</TableCell>
-                              <TableCell>Rs {trip.amount}</TableCell>
-                              {isTripCompleted(trip.end_date) ? 
-                                 <TableCell>Trip Completed</TableCell> : 
-                                 <TableCell>{trip.is_completed ? 'Ongoing' : 'Planned'}</TableCell>}
-                              <TableCell>{trip.booked_customers.length}</TableCell>
-                           </TableRow>
+                     {paginatedTrips.length === 0 ? (
+                        <TableRow>
+                           <TableCell colSpan={7} align="center">
+                              No trips available
+                           </TableCell>
+                        </TableRow>
+                     ) : (
+                        paginatedTrips.map((trip) => (
+                           <React.Fragment key={trip.id}>
+                              <TableRow>
+                                 <TableCell>
+                                    <IconButton onClick={() => handleToggleRow(trip.id)}>
+                                       {openRows[trip.id] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                                    </IconButton>
+                                 </TableCell>
+                                 <TableCell component="th" scope="row">{trip.location}</TableCell>
+                                 <TableCell>{new Date(trip.start_date).toLocaleDateString()}</TableCell>
+                                 <TableCell>{new Date(trip.end_date).toLocaleDateString()}</TableCell>
+                                 <TableCell>Rs {trip.amount}</TableCell>
+                                 {isTripCompleted(trip.end_date) ? 
+                                    <TableCell>Trip Completed</TableCell> : 
+                                    <TableCell>{trip.is_completed ? 'Ongoing' : 'Planned'}</TableCell>}
+                                 <TableCell>{trip.booked_customers.length}</TableCell>
+                                 <TableCell>{calculateTotalAmount(trip)}</TableCell>
+                                 <TableCell>
+                                    <Button variant="contained">Refund</Button>
+                                 </TableCell>
+                              </TableRow>
 
-                           {/* Collapse row to show booked customer details */}
-                           <TableRow>
-                              <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
-                                 <Collapse in={openRows[trip.id]} timeout="auto" unmountOnExit>
-                                    <Table size="small" aria-label="booked-customers" style={{ marginLeft: '50px', marginTop: '20px' }}>
-                                       <TableHead>
-                                          <TableRow>
-                                             <TableCell style={{ fontWeight: 'bold' }}>Customer Name</TableCell>
-                                             <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
-                                             <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
-                                             {/* <TableCell style={{ fontWeight: 'bold' }}>payment Type</TableCell> */}
+                              {/* Collapse row to show booked customer details */}
+                              <TableRow>
+                                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
+                                    <Collapse in={openRows[trip.id]} timeout="auto" unmountOnExit>
+                                       <Table size="small" aria-label="booked-customers" style={{ marginLeft: '50px', marginTop: '20px' }}>
+                                          <TableHead>
+                                             <TableRow>                                         
+                                                <TableCell style={{ fontWeight: 'bold' }}>Payment Id</TableCell>
 
-                                             
-                                             {/* <TableCell style={{ fontWeight: 'bold' }}>Actions</TableCell> */}
-                                          </TableRow>
-                                       </TableHead>
-                                       <TableBody>
-                                          {trip.booked_customers.length === 0 ? (
-                                             <TableRow>
-                                                <TableCell colSpan={4} align="center">
-                                                   No one booked
-                                                </TableCell>
+
+                                                <TableCell style={{ fontWeight: 'bold' }}>Customer Name</TableCell>
+
+                                                <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
+
+                                                <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
+                                                <TableCell style={{ fontWeight: 'bold' }}>Payment Type</TableCell>
+
+
                                              </TableRow>
-                                          ) : (
-                                             trip.booked_customers.map((customer) => (
-                                                <TableRow key={customer.id}>
-                                                   <TableCell>{customer.user_username}</TableCell>
-                                                   <TableCell>{customer.user_email}</TableCell>
-                                                   <TableCell>{customer.status ? 'Confirmed' : 'Pending'}</TableCell>
-                                                   {/* <TableCell>
-                                                      {customer.payment_type}
-                                                   </TableCell> */}
+                                          </TableHead>
+                                          <TableBody>
+                                             {trip.booked_customers.length === 0 ? (
+                                                <TableRow>
+                                                   <TableCell colSpan={4} align="center">
+                                                      No one booked
+                                                   </TableCell>
                                                 </TableRow>
-                                             ))
-                                          )}
-                                       </TableBody>
-                                    </Table>
-                                 </Collapse>
-                              </TableCell>
-                           </TableRow>
-                        </React.Fragment>
-                     ))}
+                                             ) : (
+                                                trip.booked_customers.map((customer) => (
+                                                   <TableRow key={customer.id}>
+                                                      <TableCell>{customer.id}</TableCell>
+
+                                                      <TableCell>{customer.user_username}</TableCell>
+                                                      <TableCell>{customer.user_email}</TableCell>
+                                                      <TableCell>{customer.status}</TableCell>
+                                                      <TableCell>{customer.payment_type}</TableCell>
+                                                   </TableRow>
+                                                ))
+                                             )}
+                                          </TableBody>
+                                       </Table>
+                                    </Collapse>
+                                 </TableCell>
+                              </TableRow>
+                           </React.Fragment>
+                        ))
+                     )}
                   </TableBody>
                </Table>
             </TableContainer>
@@ -144,7 +174,7 @@ const TripDetails = () => {
                   },
                   '& .MuiTablePagination-actions': {
                      '& .MuiIconButton-root': {
-                        color: '#1976d2',  
+                        color: '#1976d2',
                      },
                   },
                }}

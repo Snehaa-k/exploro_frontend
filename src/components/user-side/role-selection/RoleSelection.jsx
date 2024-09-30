@@ -31,7 +31,7 @@ const RoleSelection = () => {
         Swal.fire({
           icon: 'success',
           title: 'Successfully selected',
-          text: 'Redirecting to login  page...',
+          text: 'Redirecting to appropriate page ',
           timer: 2000, 
           timerProgressBar: true,
           showConfirmButton: false

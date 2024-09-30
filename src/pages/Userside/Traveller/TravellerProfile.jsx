@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import MessageIcon from '@mui/icons-material/Message';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Typography } from '@mui/material';
+import { Typography,Snackbar,Alert } from '@mui/material';
 import Navbar from '../../../components/Navbar/Navbar';
 import { API_URL } from '../../../apiservice/Apiservice';
 import axios from 'axios';
@@ -26,6 +26,9 @@ import PastTrips from '../../../components/user-side/Profiletabs/Completed-trips
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ChatDrawer from '../../../components/user-side/ChatDialog/ChatDialog';
 import CancelledTrips from '../../../components/user-side/Profiletabs/Cancelled-trips/CancelledTrips';
+import NotificationSystem from '../../../components/user-side/Notification/Notification';
+import NotificationDrawer from '../../../components/user-side/Notificationdrawer/NotificationDrawer';
+
 
 
 
@@ -37,6 +40,31 @@ const TravellerProfile = () => {
   const token = localStorage.getItem("accessToken")
   const [receiverId, setReceiverId] = useState(null); 
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+
+
+  const notificationCount='23'
+  
+
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+
+  const handleOpenNotification = () => {
+    setIsNotificationOpen(true);
+  };
+
+  const handleCloseNotification = () => {
+    setIsNotificationOpen(false);
+  };
+
+  const handleNewNotification = (message) => {
+    setNotificationMessage(message);
+    setSnackbarOpen(true);
+
+  };
+
+ 
 
   console.log(token);
 
@@ -49,12 +77,18 @@ const TravellerProfile = () => {
     setReceiverId(null); // Reset receiver ID on chat close
   };
 
+
+
   const navigate = useNavigate()
   const [profile,setProfile] = useState(null)
   const [error, setError] = useState(null);
   const [value, setValue] = useState('one');
   const dispatch = useDispatch()
   console.log(profile,"users pro");
+  useEffect(()=>{
+    console.log('value changes');
+    
+      },[value])
   
 
   const HandleProfile = ()=>{
@@ -67,12 +101,7 @@ const TravellerProfile = () => {
     navigate('/posts')
   }
  
-  useEffect(()=>{
-    
-    if (!token){
-      navigate('/login')
-      return
-    }})
+  
 
     
     const handlelogout = async () =>{
@@ -90,10 +119,16 @@ const TravellerProfile = () => {
         { value: 'two', label: 'Past Trips', content: <PastTrips/> },
         { value: 'three', label: 'Cancelled Trips', content: <CancelledTrips/> },
       ];
+      useEffect(()=>{
+    
+        if (!token){
+          navigate('/login')
+          return
+        }})
     const menuItems = [
         { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
-        { text: 'Messages', icon: <MessageIcon />, onClick:handleOpenChat },
-        { text: 'Notifications', icon: <NotificationsIcon />, path: '/notifications' },
+        { text: 'Messages', icon: <MessageIcon />, onClick:handleOpenChat,count: notificationCount },
+        { text: 'Notifications', icon: <NotificationsIcon />, path: '/notifications',count: notificationCount,onClick: () => setIsNotificationOpen(true) },
         { text: 'Logout', icon: <LogoutIcon />, onClick:handlelogout },
       ];
     
@@ -101,7 +136,7 @@ const TravellerProfile = () => {
         { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
         { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' }, 
         { text: 'Inbox', icon: <MessageIcon />,  onClick:handleOpenChat},
-        { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts' },
+        { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts',onClick: () => setIsNotificationOpen(true),count: notificationCount },
         { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/viewtrip', }, 
         { text: 'Create Trip', icon: <EventNoteIcon />, path: '/triplan' },
         { text: 'Log Out', icon: <ExitToAppIcon />, onClick: handlelogout },
@@ -222,8 +257,26 @@ const TravellerProfile = () => {
   </>
 )}
 
+
       <TabContainer value={value} handleChange={handleChange} tabs={tabs} />  
-      <ChatDrawer isOpen={isChatOpen} onClose={handleCloseChat} currentUserId={profile?.user?.id} receiverId={receiverId} receiverName={null} />
+      <ChatDrawer isOpen={isChatOpen} onClose={handleCloseChat} currentUserId={profile?.user?.id} receiverId={receiverId} receiverName={null}  />
+      <NotificationDrawer
+        isOpen={isNotificationOpen}
+        onClose={handleCloseNotification} /> 
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={() => setSnackbarOpen(false)} severity="info" sx={{ width: '100%' }}>
+          {notificationMessage}
+        </Alert>
+      </Snackbar>
+
+      <NotificationSystem open={isNotificationOpen} onClose={handleCloseNotification}  userId={profile?.user?.id} />
+      
+      
 
     </div>
   )

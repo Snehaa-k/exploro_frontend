@@ -28,10 +28,7 @@ const UserProfile = () => {
   const [details, setDetails] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [totalFollowers, setTotalFollowers] = useState(0);
-  console.log(totalFollowers,"haiii");
   
-  
-  console.log(details,"detailsss");
   const today = moment();
 
   const handleTabChange = (event, newValue) => {
@@ -56,8 +53,6 @@ const UserProfile = () => {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
-
-
 
   useEffect(() => {
     api.get(`/adminviewtrip/${id}`)
@@ -93,6 +88,7 @@ const UserProfile = () => {
   };
 
   const travelLeader = details.length > 0 ? details[0] : {};
+  
   return (
     <Box sx={{ bgcolor: "#f5f5f5", minHeight: "100vh" }}>
       <Box
@@ -131,7 +127,6 @@ const UserProfile = () => {
           {travelLeader.travelead_address}
         </Typography>
 
-        
         <Button
           variant="contained"
           sx={{
@@ -174,54 +169,62 @@ const UserProfile = () => {
       {/* Card Section */}
       <Box sx={{ padding: "20px", display: "flex", justifyContent: "center" }}>
         <Grid container spacing={2}>
-          {paginatedTrips.map((trip, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-             <Card
-  sx={{ 
-    boxShadow: 3, 
-    cursor: trip.is_completed === "pending" && moment(trip.start_date).isAfter(today) ? "pointer" : "default" 
-  }} 
-  onClick={() => {
-    if (trip.is_completed === "pending" && moment(trip.start_date).isAfter(today)) {
-      handleCardClick(trip.id); 
-    }
-  }}
->
-                <CardContent>
-                  <Box
-                    sx={{
-                      height: "200px",
-                      backgroundImage: `url(${trip.Trip_image})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  ></Box>
+          {paginatedTrips.length > 0 ? (
+            paginatedTrips.map((trip, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Card
+                  sx={{ 
+                    boxShadow: 3, 
+                    cursor: trip.is_completed === "pending" && moment(trip.start_date).isAfter(today) ? "pointer" : "default" 
+                  }} 
+                  onClick={() => {
+                    if (trip.is_completed === "pending" && moment(trip.start_date).isAfter(today)) {
+                      handleCardClick(trip.id); 
+                    }
+                  }}
+                >
+                  <CardContent>
+                    <Box
+                      sx={{
+                        height: "200px",
+                        backgroundImage: `url(${trip.Trip_image})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                    ></Box>
 
-                  <Typography variant="h6" sx={{ mt: 2 }}>
-                    {trip.location}
-                  </Typography>
-                  <Typography variant="h6" sx={{ mt: 2 }}>
-                  <CalendarTodayIcon />
-        <Typography variant="body2" ml={1}>
-          {trip.start_date} ➔ {trip.end_date}
-        </Typography>
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    {trip.description}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+                    <Typography variant="h6" sx={{ mt: 2 }}>
+                      {trip.location}
+                    </Typography>
+                    <Typography variant="h6" sx={{ mt: 2 }}>
+                      <CalendarTodayIcon />
+                      <Typography variant="body2" ml={1}>
+                        {trip.start_date} ➔ {trip.end_date}
+                      </Typography>
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                      {trip.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+          ) : (
+            <Typography variant="h6" sx={{ mt: 4, textAlign: 'center',marginLeft:'700px' }}>
+              {tabValue === 0 ? "No Upcoming Trips" : "No Completed Trips"}
+            </Typography>
+          )}
         </Grid>
       </Box>
 
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-        <Pagination
-          count={Math.ceil(displayedTrips.length / ITEMS_PER_PAGE)}
-          page={currentPage}
-          onChange={handlePageChange}
-        />
+        {displayedTrips.length > 0 && (
+          <Pagination
+            count={Math.ceil(displayedTrips.length / ITEMS_PER_PAGE)}
+            page={currentPage}
+            onChange={handlePageChange}
+          />
+        )}
       </Box>
     </Box>
   );

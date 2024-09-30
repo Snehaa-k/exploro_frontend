@@ -33,6 +33,7 @@ const TravelPostCard = ({ post, likes, handleLike }) => {
               });
               if (response.status === 200) {
                   setComments(response.data);
+                  setload(false)
               } else {
                   console.error('Unexpected response:', response);
               }
@@ -42,15 +43,18 @@ const TravelPostCard = ({ post, likes, handleLike }) => {
       };
 
       fetchComments();
+
   }, [token,reload]);
     
     
     const handleCommentClick = () => {
       setIsCommentModalOpen(true);
+      setload(true)
     };
   
     const handleCloseCommentModal = () => {
       setIsCommentModalOpen(false);
+      setload(true)
     };
   
     const handleCommentSubmit = () => {
@@ -64,8 +68,10 @@ const TravelPostCard = ({ post, likes, handleLike }) => {
         setComment('');
         handleCloseCommentModal();
         CommentSubmit(post.id, newComment);
+       
 
       }
+      setload(true)
     };
 
 
@@ -78,6 +84,7 @@ const TravelPostCard = ({ post, likes, handleLike }) => {
           object_id: postId,
           text: newComment,
         });
+
     
         if (response && response.status === 201) {
           console.log('Comment saved successfully:', response.data);

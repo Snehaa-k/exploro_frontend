@@ -13,7 +13,7 @@ const validationSchema = Yup.object().shape({
   accommodation: Yup.string().required('Accommodation is required'),
   transportation: Yup.string().required('Transportation is required'),
   participant_limit: Yup.number().required('Participants limit is required').positive().integer(),
-  amount: Yup.number().required('amount is required').positive().integer(),
+  amount: Yup.number().required('Amount is required').positive().integer(),
   start_date: Yup.date().required('Start Date is required').min(new Date(), 'Start Date must be today or later'),
   duration: Yup.string().required('Duration is required'),
 });
@@ -21,15 +21,18 @@ const validationSchema = Yup.object().shape({
 const EditTripModal = ({ open, onClose, trip, onSave }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(trip.id)
+
+  // Use the existing trip image or an empty string for the initial state
+  const [selectedImage, setSelectedImage] = useState(trip.Trip_image || ''); // Existing image
 
   // Handle form submission
   const handleSubmit = async (values) => {
     try {
-      const response = await dispatch(updateTrip({ updatedTrip: values })).unwrap();
+      const updatedTrip = { ...values }; 
+      const response = await dispatch(updateTrip({ updatedTrip })).unwrap();
       if (response) {
-        onSave( values);
-        onClose(values)
+        onSave(updatedTrip);
+        onClose(updatedTrip);
         Swal.fire({
           icon: 'success',
           title: 'Successfully Edited..',
@@ -40,11 +43,21 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
         }).then(() => {
           navigate('/viewtrip');
         });
-       
-
       }
     } catch (error) {
       console.error('Error updating trip:', error);
+    }
+  };
+
+  // Handle image change
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSelectedImage(reader.result); // Update the image preview with the new file
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -54,15 +67,15 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
       <DialogContent>
         <Formik
           initialValues={{
-            id : trip.id ||'',
+            id: trip.id || '',
             location: trip.location || '',
             accommodation: trip.accomodation || '',
             transportation: trip.transportation || '',
             participant_limit: trip.participant_limit || '',
             start_date: trip.start_date || '',
             duration: trip.duration || '',
-            amount:trip.amount||'',
-          }}
+            amount: trip.amount || '',
+         }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -70,6 +83,27 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
             <Form>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
+                  {/* Existing image preview */}
+                  {/* {selectedImage && (
+                    <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+                      <img
+                        src={selectedImage}
+                        alt="Trip"
+                        style={{ width: '100px', height: '100px', objectFit: 'cover', cursor: 'pointer' }}
+                        onClick={() => document.getElementById('imageUpload').click()} // Trigger file input on image click
+                      />
+                    </div>
+                  )} */}
+
+                  {/* Hidden file input for image */}
+                  {/* <input
+                    id="imageUpload"
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleImageChange}
+                  /> */}
+
                   <Field
                     as={TextField}
                     fullWidth
@@ -111,7 +145,7 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
                     type="number"
                   />
                   <ErrorMessage name="participant_limit" component="div" style={{ color: 'red' }} />
-                  
+
                   <Field
                     as={TextField}
                     fullWidth
@@ -122,7 +156,6 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
                     type="number"
                   />
                   <ErrorMessage name="amount" component="div" style={{ color: 'red' }} />
-
 
                   <Field
                     as={TextField}

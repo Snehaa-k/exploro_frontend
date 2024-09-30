@@ -1,15 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Stack, Typography, Avatar, Button, IconButton } from '@mui/material';
+import { Box, Stack, Typography, Avatar, Button, IconButton ,Snackbar,Alert} from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import api from '../../../../axios-interceptors/AxiosInterceptors';
 import { useNavigate } from 'react-router';
 import ChatDrawer from '../../ChatDialog/ChatDialog';
+import NotificationSystem from '../../Notification/Notification';
 
 const TripDetails = ({tripId}) => {
   console.log(tripId);
   const [trip,setTrip] = useState([])
   const [user,setUser] = useState([])
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  
+
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+
+  const handleOpenNotification = () => {
+    setIsNotificationOpen(true);
+  };
+
+  const handleCloseNotification = () => {
+    setIsNotificationOpen(false);
+  };
+
+  const handleNewNotification = (message) => {
+    setNotificationMessage(message);
+    setSnackbarOpen(true);
+  };
+
+ 
   console.log(trip,"my trips");
   console.log(user,"my user_id");
   
@@ -36,8 +57,14 @@ const TripDetails = ({tripId}) => {
     fetchTrip();
   }, [tripId]);
 
+  
+  
   const handleAvatarClick = () => {
+    if(trip.travelead === user){
+      navigate('/travellerprofile')
+    }else{
     navigate(`/userprofile/${trip.travelead}`);
+    }
   };
 
   return (
@@ -80,7 +107,9 @@ const TripDetails = ({tripId}) => {
         </Typography>
 
       </Box>
-      <Typography variant="h6"><b>Starting from </b> {trip.start_date}</Typography>
+      <Typography variant="body1" ml={1}>
+        Starting from  {trip.start_date} ➔ {trip.end_date}
+        </Typography>
 
 
       <Stack direction="row" justifyContent="space-between" sx={{ marginBottom: 3 }}>
@@ -118,8 +147,21 @@ const TripDetails = ({tripId}) => {
           currentUserId={user}
           receiverId={trip.travelead}
           receiverName={trip.travelead_username}
+          onNewNotification={handleNewNotification} 
         />
       )}
+
+      <NotificationSystem open={isNotificationOpen} onClose={handleCloseNotification}  userId={user}  />
+  {/* <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={() => setSnackbarOpen(false)} severity="info" sx={{ width: '100%' }}>
+          {notificationMessage}
+        </Alert>
+      </Snackbar> */}
     </Box>
   );
 };

@@ -8,6 +8,7 @@ import { API_URL } from '../../../../apiservice/Apiservice';
 const UpcomingTrips = () => {
     const navigate = useNavigate();
     const [upcomingTrips, setUpcomingTrips] = useState([]);
+    const [cancel,setCancelTrip] = useState(false)
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -18,7 +19,7 @@ const UpcomingTrips = () => {
           .catch(err => {
             setError('Failed to fetch booked trips');
           });
-      }, []);
+      }, [cancel]);
 
     const handleViewTrip = (id) => {
         navigate(`/viewdestination/${id}`);
@@ -29,11 +30,13 @@ const UpcomingTrips = () => {
           .then(response => {
               // Remove the canceled trip from the list of upcoming trips
               setUpcomingTrips(upcomingTrips.filter(trip => trip.id !== tripId));
-              alert('Trip canceled and wallet updated.');
+              alert('Trip canceled Successful');
+              setCancelTrip(true)
           })
           .catch(err => {
               console.error('Error canceling trip:', err);
               alert('Failed to cancel the trip.');
+              setCancelTrip(true)
           });
     };
 
@@ -50,14 +53,14 @@ const UpcomingTrips = () => {
                     <Grid item xs={12} sm={6} key={index}>
                         <Card
                             sx={{ height: '350px', position: 'relative', cursor: 'pointer' }}
-                            onClick={() => handleViewTrip(trip.id)}
+                            // onClick={() => handleViewTrip(trip.id)}
                         >
                              <CardMedia
                                 component="img"
                                 height="100"
                                 image={`${API_URL}${trip.image_url}`}  
                                 alt={trip.name}
-                                sx={{ cursor: 'pointer' }} // Add pointer cursor for visual feedback
+                                // sx={{ cursor: 'pointer' }} // Add pointer cursor for visual feedback
                                 onClick={() => handleViewTrip(trip.id)}
                             />
                             <CardContent>

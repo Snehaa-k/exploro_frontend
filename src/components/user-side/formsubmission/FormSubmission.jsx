@@ -175,11 +175,15 @@ export default function FormSubmission() {
   helperText={errors.lastname}  />
         </Box>
 
+
+
         <Box sx={{ display: 'flex', gap: 2, mb: 3, width: '100%', maxWidth: 600 }}>
           <TextField required id="email" label="Email Address" type="email" value={email}  fullWidth error={Boolean(errors.email)} disabled={true}/>
           <TextField required id="mobile" label="Mobile" fullWidth error={Boolean(errors.mobile)} 
   helperText={errors.mobile} onChange={(e)=>{setMobile(e.target.value)}} />
         </Box>
+
+
 
         <FormControl fullWidth sx={{ mb: 3 }}>
           <InputLabel id="multi-select-label"style={{marginLeft:'480px'}}>Select visited countries</InputLabel>
@@ -201,7 +205,7 @@ export default function FormSubmission() {
           </Select>
         </FormControl>
         {errors.selectedCountries && <Typography color="error" variant="caption">{errors.selectedCountries}</Typography>}
-
+        
         
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%', maxWidth: 600 }}>

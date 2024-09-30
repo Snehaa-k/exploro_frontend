@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import './Login.css'
 import { CircularProgress, TextField } from '@mui/material'
-import { Button,Box } from '@mui/material'
+import { Button,Box,Typography } from '@mui/material'
 import { loginUser, sendOTP } from '../../../redux/actions/authActions'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
 import Swal from 'sweetalert2'
 import { setUser } from '../../../redux/reducers/authReducers'
 import { ThreeDots } from 'react-loader-spinner'
+import { Link } from 'react-router-dom'
 
 
 
@@ -28,6 +29,9 @@ const Login = () => {
       return Object.keys(newErrors).length === 0;
 
     }
+    const handleForgotPassword = () => {
+      navigate('/forgot-password');  
+  };
 
     const handleLogin = async (e) => {
       e.preventDefault();
@@ -63,8 +67,11 @@ const Login = () => {
               if (is_approve_leader) {
                 Swal.fire({
                   icon: 'success',
-                  title: 'Login Successful',
-                  text: 'Redirecting to destination',
+                title: 'Login Successful',
+                text: 'Redirecting to Home page...',
+                timer: 1000, 
+                timerProgressBar: true,
+                showConfirmButton: false
                 }).then(() => {
                   navigate('/destination');
                 });
@@ -81,7 +88,10 @@ const Login = () => {
               Swal.fire({
                 icon: 'success',
                 title: 'Login Successful',
-                text: 'Redirecting to destination',
+                text: 'Redirecting to Home page...',
+                timer: 2000, 
+                timerProgressBar: true,
+                showConfirmButton: false
               }).then(() => {
                 navigate('/destination');
               });
@@ -96,12 +106,14 @@ const Login = () => {
             });
           }
         } catch (error) {
+          console.log(error,"error");
+          
           console.error('An error occurred during login:', error);
     
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'An error occurred. Please try again later.',
+            text: `${error.error}`,
           }).then(() => {
             navigate('/login');
           });
@@ -174,7 +186,8 @@ const Login = () => {
       marginTop: '180px',
       marginLeft: '22px',
       bgcolor: 'black',
-      width:'200px'
+      width:'280px',
+      height:'40px'
     }} variant='contained' type='submit'>{loading ? <ThreeDots
       visible={true}
       height="40"
@@ -184,7 +197,17 @@ const Login = () => {
       radius="9"
       ariaLabel="three-dots-loading"
           wrapperClass=""
-      />: 'LOGIN'} </Button></Box>
+      />: 'LOGIN'} </Button>
+      
+      </Box>
+      <Typography
+                        variant="body2"
+                        onClick={() => navigate('/forgot-password')}
+                        sx={{ cursor: 'pointer', color: 'blue' ,marginLeft:'190px',fontSize:'16px',marginTop:'70px'}}
+                    >
+                        forgot password?
+                    </Typography>      
+              
        
       </div>
       

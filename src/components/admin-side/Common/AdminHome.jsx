@@ -78,9 +78,9 @@ const AdminHome = () => {
         {selectedMenuItem === 'Requests' && (
           <Typography variant='h5' style={{ marginLeft: '370px', paddingTop: '50px' }}>Request Details</Typography>
         )}
-        {selectedMenuItem === 'Complaints' && (
+        {/* {selectedMenuItem === 'Complaints' && (
           <Typography variant='h5' style={{ marginLeft: '370px', paddingTop: '50px' }}>Complaint Information</Typography>
-        )}
+        )} */}
         {selectedMenuItem === 'LogOut' && (
           <Typography variant='h5' style={{ marginLeft: '370px', paddingTop: '50px' }}>Logging Out...</Typography>
         )}
@@ -95,7 +95,7 @@ const AdminHome = () => {
               { text: 'Travellers', icon: <PeopleIcon /> ,path: '/travellers'},
               { text: 'TraveLeaders', icon: <SupervisedUserCircleIcon /> ,path: '/travelleaders'},
               { text: 'Requests', icon: <AssignmentIcon />,path: '/requestss' },
-              { text: 'Complaints', icon: <ReportIcon /> },
+              // { text: 'Complaints', icon: <ReportIcon /> },
               { text: 'LogOut', icon: <ExitToAppIcon />,onClick:handlelogout }].map((item) => (
                 <ListItem
                 button
@@ -104,7 +104,6 @@ const AdminHome = () => {
                   if (item.onClick) {
                     item.onClick();
                   } else {
-                    setSelectedMenuItem(item.text);
                     navigate(item.path || '#'); 
                   }
                 }}

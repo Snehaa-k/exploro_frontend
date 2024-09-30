@@ -70,7 +70,7 @@ const AdminLogin = () => {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: 'An error occurred. Please try again later.',
+          text: `${error.error}`,
         });
       }
       

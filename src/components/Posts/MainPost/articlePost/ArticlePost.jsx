@@ -25,8 +25,12 @@ const TravelArticleCard = ({ post, likes, handleLike }) => {
 
     if (isUser) {
         updatedLikes = like.filter(id => id !== post.travel_leader);
+        console.log(updatedLikes,"haiii likesss");
+        
     } else {
         updatedLikes = [...like, post.travel_leader];
+        console.log(updatedLikes,"else");
+        
     }
 
     setLike(updatedLikes); 

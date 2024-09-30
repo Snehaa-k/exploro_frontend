@@ -33,9 +33,8 @@ import ProfileView from './pages/Userside/TravelLeader/profileview/ProfileView'
 import SuccessPage from './components/user-side/user-destination-view/success-page/Success'
 import TripDetails from './components/admin-side/Trip-details/TripDetails'
 import BookedCustomers from './components/admin-side/Booked-customers/BookedCustomers'
-import DashboardOverview from './components/Posts/Sidebar/SideBar'
-import DashBoard from './components/user-side/Travel-leader/Dashboard/DashBoard'
-
+import DashBoardPage from './pages/Userside/TravelLeader/Dashboard-page/DashBoardPage'
+import ForgotPassword from './components/user-side/FogotPassword/ForgotPassword'
 // import './App.css'
 
 
@@ -77,7 +76,8 @@ function App() {
             <Route path = '/userprofile/:id' element = {<ProfileView/>}/>
             <Route path = '/success' element = {<SuccessPage/>}/>
             <Route path = '/viewleadertrip/:id' element = {<TripDetails/>}/>
-            <Route path = '/dashboard' element = {<DashBoard/>}/>
+            <Route path = '/dashboard' element = {<DashBoardPage/>}/>
+            <Route path = '/forgot-password' element = {<ForgotPassword/>}/>
             {/* <Route path = '/viewcustomers/:id' element = {<BookedCustomers/>}/> */}
 
             

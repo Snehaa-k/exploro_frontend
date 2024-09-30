@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, CircularProgress,TablePagination } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, CircularProgress,TablePagination, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AdminHome from '../Common/AdminHome';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTravellers } from '../../../redux/actions/authActions';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-
 
 
 
@@ -79,10 +78,13 @@ const ViewTravellers = () => {
   return (
     <>
     <AdminHome/>
+    <div style={{ textAlign: 'center', marginTop: '-350px' }}>
+        <Typography variant='h4' style={{ fontWeight: 'bold' }}>Travellers</Typography>
+      </div>
     
     <div>
         
-        <TableContainer component={Paper} style={{ width: '70%', margin: '50px auto' ,marginLeft:'350px',marginTop:'-300px'}}>
+        <TableContainer component={Paper} style={{ width: '70%', margin: '50px auto' ,marginLeft:'350px'}}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>

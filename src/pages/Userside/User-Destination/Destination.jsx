@@ -167,7 +167,9 @@ const Destination = () => {
       trip.duration <= duration[1] &&
       trip.amount >= priceRange[0] &&
       trip.amount <= priceRange[1] &&
-      (!tripType || trip.trip_type === tripType)
+      (!tripType || trip.trip_type === tripType) &&
+      trip.participant_limit > 0 &&
+      trip.is_completed !='cancelled'
     );
   });
   
