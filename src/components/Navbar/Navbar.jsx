@@ -74,7 +74,7 @@ const Navbar = ({ title = 'Exploro', menuItems = [], onMenuClick }) => {
               {menuItems.map((item, index) => (
                 <Button key={index} color="inherit" onClick={item.onClick}  sx={{ textTransform: 'none' }} >
                    {item.icon}
-                   <Typography variant="body1" sx={{ marginTop: '4px' }}>{item.label}</Typography>
+                   <Typography variant="body1" sx={{ marginTop: '4px',color:'white' }}>{item.label}</Typography>
                 </Button>
               ))}
             </div>

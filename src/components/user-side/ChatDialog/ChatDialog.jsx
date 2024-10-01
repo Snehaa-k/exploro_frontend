@@ -12,10 +12,10 @@ import {
   Divider,
   Snackbar,
   Alert,
+  IconButton,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import api from '../../../axios-interceptors/AxiosInterceptors';
-
-
 
 
 const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId }) => {
@@ -34,7 +34,7 @@ const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId }) => {
     if (isOpen) {
       fetchChatPartners();
     }
-  }, [isOpen]);
+  }, [isOpen,selectedPartner]);
 
   const fetchChatPartners = async () => {
     try {
@@ -65,6 +65,8 @@ const markMessagesAsRead = async (partnerId) => {
 
   useEffect(() => {
     if (selectedPartner) {
+      
+
       console.log(selectedPartner,"seleted P");
       
       const fetchMessages = async () => {
@@ -87,7 +89,7 @@ const markMessagesAsRead = async (partnerId) => {
 
       fetchMessages();
     }
-  }, [selectedPartner]);
+  }, [selectedPartner,isConnected]);
 
   useEffect(() => {
     if (isOpen && currentUserId && (receiverId || selectedPartner)) {
@@ -173,6 +175,12 @@ const markMessagesAsRead = async (partnerId) => {
         },
       }}
     >
+      <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
+        <IconButton onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+
       {/* Chat partners list */}
       <Box sx={{ width: '30%', borderRight: '1px solid #e0e0e0', overflowY: 'auto', cursor: 'pointer' }}  onClick={() =>  markMessagesAsRead(selectedPartner.id)}>
         <Typography variant="h6" sx={{ p: 2 }}>Chat Partners</Typography>
@@ -187,7 +195,7 @@ const markMessagesAsRead = async (partnerId) => {
               <Avatar alt={partner.username} src={partner.avatarUrl || ''} />
               <ListItemText 
                 primary={partner.username} 
-                secondary={partner.unreadMessages > 0 ? `(${partner.unreadMessages} unread)` : ''}
+                secondary={partner.unread_count > 0 && selectedPartner?.id === partner.id ? `(${partner.is_read ==='false'  } unread)` : ''}
               />
             </ListItem>
           ))}
@@ -197,44 +205,58 @@ const markMessagesAsRead = async (partnerId) => {
       {/* Chat area */}
       <Box sx={{ width: '70%', display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ flexGrow: 1, overflowY: 'auto', padding: 2 }}>
-          {messages.map((msg, index) => (
-            <Box 
-            key={msg.id}  // Use message ID as the key
-            sx={{ 
-              margin: 1, 
-              textAlign: msg.sender === 'user' ? 'right' : 'left',
-              display: 'flex',
-              justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-             
-            }}
-            >
-              <Box 
-                sx={{ 
-                  maxWidth: '70%', 
-                  borderRadius: 1, 
-                  bgcolor: msg.sender === 'user' ? '#d1e7dd' : '#f8d7da',
-                  padding: 1,
-                  boxShadow: 1
-                }}
-              >
-                <Typography variant="body1">{msg.text}</Typography>
-                <Typography variant="caption" color="textSecondary">{msg.time}</Typography>
+          {selectedPartner ? (
+            messages.length > 0 ? (
+              messages.map((msg) => (
+                <Box 
+                  key={msg.id}  
+                  sx={{ 
+                    margin: 1, 
+                    textAlign: msg.sender === 'user' ? 'right' : 'left',
+                    display: 'flex',
+                    justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start',
+                  }}
+                >
+                  <Box 
+                    sx={{ 
+                      maxWidth: '70%', 
+                      borderRadius: 1, 
+                      bgcolor: msg.sender === 'user' ? '#d1e7dd' : '#f8d7da',
+                      padding: 1,
+                      boxShadow: 1,
+                    }}
+                  >
+                    <Typography variant="body1">{msg.text}</Typography>
+                    <Typography variant="caption" color="textSecondary">{msg.time}</Typography>
+                  </Box>
+                </Box>
+              ))
+            ) : (
+              <Box sx={{ textAlign: 'center', marginTop: 5 }}>
+                <Typography variant="body1">No messages yet. Start chatting!</Typography>
               </Box>
+            )
+          ) : (
+            <Box sx={{ textAlign: 'center', marginTop: '100px' }}>
+              <img src="image/chatty.jpg" alt="Chat Placeholder" style={{ width: '50%', height: 'auto', marginBottom: '16px' }} />
+              <Typography variant="h6">Select a Leader to start chatting!</Typography>
             </Box>
-          ))}
+          )}
         </Box>
         <Divider />
-        <Box sx={{ display: 'flex', padding: 1 }}>
-          <TextField
-            variant="outlined"
-            size="small"
-            fullWidth
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type a message..."
-          />
-          <Button variant="contained" onClick={handleSendMessage}>Send</Button>
-        </Box>
+        {selectedPartner && (
+          <Box sx={{ display: 'flex', padding: 1 }}>
+            <TextField
+              variant="outlined"
+              size="small"
+              fullWidth
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder="Type a message..."
+            />
+            <Button variant="contained" onClick={handleSendMessage}>Send</Button>
+          </Box>
+        )}
       </Box>
       {/* <Snackbar
         open={snackbarOpen}

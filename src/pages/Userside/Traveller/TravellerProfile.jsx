@@ -43,9 +43,21 @@ const TravellerProfile = () => {
   const [notifications, setNotifications] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
+  const [profile,setProfile] = useState(null)
+  
+
+  const [partners,setChatPartners] = useState(0)
+  console.log(partners,"hai partners..");
+  const [unreadmessages,setunreadmessage] = useState(0)
+
+  console.log(unreadmessages,"unread messages");
+  
+  
+
+  
 
 
-  const notificationCount='23'
+  const notificationCount=unreadmessages?unreadmessages:partners
   
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -64,6 +76,35 @@ const TravellerProfile = () => {
 
   };
 
+  const handlecount = (count)=>{
+    setunreadmessage(count)
+
+  }
+
+  useEffect(()=>{
+    const fetchChatPartners = async () => {
+      try {
+        const response = await api.get('/chat-partners/'); 
+        console.log(response,"haiiii...res");
+        
+        const filteredChatPartners = response.data.filter(
+          partner => partner.last_message?.receiver === profile?.user?.id
+        );
+
+        // Calculate total unread_count for these filtered chat partners
+        const totalUnreadCount = filteredChatPartners.reduce((total, partner) => {
+          return total + (partner.unread_count || 0); // Add unread_count, default to 0 if undefined
+        }, 0);
+        setChatPartners(totalUnreadCount)
+
+       
+      } catch (error) {
+        console.error('Error fetching chat partners:', error);
+      }
+    };
+     fetchChatPartners()
+  },[isChatOpen,profile,snackbarOpen,partners,notificationCount])
+
  
 
   console.log(token);
@@ -71,16 +112,18 @@ const TravellerProfile = () => {
   const handleOpenChat = (receiverId) => {
     setReceiverId(receiverId);
     setIsChatOpen(true);
+    setunreadmessage(0)
   };
   const handleCloseChat = () => {
     setIsChatOpen(false);
+    setunreadmessage(0)
     setReceiverId(null); // Reset receiver ID on chat close
   };
 
+ 
 
 
   const navigate = useNavigate()
-  const [profile,setProfile] = useState(null)
   const [error, setError] = useState(null);
   const [value, setValue] = useState('one');
   const dispatch = useDispatch()
@@ -135,7 +178,7 @@ const TravellerProfile = () => {
       const menuItemsLeader = [
         { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
         { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' }, 
-        { text: 'Inbox', icon: <MessageIcon />,  onClick:handleOpenChat},
+        { text: 'Inbox', icon: <MessageIcon />,  onClick:handleOpenChat,count: notificationCount},
         { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts',onClick: () => setIsNotificationOpen(true),count: notificationCount },
         { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/viewtrip', }, 
         { text: 'Create Trip', icon: <EventNoteIcon />, path: '/triplan' },
@@ -274,7 +317,7 @@ const TravellerProfile = () => {
         </Alert>
       </Snackbar>
 
-      <NotificationSystem open={isNotificationOpen} onClose={handleCloseNotification}  userId={profile?.user?.id} />
+      <NotificationSystem open={isNotificationOpen} onClose={handleCloseNotification}  userId={profile?.user?.id} onCount={handlecount} />
       
       
 

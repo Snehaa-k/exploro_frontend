@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router';
 import { API_URL } from '../../../apiservice/Apiservice';
 import axios from 'axios';
 import moment from 'moment';
+import api from '../../../axios-interceptors/AxiosInterceptors';
 
 const TripDetails = () => {
    const { id } = useParams();
@@ -13,6 +14,7 @@ const TripDetails = () => {
    const [rowsPerPage, setRowsPerPage] = useState(4);
    const [details, setDetails] = useState([]);
    const [openRows, setOpenRows] = useState({});
+   const[Trips,setTrips] = useState([])
    console.log(details);
 
    const navigate = useNavigate();
@@ -20,12 +22,32 @@ const TripDetails = () => {
    useEffect(() => {
       axios.get(`${API_URL}/adminviewtrip/${id}`)
          .then(response => {
-            setDetails(response.data);
+            const sortedTrips = response.data.sort((a, b) => {
+               return new Date(a.end_date) - new Date(b.end_date); 
+            });
+
+            setDetails(sortedTrips);
          })
          .catch(error => {
             console.error('Error fetching details:', error);
          });
-   }, [id]);
+   }, [id,Trips]);
+
+   const handleRefund = (tripId) => {
+      axios.post(`${API_URL}/refund/${tripId}`)
+        .then(response => {
+          const { refunded_amount } = response.data;
+          
+          setTrips(prevDetails => prevDetails.map(trip => 
+            trip.id === tripId ? { ...trip, is_refund: true } : trip
+          ));
+          
+          console.log(`Refund of Rs ${refunded_amount} successful.`);
+        })
+        .catch(error => {
+          console.error('Error processing refund:', error);
+        });
+    };
 
    const isTripCompleted = (endDate) => {
       const today = moment();
@@ -72,6 +94,7 @@ const TripDetails = () => {
                         <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
                         <TableCell style={{ fontWeight: 'bold' }}>Booked Customers</TableCell>
                         <TableCell style={{ fontWeight: 'bold' }}>Total Amount</TableCell>
+                        <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
                         <TableCell style={{ fontWeight: 'bold' }}>Payment</TableCell>
                      </TableRow>
                   </TableHead>
@@ -97,15 +120,28 @@ const TripDetails = () => {
                                  <TableCell>Rs {trip.amount}</TableCell>
                                  {isTripCompleted(trip.end_date) ? 
                                     <TableCell>Trip Completed</TableCell> : 
-                                    <TableCell>{trip.is_completed ? 'Ongoing' : 'Planned'}</TableCell>}
+                                    <TableCell>{trip.is_completed =='pending'  ? 'Ongoing' : 'Cancelled'}</TableCell>}
                                  <TableCell>{trip.booked_customers.length}</TableCell>
                                  <TableCell>{calculateTotalAmount(trip)}</TableCell>
+                                 <TableCell>{trip.is_completed}</TableCell>
                                  <TableCell>
-                                    <Button variant="contained">Refund</Button>
-                                 </TableCell>
+  {trip.is_refund ==='true' ?(
+    <Typography variant="body1" color="textSecondary">
+      Refunded
+    </Typography>
+  ) : (
+    <Button 
+      disabled={moment(trip.end_date).isAfter(moment()) || trip.is_completed === 'cancelled'} 
+      variant="contained"
+      onClick={() => handleRefund(trip.id)}
+    >
+      Refund
+    </Button>
+  )}
+</TableCell>
                               </TableRow>
 
-                              {/* Collapse row to show booked customer details */}
+                              
                               <TableRow>
                                  <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
                                     <Collapse in={openRows[trip.id]} timeout="auto" unmountOnExit>

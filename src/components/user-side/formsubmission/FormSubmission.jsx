@@ -39,16 +39,20 @@ export default function FormSubmission() {
   // const [email,setEmail] = useState('')
   const [cvFile, setCvFile] = useState(null);
   const [idFile, setIdFile] = useState(null);
+  const [accountHolder, setAccountHolder] = useState('');
+  const [accountNumber, setAccountNumber] = useState('');
+  const [bankName, setBankName] = useState('');
+  const [ifscCode, setIfscCode] = useState('');
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const users = useSelector((state) => state.reducer.user);
   console.log(users)
   if (!users) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>
   }  
   const email = users.user.user.email
-  console.log(email,"form submission")
-  // const emails = "travelleader123@gmail.com"
+  // const email = "devy123@gmail.com"
+  // console.log(email,"form submission")
 
 
 
@@ -81,6 +85,12 @@ export default function FormSubmission() {
     if (!idFile) {
       newErrors.idFile = 'ID Proof is required';
     }
+    
+    // Bank details validation
+     if (!accountHolder.trim()) newErrors.accountHolder = 'Account holder name is required';
+     if (!accountNumber.trim()) newErrors.accountNumber = 'Account number is required';
+     if (!bankName.trim()) newErrors.bankName = 'Bank name is required';
+     if (!ifscCode.trim()) newErrors.ifscCode = 'IFSC code is required';
    
    
   
@@ -99,7 +109,7 @@ export default function FormSubmission() {
   const handlesubmit = (e)=>{
     e.preventDefault();
     if(validate()){
-      dispatch(FromSubmit({firstname,lastname,email,idFile,cvFile,mobile,selectedCountries})).then((response) => {
+      dispatch(FromSubmit({firstname,lastname,email,idFile,cvFile,mobile,selectedCountries,accountHolder, accountNumber, bankName, ifscCode})).then((response) => {
       // dispatch(setUser(response))
         
         if (response) {
@@ -205,6 +215,13 @@ export default function FormSubmission() {
           </Select>
         </FormControl>
         {errors.selectedCountries && <Typography color="error" variant="caption">{errors.selectedCountries}</Typography>}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%', maxWidth: 600 }}>
+          {/* Bank Account Details Fields */}
+          <TextField required id="account-holder" label="Account Holder Name" fullWidth value={accountHolder} onChange={(e) => setAccountHolder(e.target.value)} error={Boolean(errors.accountHolder)} helperText={errors.accountHolder} />
+          <TextField required id="account-number" label="Account Number" fullWidth value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} error={Boolean(errors.accountNumber)} helperText={errors.accountNumber} />
+          <TextField required id="bank-name" label="Bank Name" fullWidth value={bankName} onChange={(e) => setBankName(e.target.value)} error={Boolean(errors.bankName)} helperText={errors.bankName} />
+          <TextField required id="ifsc-code" label="IFSC Code" fullWidth value={ifscCode} onChange={(e) => setIfscCode(e.target.value)} error={Boolean(errors.ifscCode)} helperText={errors.ifscCode} />
+        </Box>
         
         
 

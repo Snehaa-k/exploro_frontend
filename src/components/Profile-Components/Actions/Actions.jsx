@@ -96,7 +96,7 @@ const Actions = ({ avatarSrc, menuItems }) => {
                                             fontSize: '12px',
                                             position: 'absolute', 
                                             top: '0',
-                                            right: '0',
+                                            right: '43px',
                                             transform: 'translate(-600%, 10%)',
                                         }}
                                     >

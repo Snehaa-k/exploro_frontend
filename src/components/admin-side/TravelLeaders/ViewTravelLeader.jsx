@@ -106,8 +106,10 @@ const handleDetails = (id) => {
             <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
             <TableCell style={{ fontWeight: 'bold' }}>Joined Date</TableCell>
             <TableCell style={{ fontWeight: 'bold' }}>Trips</TableCell>
-
+            
             <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
+            <TableCell style={{ fontWeight: 'bold' }}>Payment Details</TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
@@ -131,6 +133,9 @@ const handleDetails = (id) => {
                       BLOCK
                     </Button>}
                   </TableCell>
+                  <TableCell>Acount Holdername:{traveller.bank_account_name},Account Number:{traveller.bank_account_number},Bank Name:{traveller.bank_name},IFSC CODE:{traveller.ifsc_code}</TableCell>
+
+
                 </TableRow>
               ))}
       </TableBody> 

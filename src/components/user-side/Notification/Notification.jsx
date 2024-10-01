@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Snackbar, Alert, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-const NotificationSystem = ({ userId, open, onClose,username }) => {
+const NotificationSystem = ({ userId, open, onClose,username ,onCount}) => {
     const [notifications, setNotifications] = useState([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);  
     const [user,setusername] = useState('')
@@ -20,6 +20,10 @@ const NotificationSystem = ({ userId, open, onClose,username }) => {
             handleNotification(data.message);
             setusername(data.user)
             console.log(data.sender);
+            console.log(data.unread_count+1);
+            
+            onCount((prevCount) => prevCount + 1||0)
+            
 
             
         };

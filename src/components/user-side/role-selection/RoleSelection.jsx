@@ -100,7 +100,7 @@ const RoleSelection = () => {
       
     }} variant='contained' onClick={()=>handleRoleSelection("travel_leader")} >
       <img src="" alt="" />
-      <h5>Travel Leader</h5></Button>
+      Travel Leader</Button>
       </div>
       </div>
         
