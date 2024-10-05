@@ -98,10 +98,19 @@ const DashBoard = () => {
                     <TableCell>{trip.booked_customers.length * trip.amount}</TableCell>
                     {/* Updated trip status logic */}
                     <TableCell>
-                      {trip.is_completed === 'completed' ? 'Completed' : trip.is_completed === 'cancelled' ? 'Cancelled' : 'Ongoing'}
-                    </TableCell>
-                    <TableCell>{trip.amount_returned ? 'Returned' : 'Not Returned'}</TableCell>
-                  </TableRow>
+  {new Date(trip.end_date) < new Date() ? (
+    trip.is_completed === 'cancelled' ? 'Cancelled' : 'Completed'
+  ) : (
+    'Ongoing'
+  )}
+</TableCell>
+                    <TableCell 
+  style={{ 
+    color: trip.is_refund === 'True' ? 'green' : 'red' 
+  }}
+>
+  {trip.is_refund === 'True' ? 'Returned' : 'Not Returned'}
+</TableCell>                  </TableRow>
                   <TableRow>
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                       <Collapse in={openRows[trip.id]} timeout="auto" unmountOnExit>

@@ -23,7 +23,9 @@ const CustomCard = styled(Card)(({ theme }) => ({
     transition: 'transform 0.3s',
     '&:hover': {
       transform: 'scale(1.03)',
+
     },
+   
   }));
 
 const MainView = ({ trip }) => (
@@ -56,6 +58,9 @@ const MainView = ({ trip }) => (
 
     
     <Typography variant="h6" gutterBottom>Amount: ₹{trip.amount}</Typography>
+    <Typography variant="body1" gutterBottom>Start Date :{trip.start_date} ,{trip.duration}day trip</Typography>
+    <Typography variant="body1" gutterBottom>Slot {trip.participant_limit} only  </Typography>
+
     <CustomButton variant="contained">Book Now</CustomButton>
   </CardContent>
 </CustomCard>

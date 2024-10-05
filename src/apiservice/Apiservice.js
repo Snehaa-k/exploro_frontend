@@ -21,6 +21,12 @@ const apiService = {
   },
   getLeaders : ()=> axios.get(`${API_URL}/formview/`), 
   getTravellers : ()=> axios.get(`${API_URL}/travellers/`), 
+ 
+  forgot: (data) => axios.post(`${API_URL}/forgot-password/`, data),
+  resetpasword: (data) => axios.post(`${API_URL}/password-reset/`, data),
+
+    
+
   
 
 }

@@ -1,121 +1,77 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Paper, Grid, List, ListItem, ListItemText, Divider } from '@mui/material';
 import api from '../../../../axios-interceptors/AxiosInterceptors';
+import LocationOnIcon from '@mui/icons-material/LocationOn'; // Importing location icon
+import { API_URL } from '../../../../apiservice/Apiservice'
+const TourPlan = ({ tripId }) => {
+  const token = localStorage.getItem('accessToken');
+  const [place, setPlace] = useState([]);
 
-const TourPlan = ({tripId}) => {
-   const token  = localStorage.getItem('accessToken')
-    const [place,setPlace] = useState([])
-    console.log(place);
-    
-    useEffect(()=>{
-    
-        const fetchPlace = async () => {
-          const response = await api.get(`/placedetails/${tripId}/`);
-          setPlace([response.data.trip]);
-        };
-    
-        fetchPlace();
-      }, [tripId]);
-    
+  useEffect(() => {
+    const fetchPlace = async () => {
+      const response = await api.get(`/placedetails/${tripId}/`);
+      setPlace([response.data.trip]);
+    };
 
-//   const tourPlanData = [
-//     {
-//       day: 1,
-//       title: "Edakkal Caves",
-//       description: "5 Star Accommodation | Breakfast",
-//       details: "A scenic trek leading to the ancient Edakkal Caves."
-//     },
-//     {
-//       day: 2,
-//       title: "Pookode Lake",
-//       description: "Boating and sightseeing at the serene Pookode Lake.",
-//       details: "5 Star Accommodation | Breakfast"
-//     },
-//     {
-//       day: 3,
-//       title: "Rest",
-//       description: "Enjoy a day of leisure at the resort.",
-//       details: "5 Star Accommodation | Breakfast"
-//     }
-//   ];
+    fetchPlace();
+  }, [tripId]);
 
   return (
-    <Box sx={{ padding: 4 }}>
+    <Box sx={{ padding: 4 ,width:'1700px'}}>
       <Grid container spacing={2}>
-
         <Grid item xs={12} md={8}>
           <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
             Tour Plan
           </Typography>
-          <Paper elevation={3} sx={{ padding: 3, mb: 2, width: '1050px', height: '600px' }}>
-          {place.length > 0 && place[0].length > 0 ?(
-            <List>
-              {place.flat().map((item, index) => (
-                <ListItem key={index} sx={{ alignItems: 'flex-start', position: 'relative', marginTop: index > 0 ? '5px' : '0' }}>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold', minWidth: '40px' }}>
-                    {`0${index + 1}`}
-                  </Typography>
-                  <Divider
-                    orientation="vertical"
-                    flexItem
+          <Paper elevation={3} sx={{ padding: 3, mb: 2, maxHeight: '600px', overflowY: 'auto' }}>
+            {place.length > 0 && place[0].length > 0 ? (
+              <List>
+                {place.flat().map((item, index) => (
+                  <ListItem
+                    key={index}
                     sx={{
-                      position: 'absolute',
-                      left: '20px',
-                      top: '30px',
-                      bottom: '0',
-                      borderWidth: '2px',
-                      borderColor: '#000',
-                      borderLeftStyle: 'dotted',
-                      height: '100px',
-                      marginTop: '10px'
+                      alignItems: 'flex-start',
+                      position: 'relative',
+                      marginTop: index > 0 ? '5px' : '0',
+                      padding: '10px',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: '5px',
+                      backgroundColor: '#f9f9f9',
                     }}
-                  />
-                  <ListItemText sx={{fontWeight: 'bold'}}
-                    primary={`Day ${index + 1}:${item.place_name}`}
-                    secondary={
-                      <>
-                        <Typography component="span" variant="body2" color="text.primary">
-                          {item.description}
+                  >
+                    <Grid container spacing={2}>
+                      <Grid item xs={3}>
+                        {/* Display the image if available */}
+                        <img
+                          src={`${API_URL}${item.place_image}` || 'path/to/default/image.jpg'} // Replace with the actual path to default image
+                          alt={item.place_name}
+                          style={{ maxWidth: '100%', height: 'auto', borderRadius: '5px' }}
+                        />
+                      </Grid>
+                      <Grid item xs={9}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                          <LocationOnIcon sx={{ verticalAlign: 'middle', marginRight: 1 }} />
+                          {`Day ${index + 1}: ${item.place_name}`}
                         </Typography>
-                        <br />
-                        <Typography component="span" variant="body2" color="text.secondary">
-                         Accomodation: {item.accomodation}
-                        </Typography><br/>
-                        <Typography component="span" variant="body2" color="text.secondary">
-                          Transportaion:{item.Transportation}
-                        </Typography>
-                      </>
-                    }
-                  />
-                </ListItem>
-              ))}
-            </List>):(<Box sx={{ textAlign: 'center', mt: 10 }}>
-                                <img src="" alt="No places available" style={{ maxWidth: '100%', height: 'auto' }} />
-                                <Typography variant="h6" sx={{ mt: 2 }}>
-                                    No places available for this tour.
-                                </Typography>
-                            </Box>)}
+                        <Typography variant="body2"><strong>Description:</strong> {item.description}</Typography>
+                        <Typography variant="body2"><strong>Accommodation:</strong> {item.accommodation}</Typography>
+                        <Typography variant="body2"><strong>Transportation:</strong> {item.Transportation}</Typography>
+                      </Grid>
+                    </Grid>
+                    <Divider sx={{ my: 2 }} />
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              <Box sx={{ textAlign: 'center', mt: 10 }}>
+                <img src="" alt="No places available" style={{ maxWidth: '100%', height: 'auto' }} />
+                <Typography variant="h6" sx={{ mt: 2 }}>
+                  No places available for this tour.
+                </Typography>
+              </Box>
+            )}
           </Paper>
         </Grid>
-
-        {/* <Grid item xs={12}>
-          <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 4, mb: 2 }}>
-            Travel Summary
-          </Typography>
-          <Paper elevation={3} sx={{ padding: 3, display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ flexGrow: 1 }}>
-              <Typography variant="body1">
-                <strong>Accommodation:</strong> Apartments, Hotel
-              </Typography>
-              <Typography variant="body1">
-                <strong>{place.length} day Trip:</strong> Edakkal Caves, Pookode Lake
-              </Typography>
-              <Typography variant="body1">
-                <strong>Transportation:</strong> Bus, Car
-              </Typography>
-            </Box>
-          </Paper>
-        </Grid> */}
       </Grid>
     </Box>
   );

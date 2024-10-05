@@ -182,24 +182,30 @@ const markMessagesAsRead = async (partnerId) => {
       </Box>
 
       {/* Chat partners list */}
-      <Box sx={{ width: '30%', borderRight: '1px solid #e0e0e0', overflowY: 'auto', cursor: 'pointer' }}  onClick={() =>  markMessagesAsRead(selectedPartner.id)}>
+      <Box sx={{ width: '30%', borderRight: '1px solid #e0e0e0', overflowY: 'auto', cursor: 'pointer' }}  >
         <Typography variant="h6" sx={{ p: 2 }}>Chat Partners</Typography>
         <List>
-          {chatPartners.map((partner) => (
-            <ListItem 
-              button 
-              key={partner.id} 
-              onClick={() => handlePartnerSelect(partner)}
-              selected={selectedPartner?.id === partner.id}
-            >
-              <Avatar alt={partner.username} src={partner.avatarUrl || ''} />
-              <ListItemText 
-                primary={partner.username} 
-                secondary={partner.unread_count > 0 && selectedPartner?.id === partner.id ? `(${partner.is_read ==='false'  } unread)` : ''}
-              />
-            </ListItem>
-          ))}
-        </List>
+  {chatPartners.map((partner) => (
+    <ListItem 
+      button 
+      key={partner.id} 
+      onClick={() => {handlePartnerSelect(partner),markMessagesAsRead(partner.id)}}
+      
+      selected={selectedPartner?.id === partner.id} 
+    >
+      <Avatar alt={partner.username} src={partner.avatarUrl || ''} />
+      <ListItemText 
+        primary={partner.username} 
+        secondary={
+          partner.unread_count > 0 ? (
+            <Typography variant="body2" sx={{ color: 'red' }}> 
+              {`(${partner.unread_count} unread)`}
+            </Typography>
+          ) : ''
+        }      />
+    </ListItem>  
+  ))}
+</List>
       </Box>
 
       {/* Chat area */}

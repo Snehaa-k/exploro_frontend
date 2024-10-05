@@ -15,6 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditPlaceModal from '../add-places-edit/AddPlacesEdit'; 
 import api from '../../../../axios-interceptors/AxiosInterceptors'; 
 import { useNavigate } from 'react-router';
+import { API_URL } from '../../../../apiservice/Apiservice';
 
 const ViewPlacesModal = ({ open, onClose, trip, onPlaceUpdated, onPlaceDeleted }) => {
   console.log(trip);
@@ -105,8 +106,20 @@ const ViewPlacesModal = ({ open, onClose, trip, onPlaceUpdated, onPlaceDeleted }
               alignItems="center"
               style={{ marginBottom: '10px' }}
             >
-        
-              <Grid item xs={10}>
+              {/* Display Image */}
+              <Grid item xs={12} md={4}>
+                {place.place_image ? (
+                  <img 
+                    src={`${API_URL}${place.place_image}`} 
+                    alt={place.place_name} 
+                    style={{ width: '100%', height: 'auto', borderRadius: '8px' }} 
+                  />
+                ) : (
+                  <Typography>No image available</Typography>
+                )}
+              </Grid>
+
+              <Grid item xs={8}>
                 <Typography variant="h6">{place.place_name}</Typography>
                 <Typography variant="body2"><strong>Description:</strong> {place.description}</Typography>
                 <Typography variant="body2"><strong>Accommodation:</strong> {place.accomodation}</Typography>
@@ -138,6 +151,7 @@ const ViewPlacesModal = ({ open, onClose, trip, onPlaceUpdated, onPlaceDeleted }
           }}
           place={selectedPlace}
           onSave={handleEditSave}
+          fetchPlaces={fetchPlaces}
         />
       )}
     </Dialog>

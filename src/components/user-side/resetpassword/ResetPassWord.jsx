@@ -1,49 +1,56 @@
 import React, { useState } from 'react';
-import './ForgotPassword.css';
 import { TextField, Button, Box, Typography } from '@mui/material';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import Swal from 'sweetalert2';
-import { forgotpassword } from '../../../redux/actions/authActions';
 import { useDispatch } from 'react-redux';
 import { ThreeDots } from 'react-loader-spinner';
+import { resetpassword } from '../../../redux/actions/authActions';
 
-const ForgotPassword = () => {
-    const [email, setEmail] = useState('');
+const ResetPassword = () => {
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    console.log(email,"email   gg");
+    const { id ,token} = useParams(); 
+    console.log(id,"hai id");
+    const userid = id
+    
     
 
-    const validateEmail = () => {
+    const validatePasswords = () => {
         const newErrors = {};
-        if (!/\S+@\S+\.\S+/.test(email)) {
-            newErrors.email = 'Invalid Email Address';
+        if (!password) {
+            newErrors.password = 'Password is required';
+        } else if (password.length < 6) {
+            newErrors.password = 'Password must be at least 6 characters';
+        }
+        if (password !== confirmPassword) {
+            newErrors.confirmPassword = 'Passwords do not match';
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleForgotPassword = async (e) => {
+    const handleResetPassword = async (e) => {
         e.preventDefault();
-        if (validateEmail()) {
-            console.log("Email sent from form:", email);
+        if (validatePasswords()) {
             setLoading(true);
             try {
-                const response = await dispatch(forgotpassword({ email }))
+                await dispatch(resetpassword({ userid,token, password}));
                 Swal.fire({
                     icon: 'success',
-                    title: 'Email Sent',
-                    text: 'A password reset link has been sent to your email address.',
+                    title: 'Password Reset',
+                    text: 'Your password has been reset successfully.',
                 }).then(() => {
-                    navigate('/login');
+                    navigate('/login'); // Redirect to login after successful password reset
                 });
             } catch (error) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Failed to send the reset link. Please try again later.',
+                    text: 'Failed to reset password. Please try again later.',
                 });
             } finally {
                 setLoading(false);
@@ -61,7 +68,7 @@ const ForgotPassword = () => {
         >
             <Box
                 component="form"
-                onSubmit={handleForgotPassword}
+                onSubmit={handleResetPassword}
                 sx={{
                     backgroundColor: '#fff',
                     p: 3,
@@ -72,21 +79,33 @@ const ForgotPassword = () => {
                 }}
             >
                 <Typography variant="h5" textAlign="center" gutterBottom>
-                    Forgot Password
+                    Reset Password
                 </Typography>
                 <Typography variant="body2" textAlign="center" color="textSecondary" gutterBottom>
-                    Enter your email address below and we'll send you a password reset link.
+                    Enter your new password below.
                 </Typography>
 
                 <TextField
                     fullWidth
-                    label="Email Address"
+                    label="New Password"
                     variant="outlined"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    helperText={errors.email}
-                    error={Boolean(errors.email)}
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    helperText={errors.password}
+                    error={Boolean(errors.password)}
+                    sx={{ mb: 3 }}
+                />
+
+                <TextField
+                    fullWidth
+                    label="Confirm New Password"
+                    variant="outlined"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    helperText={errors.confirmPassword}
+                    error={Boolean(errors.confirmPassword)}
                     sx={{ mb: 3 }}
                 />
 
@@ -106,7 +125,7 @@ const ForgotPassword = () => {
                             ariaLabel="three-dots-loading"
                         />
                     ) : (
-                        'Send Reset Link'
+                        'Reset Password'
                     )}
                 </Button>
 
@@ -124,4 +143,4 @@ const ForgotPassword = () => {
     );
 };
 
-export default ForgotPassword;
+export default ResetPassword;

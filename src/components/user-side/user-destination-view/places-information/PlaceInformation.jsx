@@ -147,7 +147,6 @@ const TripDetails = ({tripId}) => {
           currentUserId={user}
           receiverId={trip.travelead}
           receiverName={trip.travelead_username}
-          onNewNotification={handleNewNotification} 
         />
       )}
 

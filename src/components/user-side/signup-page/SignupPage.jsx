@@ -17,7 +17,12 @@ const SignupPage = () => {
 
  
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required('Username is required'),
+    username: Yup.string()
+    .trim()  
+    .required('Username is required')
+    .test('is-not-whitespace', 'Username cannot be just whitespace', (value) => {
+      return value ? value.length > 0 : false;
+    }),
     email: Yup.string().email('Invalid Email Address').required('Email is required'),
     password: Yup.string().min(6, 'Password must be at least 6 characters long').required('Password is required'),
     password2: Yup.string()
@@ -31,8 +36,10 @@ const SignupPage = () => {
       const response = await dispatch(registerUser(values)).unwrap();
       
       dispatch(setUser(response));
+      console.log(response,"hello response.......");
+      
 
-      if (response) {
+      if (response.message) {
         Swal.fire({
           icon: 'success',
           title: 'Registration Successful',
@@ -44,12 +51,24 @@ const SignupPage = () => {
           navigate('/otp-verification');
         });
       }
+      else{
+        Swal.fire({
+          icon: 'error',
+          title: 'Registration Failed',
+          text: 'Registration Failed',
+          timer: 1000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        }).then(() => {
+          navigate('/signup');
+        });
+      }
     } catch (error) {
       console.error('Registration error:', error);
       Swal.fire({
         icon: 'error',
         title: 'Registration Failed',
-        text: `${error.error}`,
+        text: `${error.email}`,
       }).then(() => {
         navigate('/signup');
       });

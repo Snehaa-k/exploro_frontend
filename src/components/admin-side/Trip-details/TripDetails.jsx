@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router';
 import { API_URL } from '../../../apiservice/Apiservice';
 import axios from 'axios';
 import moment from 'moment';
-import api from '../../../axios-interceptors/AxiosInterceptors';
+import Swal from 'sweetalert2';
 
 const TripDetails = () => {
    const { id } = useParams();
@@ -34,19 +34,37 @@ const TripDetails = () => {
    }, [id,Trips]);
 
    const handleRefund = (tripId) => {
-      axios.post(`${API_URL}/refund/${tripId}`)
-        .then(response => {
-          const { refunded_amount } = response.data;
-          
-          setTrips(prevDetails => prevDetails.map(trip => 
-            trip.id === tripId ? { ...trip, is_refund: true } : trip
-          ));
-          
-          console.log(`Refund of Rs ${refunded_amount} successful.`);
-        })
-        .catch(error => {
-          console.error('Error processing refund:', error);
-        });
+      // Show SweetAlert confirmation dialog
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to proceed with the refund?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, refund it!',
+        cancelButtonText: 'No, cancel!',
+      }).then((result) => {
+        // If the user confirmed, proceed with the refund
+        if (result.isConfirmed) {
+          axios.post(`${API_URL}/refund/${tripId}`)
+            .then(response => {
+              const { refunded_amount } = response.data;
+    
+              // Update the trips state to reflect the refund
+              setTrips(prevDetails => prevDetails.map(trip => 
+                trip.id === tripId ? { ...trip, is_refund: true } : trip
+              ));
+    
+              Swal.fire('Refunded!', `Refund of Rs ${refunded_amount} was successful.`, 'success');
+            })
+            .catch(error => {
+              console.error('Error processing refund:', error);
+              Swal.fire('Error', 'There was an issue processing the refund.', 'error');
+            });
+        } else {
+          // If the user canceled the refund
+          Swal.fire('Cancelled', 'Refund process has been cancelled.', 'info');
+        }
+      });
     };
 
    const isTripCompleted = (endDate) => {
@@ -125,7 +143,7 @@ const TripDetails = () => {
                                  <TableCell>{calculateTotalAmount(trip)}</TableCell>
                                  <TableCell>{trip.is_completed}</TableCell>
                                  <TableCell>
-  {trip.is_refund ==='true' ?(
+  {trip.is_refund ==='True' ?(
     <Typography variant="body1" color="textSecondary">
       Refunded
     </Typography>

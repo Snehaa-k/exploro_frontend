@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Box, Button, Modal, Paper, Typography, Tab, Tabs } from '@mui/material';
 import api from '../../../axios-interceptors/AxiosInterceptors';
+import { API_URL } from '../../../apiservice/Apiservice';
+import { useNavigate } from 'react-router';
 
 
 const ViewProfile = ({
+  userid,
   profilePic,
   name,
   description,
@@ -14,15 +17,22 @@ const ViewProfile = ({
   following_r,
   tripsCompleted,
   Address,
+  is_travel_leader,
   CS
 
 }) => {
   const [value, setValue] = useState('one');
   const [open, setOpen] = useState(false);
   const [travelLeaders,setTravelLeaders] = useState([])
+  const[followerscount,setfollowersCount] = useState(0)
+  const[totalcompleted,setcompleted] = useState(0)
+  const[totalfollowers,setTotalFollowers] = useState(0)
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); 
   console.log(travelLeaders,"travel leaders");
+  console.log(totalfollowers,"............");
+  
+  const navigate = useNavigate()
   
 
   const handleChange = (event, newValue) => {
@@ -36,22 +46,50 @@ const ViewProfile = ({
 
   const handleClose = () => setOpen(false);
 
-  // useEffect(() => {
-  //   const fetchFollowedLeaders = async () => {
-  //     try {
-  //       const response = await api.get('/following-leaders/')
+  useEffect(() => {
+    const fetchFollowedLeaders = async () => {
+      try {
+        const response = await api.get('/following-leaders/')
+        console.log(response.data,"following");
+        
+        setTravelLeaders(response.data.travel_leaders);
+        setfollowersCount(response.data.total_followed_leaders);
+        setcompleted(response.data.total_completed_trip)
+        setLoading(false); 
+      } catch (error) {
+        setError('Unable to fetch followed travel leaders');
+        console.error('Error fetching travel leaders:', error);
+      }
+    };
 
-  //       setTravelLeaders(response.data.followed_travel_leaders);
-  //       setTotalFollowing(response.data.total_following);
-  //       setLoading(false); 
-  //     } catch (error) {
-  //       setError('Unable to fetch followed travel leaders');
-  //       console.error('Error fetching travel leaders:', error);
-  //     }
-  //   };
+    
+    fetchFollowedLeaders();
+  }, []);
+  
+  useEffect(() => {
+    const fetchFollowStatus = async () => {
+      try {
+        const response = await api.get(`/follow/${userid}`);
+        setTotalFollowers(response.data.total_followers);
+        console.log("haiiiiiiiiiiiiiiiiiiii",response);
+        
+      } catch (error) {
+        console.error('Error fetching follow status:', error);
+      }
+    };
+  
+    if (userid) {
+      fetchFollowStatus();
+    }
+  }, [userid]);
 
-  //   fetchFollowedLeaders();
-  // }, []);
+  
+  const handleAvatarClick = (travelid) => {
+   
+    navigate(`/userprofile/${travelid}`);
+    
+  };
+
 
   return (
     <div>
@@ -73,7 +111,7 @@ const ViewProfile = ({
             }}
           >
             <Typography id="followers-modal-title" variant="h6">
-              {following_r}
+              {following_r} 
             </Typography>
             <Typography id="followers-modal-description" sx={{ mt: 2 }}>
               List of {following_r}...
@@ -83,21 +121,41 @@ const ViewProfile = ({
       ) : (
         <ul>
           {travelLeaders.map((leader) => (
-            <li key={leader.id}>
-              <div>
-                <img
-                  src={leader.profile_image || 'default-avatar.png'}
-                  alt={`${leader.username}'s profile`}
-                  width="50"
-                  height="50"
-                />
-                <div>
-                  <h3>{leader.full_name}</h3>
-                  <p>{leader.username}</p>
-                  <p>{leader.bio}</p>
-                </div>
-              </div>
-            </li>
+           <li key={leader.id} style={{ margin: '10px 0' }}>
+           <div style={{
+               display: 'flex',
+               alignItems: 'center',
+               cursor: 'pointer',
+               border: '1px solid #ddd',
+               borderRadius: '8px',
+               padding: '10px',
+               transition: 'background-color 0.3s',
+             }}
+             onClick={() => handleAvatarClick(leader.user)} // Add your click handler
+           >
+             <img
+               src={`${API_URL}${leader.profile_image}` || 'default-avatar.png'}
+               alt={`${leader.username}'s profile`}
+               style={{
+                 borderRadius: '50%', // Makes the image round
+                 width: '50px',
+                 height: '50px',
+                 marginRight: '10px',
+               }}
+             />
+             <div>
+               <h3 style={{
+                   margin: 0,
+                   fontSize: '1.2rem',
+                   color: '#333', // Darker color for better readability
+                   fontWeight: 'bold',
+                 }}
+               >
+                 {leader.username}
+               </h3>
+             </div>
+           </div>
+         </li>
           ))}
         </ul>
       )}
@@ -119,15 +177,20 @@ const ViewProfile = ({
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '80px', marginTop: '20px' }}>
-            <Button variant="contained" color="primary" onClick={handleOpen} style={{marginLeft:'-40px'}}>
-                {Followers} :{followersCount}
-            </Button>
-            <Box sx={{ borderLeft: '1px solid #000', height: '24px', marginLeft: '16px', marginRight: '16px' }} />
-            <Typography variant="body1">
-                Trips Completed: {tripsCompleted}
-            </Typography>
-        </Box>
-
+  {is_travel_leader === true ? (
+    <Button variant="contained" color="primary"  style={{ marginLeft: '-40px' }}>
+      {Followers} : {totalfollowers} {/* Show travel leader's follower count */}
+    </Button>
+  ) : (
+    <Button variant="contained" color="primary" onClick={handleOpen} style={{ marginLeft: '-40px' }}>
+      {Followers} : {followerscount} 
+    </Button>
+  )}
+  <Box sx={{ borderLeft: '1px solid #000', height: '24px', marginLeft: '16px', marginRight: '16px' }} />
+  <Typography variant="body1">
+    Trips Completed: {totalcompleted}
+  </Typography>
+</Box>
         {children && <Box mt={2}>{children}</Box>}
       </Box>
 

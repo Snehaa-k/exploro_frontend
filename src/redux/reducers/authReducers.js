@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, verifyOtp,loginUser,fetchLeaders,fetchTravellers,createTrip,updateTrip ,createPosts} from '../actions/authActions';
+import { registerUser, verifyOtp,loginUser,fetchLeaders,fetchTravellers,createTrip,updateTrip } from '../actions/authActions';
 
 
 

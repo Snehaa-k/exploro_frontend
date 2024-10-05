@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Grid } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Grid, Box, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -22,17 +22,42 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Use the existing trip image or an empty string for the initial state
-  const [selectedImage, setSelectedImage] = useState(trip.Trip_image || ''); // Existing image
+  const [tripImagePreview, setTripImagePreview] = useState(trip.Trip_image || ''); // Add image preview state
+  const [tripImage, setTripImage] = useState(null); // To store the file
+
+  // Handle image change and preview
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setTripImage(file);
+      setTripImagePreview(URL.createObjectURL(file)); // Set preview for the selected image
+    }
+  };
 
   // Handle form submission
   const handleSubmit = async (values) => {
     try {
-      const updatedTrip = { ...values }; 
-      const response = await dispatch(updateTrip({ updatedTrip })).unwrap();
+      const formData = new FormData(); // Use FormData for file upload
+
+      // Append all form data
+      formData.append('id', trip.id);
+      formData.append('location', values.location);
+      formData.append('accommodation', values.accommodation);
+      formData.append('transportation', values.transportation);
+      formData.append('participant_limit', values.participant_limit);
+      formData.append('amount', values.amount);
+      formData.append('start_date', values.start_date);
+      formData.append('duration', values.duration);
+
+      // Append image if a new one is selected
+      if (tripImage) {
+        formData.append('Trip_image', tripImage);
+      }
+
+      const response = await dispatch(updateTrip({ updatedTrip: formData })).unwrap();
       if (response) {
-        onSave(updatedTrip);
-        onClose(updatedTrip);
+        onSave(values);
+        onClose(values);
         Swal.fire({
           icon: 'success',
           title: 'Successfully Edited..',
@@ -46,18 +71,6 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
       }
     } catch (error) {
       console.error('Error updating trip:', error);
-    }
-  };
-
-  // Handle image change
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedImage(reader.result); // Update the image preview with the new file
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -75,7 +88,7 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
             start_date: trip.start_date || '',
             duration: trip.duration || '',
             amount: trip.amount || '',
-         }}
+          }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -83,27 +96,6 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
             <Form>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  {/* Existing image preview */}
-                  {/* {selectedImage && (
-                    <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-                      <img
-                        src={selectedImage}
-                        alt="Trip"
-                        style={{ width: '100px', height: '100px', objectFit: 'cover', cursor: 'pointer' }}
-                        onClick={() => document.getElementById('imageUpload').click()} // Trigger file input on image click
-                      />
-                    </div>
-                  )} */}
-
-                  {/* Hidden file input for image */}
-                  {/* <input
-                    id="imageUpload"
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={handleImageChange}
-                  /> */}
-
                   <Field
                     as={TextField}
                     fullWidth
@@ -145,7 +137,7 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
                     type="number"
                   />
                   <ErrorMessage name="participant_limit" component="div" style={{ color: 'red' }} />
-
+                  
                   <Field
                     as={TextField}
                     fullWidth
@@ -178,6 +170,24 @@ const EditTripModal = ({ open, onClose, trip, onSave }) => {
                     margin="normal"
                   />
                   <ErrorMessage name="duration" component="div" style={{ color: 'red' }} />
+
+                  {/* Image Upload */}
+                  <Box mt={2}>
+                    <Typography>Trip Image</Typography>
+                    <input
+                      type="file"
+                      onChange={handleImageChange}
+                      accept="image/*"
+                      style={{ display: 'block', margin: '10px 0' }}
+                    />
+                    {tripImagePreview && (
+                      <img
+                        src={tripImagePreview}
+                        alt="Trip Preview"
+                        style={{ width: '100%', maxHeight: '200px', objectFit: 'cover' }}
+                      />
+                    )}
+                  </Box>
                 </Grid>
               </Grid>
               <DialogActions>

@@ -35,8 +35,8 @@ import TripDetails from './components/admin-side/Trip-details/TripDetails'
 import BookedCustomers from './components/admin-side/Booked-customers/BookedCustomers'
 import DashBoardPage from './pages/Userside/TravelLeader/Dashboard-page/DashBoardPage'
 import ForgotPassword from './components/user-side/FogotPassword/ForgotPassword'
-// import './App.css'
-
+// import ResetPassword from './components/user-side/resetpassword/ResetPassword'
+import ResetPassword from './components/user-side/resetpassword/ResetPassWord'
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -78,6 +78,7 @@ function App() {
             <Route path = '/viewleadertrip/:id' element = {<TripDetails/>}/>
             <Route path = '/dashboard' element = {<DashBoardPage/>}/>
             <Route path = '/forgot-password' element = {<ForgotPassword/>}/>
+            <Route path='/password-reset-confirm/:id/:token' element={<ResetPassword />} />
             {/* <Route path = '/viewcustomers/:id' element = {<BookedCustomers/>}/> */}
 
             

@@ -18,6 +18,7 @@ import TravelPostCard from '../../Posts/MainPost/PhotoPost/PhotoPost';
 import TravelArticleCard from '../../Posts/MainPost/articlePost/ArticlePost';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import NotificationSystem from '../Notification/Notification';
+import ChatDrawer from '../ChatDialog/ChatDialog';
 
 const PostsPage = () => {
   const dispatch = useDispatch()
@@ -31,6 +32,57 @@ const PostsPage = () => {
   const [wallet, setWallet] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
+  const [totaltrip,setCompletedtrips] = useState(0)
+  const [follow,setfollowers] = useState(0)
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [unreadmessages,setunreadmessage] = useState(0)
+  const [unreadmessagess,setunreadmessages] = useState(0)
+  const [partners,setChatPartners] = useState(0)
+  console.log(partners,"partners.........");
+  
+
+
+  const notificationCount=unreadmessages?unreadmessages:partners
+  const notificationCounts = unreadmessagess?unreadmessagess:0
+
+
+
+  const handleOpenChat = (receiverId) => {
+    // setReceiverId(receiverId);
+    setIsChatOpen(true);
+    setunreadmessage(0)
+  };
+  const handleCloseChat = () => {
+    setIsChatOpen(false);
+    setunreadmessage(0)
+    // setReceiverId(null); 
+  };
+
+
+  useEffect(()=>{
+    const fetchChatPartners = async () => {
+      try {
+        const response = await api.get('/chat-partners/'); 
+        console.log(response,"haiiii...res");
+        
+        const filteredChatPartners = response.data.filter(
+          partner => partner.last_message?.receiver === profile?.user?.id
+        );
+
+        const totalUnreadCount = filteredChatPartners.reduce((total, partner) => {
+          return total + (partner.unread_count || 0); 
+        }, 0);
+        setChatPartners(totalUnreadCount)
+
+       
+      } catch (error) {
+        console.error('Error fetching chat partners:', error);
+      }
+    };
+     fetchChatPartners()
+  },[isChatOpen,profile,snackbarOpen,partners,notificationCount])
+
+ 
   
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -53,6 +105,7 @@ const PostsPage = () => {
   console.log(likes,"likess");
   console.log(posts,"posts pagessss");
   console.log(wallet,"wallet_amount");
+  
   
 
   
@@ -137,6 +190,22 @@ useEffect(() => {
 fetchPosts();
 }, [token,reloadPosts]);
 
+//followerss count
+useEffect(() => {
+  const fetchFollowStatus = async () => {
+    try {
+      const response = await api.get(`/follow/${user.id}`);
+      setfollowers(response.data.total_followers);
+    } catch (error) {
+      console.error('Error fetching follow status:', error);
+    }
+  };
+
+  if (user.is_travel_leader) {
+    fetchFollowStatus();
+  }
+}, [user]);
+
 useEffect(() => {
  
   const fetchArticle = async () => {
@@ -160,6 +229,10 @@ useEffect(() => {
       const response = await api.get('/showwallet/');
       if (response) {
         setWallet(response.data.wallet);
+        setCompletedtrips(response.data.total_completed_trip)
+        setfollowers(response.data.total_followed_leaders)
+        console.log(response.data.total_completed_trip,"followers...");
+        
       }
     } catch (error) {
       console.error('Failed to fetch wallet data:', error.message);
@@ -168,7 +241,15 @@ useEffect(() => {
   fetchWallet();
 }, [token]);
 
+const handlecount = (count)=>{
+  setunreadmessage(count)
 
+}
+
+const handlecounts = (count)=>{
+  setunreadmessages(count)
+
+}
 
 
 const getLatestPost = (posts) => {
@@ -182,8 +263,8 @@ const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_a
   const items = [
     {
       icon: <PeopleIcon color="primary" />,
-      primaryText: `${user.is_travel_leader?"followers":"followeing"}`,
-      secondaryText:'0',
+      primaryText: `${user.is_travel_leader?"followers":"following"}`,
+      secondaryText:`${follow?follow: 0}`,
     },
     // {
     //   icon: <CheckCircleIcon color="success" />,
@@ -200,7 +281,9 @@ const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_a
   const menuItems = [
     {
       icon: <ChatIcon color="" />,
-      text: 'Chats'
+      text: 'Chats',
+      onClick :handleOpenChat,
+
     },
     {
       icon: <NotificationsIcon color="" />,
@@ -229,7 +312,9 @@ const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_a
      <Sidebar profileImage={`${API_URL}${profile.profile_image}`}
         name={user.username}
         role={user.is_travel_leader?"Travel Leader" : "Traveller"}
-        menuItems={menuItems} />
+        menuItems={menuItems} 
+        notificationCount={notificationCounts}
+        chatCount={notificationCount}/>
     </div>
     <div className='create-post'>
    {user.is_travel_leader && (
@@ -263,7 +348,9 @@ const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_a
         })}
       </div>
     
-    <NotificationSystem open={isNotificationOpen} onClose={handleCloseNotification}  userId={user.id} />
+    <NotificationSystem open={isNotificationOpen} onClose={handleCloseNotification}  userId={user.id} onCount={handlecount} oncountnot= {handlecounts} />
+    
+    <ChatDrawer isOpen={isChatOpen} onClose={handleCloseChat} currentUserId={user.id}  receiverName={null}/>
 
     </div>
 

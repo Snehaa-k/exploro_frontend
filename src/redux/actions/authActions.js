@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import apiService from '../../apiservice/Apiservice';
+import apiService, { API_URL } from '../../apiservice/Apiservice';
 import api from '../../axios-interceptors/AxiosInterceptors';
 import userApi from '../../axios-interceptors/AxiosInterceptors';
 
@@ -274,6 +274,50 @@ export const fetchuser = createAsyncThunk(
     }
   }
 );
+
+
+
+// export const forgotpassword = createAsyncThunk(
+//   '/forgotpassword',
+//   async ({  forgot }, { rejectWithValue }) => {
+//     try {
+//       const response = await apiService.forgot(forgot);
+//       console.log(response.data,"my places")
+//       return response.data;
+//     } catch (error) {
+//       return rejectWithValue(error.response.data);
+//     }
+//   }
+// );
+
+
+export const forgotpassword = createAsyncThunk(
+  'user/forgot',
+  async (preferenceData, { rejectWithValue }) => {
+    try {
+      const response = await apiService.forgot(preferenceData);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const resetpassword = createAsyncThunk(
+  'user/forgot',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await apiService.resetpasword(data);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+
 
 
 
