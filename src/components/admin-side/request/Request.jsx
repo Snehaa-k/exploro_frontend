@@ -63,7 +63,7 @@ const Request = () => {
             <TableRow key={leader.id}>
               <TableCell component="th" scope="row">
                 <AccountCircleIcon style={{ verticalAlign: 'middle', marginRight: '8px' }} />
-                {leader.firstname}
+                {leader.user_id.username}
               </TableCell>
               <TableCell>{leader.user_id.email}</TableCell>
               <TableCell> {leader.is_approved === 'pending' ? <h4  style={{color:'#FABC3F'}}> Pending </h4>:

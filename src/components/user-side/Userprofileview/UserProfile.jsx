@@ -11,11 +11,18 @@ import {
   Card,
   CardContent,
   Pagination,
+
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router"; 
 import api from "../../../axios-interceptors/AxiosInterceptors";
 import moment from 'moment';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import ReportIcon from '@mui/icons-material/Report';
 
 
 const ITEMS_PER_PAGE = 3; 
@@ -28,6 +35,31 @@ const UserProfile = () => {
   const [details, setDetails] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [totalFollowers, setTotalFollowers] = useState(0);
+  const [openReportModal, setOpenReportModal] = useState(false);
+  const [reportMessage, setReportMessage] = useState('');
+  const handleOpenReportModal = () => {
+    setOpenReportModal(true);
+  };
+
+  const handleCloseReportModal = () => {
+    setOpenReportModal(false);
+  };
+
+  const handleSubmitReport = () => {
+    if (reportMessage.trim() === "") {
+      return;
+    }
+
+    api.post(`/report/${id}/`, { reason: reportMessage })
+      .then(response => {
+        handleCloseReportModal();  
+        alert("Report submitted successfully!");
+      })
+      .catch(error => {
+        console.error("Error submitting report:", error);
+      });
+  };
+
   
   const today = moment();
 
@@ -143,10 +175,29 @@ const UserProfile = () => {
         >
         {isFollowing ? "Unfollow" : "Follow"}
         </Button>
-        <Typography variant="body2" color="text.secondary" style={{marginTop:'-30px',marginLeft:'50px'}}>
+       
+        <Typography variant="body2" color="text.secondary" style={{marginTop:'-30px',marginLeft:'60px'}}>
           {totalFollowers}  Followers
         </Typography>
       </Box>
+      <Button
+          variant="contained"
+          sx={{
+            mt: 2,
+            borderRadius: "20px",
+            backgroundColor: "#BBF2E8",
+            marginTop:'-60px',
+            marginLeft:'850px',
+            color: "#000",
+            "&:hover": {
+              backgroundColor: "#A0DED4",
+            },
+          
+          }}
+          onClick={handleOpenReportModal}
+        >
+          <ReportIcon />
+        </Button>
 
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
         <Tabs
@@ -226,6 +277,34 @@ const UserProfile = () => {
           />
         )}
       </Box>
+      <Dialog 
+      open={openReportModal} 
+      onClose={handleCloseReportModal}
+      >
+        <DialogTitle>Report User</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please provide a reason for reporting this user:
+          </DialogContentText>
+          <textarea
+            rows={4}
+            style={{ width: '100%' }}
+            value={reportMessage}
+            onChange={(e) => setReportMessage(e.target.value)}
+            placeholder="Type your message here..."
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button 
+          onClick={handleCloseReportModal}
+          >Cancel</Button>
+          <Button 
+          onClick={handleSubmitReport} 
+          color="primary">
+            Submit Report
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

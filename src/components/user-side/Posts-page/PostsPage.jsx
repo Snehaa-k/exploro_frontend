@@ -19,6 +19,7 @@ import TravelArticleCard from '../../Posts/MainPost/articlePost/ArticlePost';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import NotificationSystem from '../Notification/Notification';
 import ChatDrawer from '../ChatDialog/ChatDialog';
+import NotificationDrawer from '../Notificationdrawer/NotificationDrawer';
 
 const PostsPage = () => {
   const dispatch = useDispatch()
@@ -287,7 +288,8 @@ const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_a
     },
     {
       icon: <NotificationsIcon color="" />,
-      text: 'Notifications'
+      text: 'Notifications',
+      onClick: () => setIsNotificationOpen(true)
     },
    
   ];
@@ -351,6 +353,9 @@ const combinedPosts = [...posts, ...article].sort((a, b) => new Date(b.created_a
     <NotificationSystem open={isNotificationOpen} onClose={handleCloseNotification}  userId={user.id} onCount={handlecount} oncountnot= {handlecounts} />
     
     <ChatDrawer isOpen={isChatOpen} onClose={handleCloseChat} currentUserId={user.id}  receiverName={null}/>
+    <NotificationDrawer
+        isOpen={isNotificationOpen}
+        onClose={handleCloseNotification} currentUserId={profile?.user?.id} /> 
 
     </div>
 

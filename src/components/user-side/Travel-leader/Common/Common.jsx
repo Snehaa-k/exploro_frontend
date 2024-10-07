@@ -13,11 +13,96 @@ import { useDispatch } from 'react-redux';
 import { fetchuser } from '../../../../redux/actions/authActions';
 import { useNavigate } from 'react-router';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import { logoutUser } from '../../../../redux/reducers/authReducers';
+import ChatDrawer from '../../ChatDialog/ChatDialog';
+import NotificationDrawer from '../../Notificationdrawer/NotificationDrawer';
+import NotificationSystem from '../../Notification/Notification';
+import api from '../../../../axios-interceptors/AxiosInterceptors';
 
 
 const CommonLayout = ({ children }) => {
   const [profile,setProfile] = useState([])
+  console.log(profile,"hai common");
+  const [receiverId, setReceiverId] = useState(null); 
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [loading, setLoading] = useState(true); 
+  const [notification,setNotificationCount] = useState(0)
+  
+
+  const [partners,setChatPartners] = useState(0)
+  console.log(partners,"hai partners..");
+  const [unreadmessages,setunreadmessage] = useState(0)
+  const [unreadmessagess,setunreadmessages] = useState(0)
+  
   const dispatch = useDispatch()
+  const handleOpenChat = (receiverId) => {
+    setReceiverId(receiverId);
+    setIsChatOpen(true);
+    setunreadmessage(0)
+  };
+  const handleCloseChat = () => {
+    setIsChatOpen(false);
+    setunreadmessage(0)
+    setReceiverId(null); 
+  };
+  const notificationCount=unreadmessages?unreadmessages:partners
+  // const notificationCounts=unreadmessagess?unreadmessagess:notifications
+  
+  
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+
+  const handleOpenNotification = () => {
+    setIsNotificationOpen(true);
+  };
+
+  const handleCloseNotification = () => {
+    setIsNotificationOpen(false);
+    setunreadmessages(0)
+  };
+
+  const handleNewNotification = (message) => {
+    setNotificationMessage(message);
+    setSnackbarOpen(true);
+
+  };
+
+  const handlecount = (count)=>{
+    setunreadmessage(count)
+
+  }
+
+  const handlecounts = (count)=>{
+    setunreadmessages(count)
+
+  }
+
+  useEffect(()=>{
+    const fetchChatPartners = async () => {
+      try {
+        const response = await api.get('/chat-partners/'); 
+        console.log(response,"haiiii...res");
+        
+        const filteredChatPartners = response.data.filter(
+          partner => partner.last_message?.receiver === profile?.user?.id
+        );
+
+        const totalUnreadCount = filteredChatPartners.reduce((total, partner) => {
+          return total + (partner.unread_count || 0); 
+        }, 0);
+        setChatPartners(totalUnreadCount)
+
+       
+      } catch (error) {
+        console.error('Error fetching chat partners:', error);
+      }
+    };
+     fetchChatPartners()
+  },[isChatOpen,profile,snackbarOpen,partners,notificationCount])
+
+  
   const navigate = useNavigate()
   const HandleProfile = ()=>{
     navigate('/travellerprofile')
@@ -28,6 +113,16 @@ const CommonLayout = ({ children }) => {
   const HandleHome = ()=>{
     navigate('/posts')
   }
+  
+  const handlelogout = async () =>{
+      
+    const response = dispatch(logoutUser())
+    if (response){
+      navigate('/login')
+
+    }
+  }
+
   useEffect(()=>{
   
     const fetchUserData = async () => {
@@ -55,11 +150,11 @@ const CommonLayout = ({ children }) => {
   const menuItemsActions = [
     { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-    { text: 'Inbox', icon: <MessageIcon />, path: '/inbox' },
-    { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts' },
+    { text: 'Inbox', icon: <MessageIcon />, onClick:handleOpenChat,count: notificationCount  },
+    { text: 'Alerts', icon: <NotificationsIcon />,onClick: () => setIsNotificationOpen(true)},
     { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/viewtrip' },
     { text: 'Create Trip', icon: <EventNoteIcon />, path: '/triplan' },
-    { text: 'LogOut', icon: <ExitToAppIcon /> },
+    { text: 'LogOut', icon: <ExitToAppIcon />,onClick:handlelogout },
   ];
 
   return (
@@ -73,6 +168,13 @@ const CommonLayout = ({ children }) => {
         </div>
         <div className="trip-creation medium-size">
           {children}
+          <ChatDrawer isOpen={isChatOpen} onClose={handleCloseChat} currentUserId={profile?.user?.id} receiverId={receiverId} receiverName={null}/>
+          <NotificationDrawer
+        isOpen={isNotificationOpen}
+        onClose={handleCloseNotification} currentUserId={profile?.user?.id} /> 
+          <NotificationSystem open={isNotificationOpen} onClose={handleCloseNotification}  userId={profile?.user?.id} onCount={handlecount} oncountnot= {handlecounts} />
+
+
         </div>
       </div>
     </div>

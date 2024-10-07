@@ -32,6 +32,11 @@ const ForgotPassword = () => {
             setLoading(true);
             try {
                 const response = await dispatch(forgotpassword({ email }))
+                console.log(response);
+                
+                if(response.payload.message){
+
+                
                 Swal.fire({
                     icon: 'success',
                     title: 'Email Sent',
@@ -39,6 +44,15 @@ const ForgotPassword = () => {
                 }).then(() => {
                     navigate('/login');
                 });
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Password Reset Failed ',
+                    text: 'Please Check Your Email',
+                }).then(() => {
+                    navigate('/login');
+                });
+            }
             } catch (error) {
                 Swal.fire({
                     icon: 'error',

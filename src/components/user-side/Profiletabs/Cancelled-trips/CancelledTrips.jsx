@@ -29,7 +29,7 @@ const CancelledTrips = () => {
             {filteredTrips.length > 0 ? (
                 filteredTrips.map((trip, index) => (
                     <Grid item xs={12} sm={6} key={index}>
-                        <Card sx={{ height: '300px', position: 'relative' }}>
+                        <Card sx={{ height: '350px', position: 'relative' }}>
                             <CardMedia
                                 component="img"
                                 height="140"

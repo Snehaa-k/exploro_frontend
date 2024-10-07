@@ -37,6 +37,11 @@ import DashBoardPage from './pages/Userside/TravelLeader/Dashboard-page/DashBoar
 import ForgotPassword from './components/user-side/FogotPassword/ForgotPassword'
 // import ResetPassword from './components/user-side/resetpassword/ResetPassword'
 import ResetPassword from './components/user-side/resetpassword/ResetPassWord'
+import ProtectedRoute from './pages/UserHomeProtected'
+import Userloginprotected from './pages/UserLoginProtected'
+import Adminprotected from './pages/AdminProtected'
+import Userlistprotected from './pages/AdminListProtected'
+import ReportRequests from './components/admin-side/complaints/Report'
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -52,33 +57,34 @@ function App() {
        <Router>
       
           <Routes>
-            <Route path ="/" element={<Navigate to="/login" />} />
+            <Route path ="/" element={<Userloginprotected><Navigate to="/login" /></Userloginprotected>} />
             <Route path ="/:mode" element={<Home/>} /> 
             <Route path ='/otp-verification' element={<OtpVerificationPage/>}/>
             {/* <Route path ='/posts' element={<PostsPage/>}/>            */}
             <Route path ='/formsubmission' element={<FormSubmission/>}/>
-            <Route path = '/adminlog' element = {<AdminLogin/>}/>
+            <Route path = '/adminlog' element = {<Adminprotected><AdminLogin/></Adminprotected>}/>
             <Route path = '/travellers' element = { <ViewTravellers/>}/>
             <Route path = '/requestss' element = { <Request/>}/>
             <Route path = "/request/:id" element={<TravelLeaderDetails />} />
             <Route path = '/travelleaders' element = { <ViewTravelLeaders/>}/>
-            <Route path = '/editprofile' element = { <EditProfile/>}/>
-            <Route path = '/travellerprofile' element = { <TravellerProfile/>}/>
+            <Route path = '/editprofile' element = {<ProtectedRoute> <EditProfile/></ProtectedRoute>}/>
+            <Route path = '/travellerprofile' element = {<ProtectedRoute><TravellerProfile/></ProtectedRoute>}/>
             <Route path = '/posts' element = { <UserPost/>}/>
-            <Route path = '/triplan' element = { <PlanTrips/>}/>
-            <Route path = '/viewtrip' element = {<ViewTrip/>}/>
-            <Route path = '/destination' element = {<Destination/>}/>
+            <Route path = '/triplan' element = {<ProtectedRoute><PlanTrips/></ProtectedRoute>}/>
+            <Route path = '/viewtrip' element = {<ProtectedRoute><ViewTrip/></ProtectedRoute>}/>
+            <Route path = '/destination' element = {<ProtectedRoute><Destination/></ProtectedRoute>}/>
            
            
             <Route path = '/places' element = {<TourPlan/>}/>
            
-            <Route path = '/viewdestination/:id' element = {<UserDestination/>}/>
+            <Route path = '/viewdestination/:id' element = {<ProtectedRoute><UserDestination/></ProtectedRoute>}/>
             <Route path = '/userprofile/:id' element = {<ProfileView/>}/>
             <Route path = '/success' element = {<SuccessPage/>}/>
             <Route path = '/viewleadertrip/:id' element = {<TripDetails/>}/>
             <Route path = '/dashboard' element = {<DashBoardPage/>}/>
             <Route path = '/forgot-password' element = {<ForgotPassword/>}/>
             <Route path='/password-reset-confirm/:id/:token' element={<ResetPassword />} />
+            <Route path='/report' element={<ReportRequests/>} />
             {/* <Route path = '/viewcustomers/:id' element = {<BookedCustomers/>}/> */}
 
             
@@ -93,18 +99,10 @@ function App() {
              
         </Router> 
 
-      {/* <RoleSelection/> */}
-      {/* <UserPreference/> */}
-      {/* <FormSubmission/> */}
+    
    
       </h1>
-   {/* <Home/> */}
-   {/* <Profile/> */}
-   {/* <ViewProfile/> */}
-   {/* <EditProfile/> */}
-   {/* <LeaderProfile/> */}
-   {/* <TravelLeaderDetails/> */}
-   
+ 
   
       </div>
      

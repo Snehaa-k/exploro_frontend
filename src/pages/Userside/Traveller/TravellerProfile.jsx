@@ -35,6 +35,7 @@ import LeadersPost from '../TravelLeader/LeadersPosts/LeadersPost';
 
 
 
+
 const TravellerProfile = () => {
   // const { userId, travelLeadId } = useParams();
   // console.log(travelLeadId,"idd")
@@ -63,7 +64,13 @@ const TravellerProfile = () => {
   console.log(unreadmessages,"unread messages");
   
   
-
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+  
+    return () => {
+      document.body.style.overflow = 'auto'; 
+    };
+  }, []);
   
 
   const notificationCount=unreadmessages?unreadmessages:partners
@@ -223,7 +230,7 @@ const TravellerProfile = () => {
     const menuItems = [
         { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
         { text: 'Messages', icon: <MessageIcon />, onClick:handleOpenChat,count: notificationCount },
-        { text: 'Notifications', icon: <NotificationsIcon />, path: '/notifications',count: notificationCounts,onClick: () => setIsNotificationOpen(true) },
+        { text: 'Notifications', icon: <NotificationsIcon />,count: notificationCounts,onClick: () => setIsNotificationOpen(true) },
         { text: 'Logout', icon: <LogoutIcon />, onClick:handlelogout },
       ];
     
@@ -231,7 +238,7 @@ const TravellerProfile = () => {
         { text: 'Edit Profile', icon: <EditIcon />, path: '/editprofile' },
         { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' }, 
         { text: 'Inbox', icon: <MessageIcon />,  onClick:handleOpenChat,count: notificationCount},
-        { text: 'Alerts', icon: <NotificationsIcon />, path: '/alerts',onClick: () => setIsNotificationOpen(true),count: notificationCounts },
+        { text: 'Alerts', icon: <NotificationsIcon />,onClick: () => setIsNotificationOpen(true),count: notificationCounts },
         { text: 'Planned Trips', icon: <FlightTakeoffIcon />, path: '/viewtrip', }, 
         { text: 'Create Trip', icon: <EventNoteIcon />, path: '/triplan' },
         { text: 'Log Out', icon: <ExitToAppIcon />, onClick: handlelogout },
@@ -301,10 +308,10 @@ const TravellerProfile = () => {
 
   return (
     
-    <div style={{marginTop:'120px'}}>
+    <div className='mainprofile' style={{marginTop:'120px'}}>
     {loading ? (
      
-     <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+     <Box display="flex" justifyContent="center" alignItems="center" height="100px">
      <CircularProgress />
    </Box>
       

@@ -44,7 +44,7 @@ const ResetPassword = () => {
                     title: 'Password Reset',
                     text: 'Your password has been reset successfully.',
                 }).then(() => {
-                    navigate('/login'); // Redirect to login after successful password reset
+                    navigate('/login'); 
                 });
             } catch (error) {
                 Swal.fire({

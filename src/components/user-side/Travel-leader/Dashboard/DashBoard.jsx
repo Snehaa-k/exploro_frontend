@@ -17,6 +17,7 @@ import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Lege
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import axios from 'axios';
 import api from '../../../../axios-interceptors/AxiosInterceptors';
+import { Button } from 'rsuite';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -25,12 +26,30 @@ const DashBoard = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(4);
   const [openRows, setOpenRows] = useState({});
+
+  
+  const handleCreateGroup = async (tripId) => {
+    const trip = trips.find(t => t.id === tripId);
+    const groupMembers = trip.booked_customers.map(customer => ({ user: customer.user }));
+
+    try {
+      const response = await api.post('/groups/', {
+        trip: tripId,
+        members: groupMembers,
+      });
+      console.log('Group created successfully:', response.data);
+    } catch (error) {
+      console.error("Error creating group:", error);
+    }
+  };
   
   useEffect(() => {
     const fetchTrips = async () => {
       try {
         const response = await api.get('/trip_details/');
         setTrips(response.data);
+        console.log(response.data,"hellotrip")
+
       } catch (error) {
         console.error("Error fetching trip data:", error);
       }
@@ -79,6 +98,8 @@ const DashBoard = () => {
                 <TableCell style={{ fontWeight: 'bold' }}>Total Earnings ($)</TableCell>               
                   <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
                   <TableCell style={{ fontWeight: 'bold' }}>Amount Returned</TableCell>
+                  {/* <TableCell style={{ fontWeight: 'bold' }}>Group</TableCell> */}
+
               </TableRow>
             </TableHead>
             <TableBody>
@@ -97,20 +118,28 @@ const DashBoard = () => {
                     <TableCell>{trip.end_date}</TableCell>
                     <TableCell>{trip.booked_customers.length * trip.amount}</TableCell>
                     {/* Updated trip status logic */}
-                    <TableCell>
-  {new Date(trip.end_date) < new Date() ? (
-    trip.is_completed === 'cancelled' ? 'Cancelled' : 'Completed'
-  ) : (
-    'Ongoing'
-  )}
-</TableCell>
+                     <TableCell>
+                      {trip.is_completed === 'cancelled' ? (
+                        <span style={{ color: 'red' }}>Cancelled</span>
+                      ) : new Date(trip.end_date) < new Date() ? (
+                        <span style={{ color: 'green' }}>Completed</span>
+                      ) : (
+                        <span style={{ color: 'orange' }}>Ongoing</span>
+                      )}
+                    </TableCell>
                     <TableCell 
-  style={{ 
-    color: trip.is_refund === 'True' ? 'green' : 'red' 
-  }}
->
-  {trip.is_refund === 'True' ? 'Returned' : 'Not Returned'}
-</TableCell>                  </TableRow>
+                      style={{ 
+                        color: trip.is_refund === 'True' ? 'green' : 'red' 
+                      }}
+                    >
+                      {trip.is_refund === 'True' ? 'Returned' : 'Not Returned'}
+                    </TableCell>    
+{/* 
+                    <TableCell><Button  onClick={() => handleCreateGroup(trip.id)} >Group Create
+                      </Button></TableCell> */}
+
+
+               </TableRow>
                   <TableRow>
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                       <Collapse in={openRows[trip.id]} timeout="auto" unmountOnExit>

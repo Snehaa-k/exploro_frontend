@@ -189,6 +189,7 @@ const TripDetails = () => {
                                              ) : (
                                                 trip.booked_customers.map((customer) => (
                                                    <TableRow key={customer.id}>
+                                                      
                                                       <TableCell>{customer.id}</TableCell>
 
                                                       <TableCell>{customer.user_username}</TableCell>

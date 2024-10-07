@@ -86,16 +86,16 @@ const AdminHome = () => {
         )}
     </div>
    
-    <div className='sidebar-container' style={{marginLeft:'-30px',marginTop:'-180px'}}>
+    <div className='sidebar-container' style={{marginLeft:'10px',marginTop:'-140px'}}>
       <div className='side-bar'>
         <Box p={2} sx={{ backgroundColor: '#f9f9f9', height: 'vh' ,marginTop:'50px',paddingLeft:'20px' }}>
       <List>
         <Typography style={{paddingBottom:'20px',paddingLeft:'20px'}}>Admin Dashboard</Typography>
-        {[{ text: 'Dashboard', icon: <DashboardIcon /> },
+        {[
               { text: 'Travellers', icon: <PeopleIcon /> ,path: '/travellers'},
               { text: 'TraveLeaders', icon: <SupervisedUserCircleIcon /> ,path: '/travelleaders'},
               { text: 'Requests', icon: <AssignmentIcon />,path: '/requestss' },
-              // { text: 'Complaints', icon: <ReportIcon /> },
+              { text: 'Complaints', icon: <ReportIcon /> ,path:'/report' },
               { text: 'LogOut', icon: <ExitToAppIcon />,onClick:handlelogout }].map((item) => (
                 <ListItem
                 button

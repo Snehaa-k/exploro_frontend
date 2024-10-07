@@ -54,7 +54,7 @@ const TourPlan = ({ tripId }) => {
                           {`Day ${index + 1}: ${item.place_name}`}
                         </Typography>
                         <Typography variant="body2"><strong>Description:</strong> {item.description}</Typography>
-                        <Typography variant="body2"><strong>Accommodation:</strong> {item.accommodation}</Typography>
+                        <Typography variant="body2"><strong>Accommodation:</strong> {item.accomodation}</Typography>
                         <Typography variant="body2"><strong>Transportation:</strong> {item.Transportation}</Typography>
                       </Grid>
                     </Grid>

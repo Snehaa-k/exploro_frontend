@@ -1,150 +1,136 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-
-
-.container{
-   
-    justify-content: flex-start;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    width: 100%;
-    height: 200px; 
- }
-
-
-.container1{
-  
-    width: 100%;
-    height: 100%;
-
-}
-.logo{
-    position: fixed;
-    margin-top: 20px;
-    left: 100px;
-    width: 90px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-
-
-.image-container{
-    /* position: fixed; */
-    width: 700px;
-    margin-top: 90px;
-    left: 0px;
-    height: auto;
-    object-fit: cover;
-   
+.container {
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  width: 100%;
+  height: auto; /* Adjust height for flexibility */
 }
 
-/* .sigup-container{
-    position:fixed;
-    margin-top: 22px;
-    right: 180px;
-    width: 3px;
-} */
-.container1,.container2{
- flex: 1;
+.container1 {
+  width: 100%;
+  height: auto; /* Allow height to adapt */
 }
-.container2{
-   
-    background-color:#BBF2E8;
-    width:100%;
-    height: 375%;
-    justify-content: space-between;
-   
-    
+
+.logo {
+  position: fixed;
+  margin-top: 20px;
+  left: 100px;
+  width: 90px;
 }
-.container3{
-    background-color: white;
-    width: 68%;
-    height: 550px;
-    padding-top: 24px;
-    
-    margin-top: 100px;
-    margin-left: 125px;
-    border-radius: 10px;
+
+.image-container {
+  width: 700px;
+  margin-top: 90px;
+  left: 0px;
+  height: auto;
+  object-fit: cover;
 }
+
+.container1, .container2 {
+  flex: 1;
+}
+
+.container2 {
+  background-color: #BBF2E8;
+  width: 100%;
+  height: auto; /* Allow height to adapt */
+  justify-content: space-between;
+}
+
+.container3 {
+  background-color: white;
+  width: 68%;
+  height: 80%; /* Allow height to adapt */
+  padding-top: 24px;
+  margin-top: 100px;
+  margin-left: 125px;
+  border-radius: 10px;
+}
+
 .logo {
   display: flex;
-  align-items: center; 
-  font-size: 30px; 
+  align-items: center;
+  font-size: 30px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.logo-icon {
-  font-size: 100px; 
-  margin-right: 8px; 
- 
-}
 .logo-image {
-  width: 150px; 
+  width: 150px;
   height: auto;
   animation: pulse 2s infinite;
   margin-top: 30px;
-
 }
 
 @keyframes pulse {
   0% {
-    transform: scale(1);
+      transform: scale(1);
   }
   50% {
-    transform: scale(1.1);
+      transform: scale(1.1);
   }
   100% {
-    transform: scale(1);
+      transform: scale(1);
   }
-}
-.description {
-  font-size: 16px; 
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  margin: 60px 0; 
-  color: rgb(121, 123, 123);
-  text-align: center; 
-  max-width: 600px; 
-  margin-bottom: 20px; 
-  margin-top: 0px;
-  margin-left: 90px;
 }
 
+.description {
+  font-size: 16px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin: 60px 0;
+  color: rgb(121, 123, 123);
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 20px;
+  margin-top: 0px;
+  margin-left: 90px; /* Keep original margin */
+}
+
+/* Media Queries for Responsiveness */
 @media (max-width: 1000px) {
-    .logo {
-      font-size: 1.5rem;
-    }
-  
-   
-  
-    /* .text-container {
-      font-size: 1.2rem;
-    }
-   */
-    .image-container {
-      margin-top: 10px;
-    
-      max-height: 200px;
-    }
-  
-    .container2 {
-      padding: 10px;
-      max-width: 400px;
-      left: 1rem;
-    }
-    .container1{
-        padding: 10px; 
-        max-width: 400px;
-    }
-    .container3{
-        padding: 10px;
-        max-width: 300px;
-    }
-    .container{
-        padding: 10px;
-        
-    }
+  .logo {
+      font-size: 1.5rem; /* Adjust logo size */
   }
+
+  .image-container {
+      margin-top: 10px;
+      max-width: 100%; /* Allow image to adapt to container */
+      height: auto; /* Maintain aspect ratio */
+  }
+
+  .container2 {
+      padding: 10px;
+      max-width: 90%; /* Adjust max-width for smaller screens */
+      margin-left: auto; /* Center the container */
+      margin-right: auto; /* Center the container */
+  }
+
+  .container1 {
+      padding: 10px;
+      max-width: 90%; /* Adjust max-width for smaller screens */
+      margin-left: auto; /* Center the container */
+      margin-right: auto; /* Center the container */
+  }
+
+  .container3 {
+      padding: 10px;
+      max-width: 90%; /* Adjust max-width for smaller screens */
+      margin-left: auto; /* Center the container */
+      margin-right: auto; /* Center the container */
+  }
+
+  .container {
+      padding: 10px;
+  }
+
+  .description {
+      font-size: 14px; /* Adjust description font size */
+      margin-left: 10px; /* Reduce margin for smaller screens */
+  }
+}

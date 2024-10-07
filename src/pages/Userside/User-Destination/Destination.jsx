@@ -54,6 +54,7 @@ const Destination = () => {
   
   console.log(travelead,"travel_id");
   
+  
   const [user,setUser] = useState()
   console.log(user,"i am user");
   
@@ -188,7 +189,7 @@ const Destination = () => {
       <Typography align='center' variant='h5'>Find Your Destination</Typography>
       </div>
    
-      <Container maxWidth="md" sx={{ marginTop: '40px' }}>
+      <Container maxWidth="md" sx={{ marginTop: '4px' }}>
         <SearchBar
           variant="outlined"
           fullWidth
