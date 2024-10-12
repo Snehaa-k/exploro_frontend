@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Dialog,
   DialogTitle,
@@ -11,17 +11,16 @@ import {
   TextField,
   Button,
   Avatar,
-} from '@mui/material';
+} from "@mui/material";
 const parseCommentText = (text) => {
   try {
     const jsonText = text.replace(/'/g, '"');
     return JSON.parse(jsonText);
   } catch (error) {
-    console.error('Error parsing comment text:', error);
-    return { text: '', timestamp: '' };
+    console.error("Error parsing comment text:", error);
+    return { text: "", timestamp: "" };
   }
 };
-
 
 const CommentModal = ({
   isOpen,
@@ -32,7 +31,7 @@ const CommentModal = ({
   handleCommentSubmit,
 }) => {
   console.log(comments);
-  
+
   return (
     <Dialog open={isOpen} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>Comments</DialogTitle>
@@ -41,22 +40,26 @@ const CommentModal = ({
           {comments.length > 0 ? (
             comments.map((comment, index) => {
               const { text, timestamp } = parseCommentText(comment.text);
-              const { name, profileImage } = comment.user; 
+              const { name, profileImage } = comment.user;
 
               return (
                 <ListItem key={index} alignItems="flex-start">
-                  <Avatar alt={name} src={profileImage} sx={{ marginRight: 2 }} />
-                  <Box sx={{ width: '100%' }}>
+                  <Avatar
+                    alt={name}
+                    src={profileImage}
+                    sx={{ marginRight: 2 }}
+                  />
+                  <Box sx={{ width: "100%" }}>
                     <Typography variant="body1" fontWeight="bold">
-                      {comment.user} 
+                      {comment.user}
                     </Typography>
                     <Typography variant="body2">{text}</Typography>
                     <Typography
                       variant="caption"
                       color="textSecondary"
-                      sx={{ display: 'block', marginTop: '4px' }}
+                      sx={{ display: "block", marginTop: "4px" }}
                     >
-                      {new Date(timestamp).toLocaleString()} 
+                      {new Date(timestamp).toLocaleString()}
                     </Typography>
                   </Box>
                 </ListItem>

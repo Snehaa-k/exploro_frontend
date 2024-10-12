@@ -33,12 +33,13 @@
   object-fit: cover;
 }
 
-.container1, .container2 {
+.container1,
+.container2 {
   flex: 1;
 }
 
 .container2 {
-  background-color: #BBF2E8;
+  background-color: #bbf2e8;
   width: 100%;
   height: auto; /* Allow height to adapt */
   justify-content: space-between;
@@ -70,19 +71,20 @@
 
 @keyframes pulse {
   0% {
-      transform: scale(1);
+    transform: scale(1);
   }
   50% {
-      transform: scale(1.1);
+    transform: scale(1.1);
   }
   100% {
-      transform: scale(1);
+    transform: scale(1);
   }
 }
 
 .description {
   font-size: 16px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   margin: 60px 0;
   color: rgb(121, 123, 123);
   text-align: center;
@@ -95,42 +97,42 @@
 /* Media Queries for Responsiveness */
 @media (max-width: 1000px) {
   .logo {
-      font-size: 1.5rem; /* Adjust logo size */
+    font-size: 1.5rem; /* Adjust logo size */
   }
 
   .image-container {
-      margin-top: 10px;
-      max-width: 100%; /* Allow image to adapt to container */
-      height: auto; /* Maintain aspect ratio */
+    margin-top: 10px;
+    max-width: 100%; /* Allow image to adapt to container */
+    height: auto; /* Maintain aspect ratio */
   }
 
   .container2 {
-      padding: 10px;
-      max-width: 90%; /* Adjust max-width for smaller screens */
-      margin-left: auto; /* Center the container */
-      margin-right: auto; /* Center the container */
+    padding: 10px;
+    max-width: 90%; /* Adjust max-width for smaller screens */
+    margin-left: auto; /* Center the container */
+    margin-right: auto; /* Center the container */
   }
 
   .container1 {
-      padding: 10px;
-      max-width: 90%; /* Adjust max-width for smaller screens */
-      margin-left: auto; /* Center the container */
-      margin-right: auto; /* Center the container */
+    padding: 10px;
+    max-width: 90%; /* Adjust max-width for smaller screens */
+    margin-left: auto; /* Center the container */
+    margin-right: auto; /* Center the container */
   }
 
   .container3 {
-      padding: 10px;
-      max-width: 90%; /* Adjust max-width for smaller screens */
-      margin-left: auto; /* Center the container */
-      margin-right: auto; /* Center the container */
+    padding: 10px;
+    max-width: 90%; /* Adjust max-width for smaller screens */
+    margin-left: auto; /* Center the container */
+    margin-right: auto; /* Center the container */
   }
 
   .container {
-      padding: 10px;
+    padding: 10px;
   }
 
   .description {
-      font-size: 14px; /* Adjust description font size */
-      margin-left: 10px; /* Reduce margin for smaller screens */
+    font-size: 14px; /* Adjust description font size */
+    margin-left: 10px; /* Reduce margin for smaller screens */
   }
 }

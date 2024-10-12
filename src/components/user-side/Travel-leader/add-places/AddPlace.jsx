@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Grid, Typography } from '@mui/material';
-import api from '../../../../axios-interceptors/AxiosInterceptors';
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  Grid,
+  Typography,
+} from "@mui/material";
+import api from "../../../../axios-interceptors/AxiosInterceptors";
 
 const AddPlaceModal = ({ open, onClose, onSave, tripId }) => {
-  const [place_name, setPlaceName] = useState('');
-  const [description, setDescription] = useState('');
-  const [Transportation, setTransportation] = useState('');
-  const [accomodation, setAccomodation] = useState('');
+  const [place_name, setPlaceName] = useState("");
+  const [description, setDescription] = useState("");
+  const [Transportation, setTransportation] = useState("");
+  const [accomodation, setAccomodation] = useState("");
   const [image, setImage] = useState(null); // State for the image file
   const [imagePreview, setImagePreview] = useState(null); // State for image preview
   const [loading, setLoading] = useState(false);
@@ -29,29 +38,29 @@ const AddPlaceModal = ({ open, onClose, onSave, tripId }) => {
 
     // Create FormData to include the image file
     const formData = new FormData();
-    formData.append('place_name', place_name);
-    formData.append('description', description);
-    formData.append('Transportation', Transportation);
-    formData.append('accomodation', accomodation);
-    formData.append('trip', tripId);
-    formData.append('tripId', tripId);
+    formData.append("place_name", place_name);
+    formData.append("description", description);
+    formData.append("Transportation", Transportation);
+    formData.append("accomodation", accomodation);
+    formData.append("trip", tripId);
+    formData.append("tripId", tripId);
     if (image) {
-      formData.append('place_image', image); // Append the image file if it's selected
+      formData.append("place_image", image); // Append the image file if it's selected
     }
 
     try {
-      const response = await api.post('/addplaces/', formData)
+      const response = await api.post("/addplaces/", formData);
       onSave(response.data);
       onClose();
-      setPlaceName('');
-      setDescription('');
-      setAccomodation('');
-      setTransportation('');
+      setPlaceName("");
+      setDescription("");
+      setAccomodation("");
+      setTransportation("");
       setImage(null);
       setImagePreview(null); // Reset image preview after saving
     } catch (err) {
-      console.error('Error saving place:', err);
-      setError('Failed to save place.');
+      console.error("Error saving place:", err);
+      setError("Failed to save place.");
     } finally {
       setLoading(false);
     }
@@ -101,17 +110,21 @@ const AddPlaceModal = ({ open, onClose, onSave, tripId }) => {
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              style={{ marginTop: '16px' }}
+              style={{ marginTop: "16px" }}
             />
 
             {/* Image Preview */}
             {imagePreview && (
-              <div style={{ marginTop: '16px' }}>
+              <div style={{ marginTop: "16px" }}>
                 <Typography variant="subtitle1">Image Preview:</Typography>
                 <img
                   src={imagePreview}
                   alt="Selected Place"
-                  style={{ width: '100%', maxHeight: '400px', objectFit: 'contain' }}
+                  style={{
+                    width: "100%",
+                    maxHeight: "400px",
+                    objectFit: "contain",
+                  }}
                 />
               </div>
             )}
@@ -120,7 +133,12 @@ const AddPlaceModal = ({ open, onClose, onSave, tripId }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button variant="contained" color="primary" onClick={handleAdd} disabled={loading}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleAdd}
+          disabled={loading}
+        >
           Save
         </Button>
       </DialogActions>

@@ -1,41 +1,40 @@
-import React from 'react'
-import Navbar from '../../../components/Navbar/Navbar'
-import PostsPage from '../../../components/user-side/Posts-page/PostsPage'
-import './UserPost.css'
-import HomeIcon from '@mui/icons-material/Home';
-import ExploreIcon from '@mui/icons-material/Explore';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useNavigate } from 'react-router';
+import React from "react";
+import Navbar from "../../../components/Navbar/Navbar";
+import PostsPage from "../../../components/user-side/Posts-page/PostsPage";
+import "./UserPost.css";
+import HomeIcon from "@mui/icons-material/Home";
+import ExploreIcon from "@mui/icons-material/Explore";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useNavigate } from "react-router";
 
 const UserPost = () => {
-  const navigate = useNavigate()
-  const HandleProfile = ()=>{
-    navigate('/travellerprofile')
-  }
-  const HandleDestination = ()=>{
-    navigate('/destination')
-  }
-  const HandleHome = ()=>{
-    navigate('/posts')
-  }
+  const navigate = useNavigate();
+  const HandleProfile = () => {
+    navigate("/travellerprofile");
+  };
+  const HandleDestination = () => {
+    navigate("/destination");
+  };
+  const HandleHome = () => {
+    navigate("/posts");
+  };
   const handleClick = (id) => {
     navigate(`/viewdestination/${id}`);
   };
 
   const menuItemsLead = [
-    { label: 'Home', onClick: HandleHome },
-    { label: 'Profile', onClick:HandleProfile },
-    { label: 'Destination', onClick:HandleDestination },
+    { label: "Home", onClick: HandleHome },
+    { label: "Profile", onClick: HandleProfile },
+    { label: "Destination", onClick: HandleDestination },
   ];
   return (
-
-    <div >
-      <div style={{position:'fixed',width:'100%',zIndex: 3}}>
+    <div>
+      <div style={{ position: "fixed", width: "100%", zIndex: 3 }}>
         <Navbar menuItems={menuItemsLead} />
-        </div>
-        <PostsPage/>
+      </div>
+      <PostsPage />
     </div>
-  )
-}
+  );
+};
 
-export default UserPost
+export default UserPost;

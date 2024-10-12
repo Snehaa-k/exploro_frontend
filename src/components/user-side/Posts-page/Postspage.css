@@ -1,46 +1,46 @@
-body, html {
+body,
+html {
   height: 100%;
   margin: 0;
   scroll-behavior: auto;
 }
 
 .create-post {
-  width: 90%; 
-  max-width: 400px; 
+  width: 90%;
+  max-width: 400px;
   margin: 20px auto;
-  margin-top: 0px; 
+  margin-top: 0px;
 }
 
 .sidebar-container {
-  width: 80%; 
-  max-width: 300px; 
-  padding-left: 20px; 
+  width: 80%;
+  max-width: 300px;
+  padding-left: 20px;
 }
 
 .main-container {
-  margin-left: 300px; 
-  padding: 20px; 
+  margin-left: 300px;
+  padding: 20px;
   overflow-y: auto;
-  margin-left: 450px; 
+  margin-left: 450px;
 }
 
 .create-post-container {
-  max-height: 500px; 
+  max-height: 500px;
   overflow-y: auto;
   margin-bottom: 20px;
- 
 }
 
 .dashboard {
   position: fixed;
-  margin-left: 20px; 
+  margin-left: 20px;
   z-index: 1;
 }
 
 .right-side-container {
   position: fixed;
   z-index: 2;
-  margin-top: 80px; 
+  margin-top: 80px;
 }
 
 .create-post {
@@ -49,42 +49,41 @@ body, html {
 }
 
 @media (max-width: 768px) {
-  
   .main-container {
-      margin-left: 0; 
-      padding: 10px; 
+    margin-left: 0;
+    padding: 10px;
   }
-  
+
   .sidebar-container {
-      width: 100%; 
-      position: relative; 
-      padding-left: 0; 
+    width: 100%;
+    position: relative;
+    padding-left: 0;
   }
-  
+
   .dashboard {
-      position: relative; 
-      margin-left: 0; 
-      margin-bottom: 20px; 
+    position: relative;
+    margin-left: 0;
+    margin-bottom: 20px;
   }
 
   .right-side-container {
-      margin-top: 20px; 
-      position: relative; 
-      width: 100%; 
+    margin-top: 20px;
+    position: relative;
+    width: 100%;
   }
 
   .create-post {
-      top: auto; 
-      bottom: 20px; 
-      left: 0; 
-      right: 0; 
-      margin: 0 auto; 
+    top: auto;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
   }
 }
 
 @media (max-width: 480px) {
   .create-post {
-      width: 90%; 
-      max-width: none; 
+    width: 90%;
+    max-width: none;
   }
 }

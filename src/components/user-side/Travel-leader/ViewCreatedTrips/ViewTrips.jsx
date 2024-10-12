@@ -1,21 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton } from '@mui/material';
-import { styled } from '@mui/system';
-import AddPlaceModal from '../add-places/AddPlace';
-import EditTripModal from '../EditTrip/EditTrip';
-import EditPlaceModal from '../add-places-edit/AddPlacesEdit';
-import ViewPlacesModal from '../add-places/ViewPlaces'; 
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import api from '../../../../axios-interceptors/AxiosInterceptors';
-import { useNavigate } from 'react-router';
-import { API_URL } from '../../../../apiservice/Apiservice';
-import { format, isAfter } from 'date-fns';
-import Swal from 'sweetalert2';
+import React, { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  IconButton,
+} from "@mui/material";
+import { styled } from "@mui/system";
+import AddPlaceModal from "../add-places/AddPlace";
+import EditTripModal from "../EditTrip/EditTrip";
+import EditPlaceModal from "../add-places-edit/AddPlacesEdit";
+import ViewPlacesModal from "../add-places/ViewPlaces";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import api from "../../../../axios-interceptors/AxiosInterceptors";
+import { useNavigate } from "react-router";
+import { API_URL } from "../../../../apiservice/Apiservice";
+import { format, isAfter } from "date-fns";
+import Swal from "sweetalert2";
 
 const StyledTableContainer = styled(TableContainer)({
-  maxWidth: '100%',
-  overflowX: 'auto',
+  maxWidth: "100%",
+  overflowX: "auto",
 });
 
 const StyledTable = styled(Table)({
@@ -26,18 +36,18 @@ const StyledButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(1),
 }));
 
-const StyledImage = styled('img')({
-  width: '100px',
-  height: '60px',
-  objectFit: 'cover',
+const StyledImage = styled("img")({
+  width: "100px",
+  height: "60px",
+  objectFit: "cover",
 });
 
-const PlaceholderImage = styled('img')({
-  width: '200px',
-  height: '150px',
-  objectFit: 'cover',
-  margin: '20px auto',
-  display: 'block',
+const PlaceholderImage = styled("img")({
+  width: "200px",
+  height: "150px",
+  objectFit: "cover",
+  margin: "20px auto",
+  display: "block",
 });
 
 const TripList = () => {
@@ -51,11 +61,11 @@ const TripList = () => {
   const [editPlaceOpen, setEditPlaceOpen] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [selectedId, setSelectedID] = useState(null);
-  const [error, setError] = useState('');
-  const token = localStorage.getItem('accessToken');
+  const [error, setError] = useState("");
+  const token = localStorage.getItem("accessToken");
   const navigate = useNavigate();
 
-  const today = format(new Date(), 'yyyy-MM-dd');
+  const today = format(new Date(), "yyyy-MM-dd");
 
   const handleAddTrip = (newTrip) => {
     setTrips([...trip, newTrip]);
@@ -87,14 +97,14 @@ const TripList = () => {
 
   const handleDeleteTrip = async (tripId) => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "Do you want to cancel the trip?",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, cancel it!',
-      cancelButtonText: 'No, keep it',
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, cancel it!",
+      cancelButtonText: "No, keep it",
     });
 
     if (result.isConfirmed) {
@@ -102,27 +112,27 @@ const TripList = () => {
         await api.post(`/trip_cancel/${tripId}`);
         setTrips((prevTrips) => prevTrips.filter((trip) => trip.id !== tripId));
         Swal.fire({
-          icon: 'success',
-          title: 'Cancelled!',
-          text: 'The trip has been canceled.',
+          icon: "success",
+          title: "Cancelled!",
+          text: "The trip has been canceled.",
           timer: 2000,
           timerProgressBar: true,
           showConfirmButton: false,
         });
       } catch (error) {
-        console.error('Error canceling trip:', error.message);
-        setError('Error canceling trip');
+        console.error("Error canceling trip:", error.message);
+        setError("Error canceling trip");
         Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: 'There was a problem canceling the trip.',
+          icon: "error",
+          title: "Error!",
+          text: "There was a problem canceling the trip.",
         });
       }
     }
   };
 
   const handleNavigate = () => {
-    navigate('/triplan');
+    navigate("/triplan");
   };
 
   useEffect(() => {
@@ -135,8 +145,8 @@ const TripList = () => {
         const response = await api.get(`/viewtrip/`);
         setPlans([response.data.trip]);
       } catch (error) {
-        setError('Error fetching trips');
-        console.error('Error fetching trips:', error.message);
+        setError("Error fetching trips");
+        console.error("Error fetching trips:", error.message);
       }
     };
 
@@ -166,7 +176,10 @@ const TripList = () => {
               {plans.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={9} align="center">
-                    <PlaceholderImage src="path_to_placeholder_image" alt="No trips available" />
+                    <PlaceholderImage
+                      src="path_to_placeholder_image"
+                      alt="No trips available"
+                    />
                     <div>No trips available</div>
                     <StyledButton variant="contained" onClick={handleNavigate}>
                       Create Trip
@@ -175,13 +188,19 @@ const TripList = () => {
                 </TableRow>
               ) : (
                 plans.flat().map((trip) => {
-                  const isCompleted = isAfter(new Date(today), new Date(trip.end_date));
+                  const isCompleted = isAfter(
+                    new Date(today),
+                    new Date(trip.end_date),
+                  );
                   const isCancelled = trip.is_completed === "cancelled";
 
                   return (
                     <TableRow key={trip.id}>
                       <TableCell>
-                        <StyledImage src={trip.Trip_image} alt={trip.location} />
+                        <StyledImage
+                          src={trip.Trip_image}
+                          alt={trip.location}
+                        />
                       </TableCell>
                       <TableCell>{trip.location}</TableCell>
                       <TableCell>{trip.accomodation}</TableCell>
@@ -193,21 +212,32 @@ const TripList = () => {
                       <TableCell>{trip.end_date}</TableCell>
                       <TableCell>
                         {isCancelled ? (
-                          <div style={{color:'red'}}>Cancelled</div>
+                          <div style={{ color: "red" }}>Cancelled</div>
                         ) : isCompleted ? (
-                          <div >Completed</div>
+                          <div>Completed</div>
                         ) : (
                           <>
-                            <IconButton onClick={() => handleEditTripClick(trip)}>
+                            <IconButton
+                              onClick={() => handleEditTripClick(trip)}
+                            >
                               <EditIcon />
                             </IconButton>
-                            <StyledButton variant="contained" onClick={() => handleAddPlace(trip.id)}>
+                            <StyledButton
+                              variant="contained"
+                              onClick={() => handleAddPlace(trip.id)}
+                            >
                               Add Place
                             </StyledButton>
-                            <StyledButton variant="contained" onClick={() => handleViewPlacesClick(trip)}>
+                            <StyledButton
+                              variant="contained"
+                              onClick={() => handleViewPlacesClick(trip)}
+                            >
                               View Places
                             </StyledButton>
-                            <IconButton onClick={() => handleDeleteTrip(trip.id)} color="error">
+                            <IconButton
+                              onClick={() => handleDeleteTrip(trip.id)}
+                              color="error"
+                            >
                               <DeleteIcon />
                             </IconButton>
                           </>
@@ -258,8 +288,8 @@ const TripList = () => {
           onSave={(updatedPlace) => {
             setPlaces(
               places.map((place) =>
-                place.id === updatedPlace.id ? updatedPlace : place
-              )
+                place.id === updatedPlace.id ? updatedPlace : place,
+              ),
             );
           }}
         />

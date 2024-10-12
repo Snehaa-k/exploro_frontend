@@ -1,48 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import { Drawer, List, ListItem, ListItemText, IconButton, Button } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete'; // For delete button
-import { useNavigate } from 'react-router-dom'; // For redirecting
-import api from '../../../axios-interceptors/AxiosInterceptors';
+import React, { useEffect, useState } from "react";
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  Button,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete"; // For delete button
+import { useNavigate } from "react-router-dom"; // For redirecting
+import api from "../../../axios-interceptors/AxiosInterceptors";
 
 const NotificationDrawer = ({ isOpen, onClose, currentUserId }) => {
   const [notifications, setNotifications] = useState([]);
-  const navigate = useNavigate(); 
-  const [load,setLoad] = useState(false)
+  const navigate = useNavigate();
+  const [load, setLoad] = useState(false);
   console.log(notifications);
-  
 
   // Fetch notifications
   const fetchNotifications = async () => {
     try {
-      const response = await api.get('notification/');
+      const response = await api.get("notification/");
       setNotifications(response.data);
-      setLoad(true) 
-
+      setLoad(true);
     } catch (error) {
-      console.error('Error fetching notifications:', error);
+      console.error("Error fetching notifications:", error);
     }
   };
 
   // Mark a single notification as read
   const markAsRead = async (id, redirectUrl) => {
     try {
-      await api.post(`mark_as_read/${id}`); 
-      navigate(redirectUrl); 
-      setLoad(true) 
+      await api.post(`mark_as_read/${id}`);
+      navigate(redirectUrl);
+      setLoad(true);
       fetchNotifications();
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      console.error("Error marking notification as read:", error);
     }
   };
 
   // Delete a read notification
   const deleteNotification = async (id) => {
     try {
-      await api.delete(`notification/${id}`); 
-      fetchNotifications(); 
+      await api.delete(`notification/${id}`);
+      fetchNotifications();
     } catch (error) {
-      console.error('Error deleting notification:', error);
+      console.error("Error deleting notification:", error);
     }
   };
 
@@ -54,7 +59,7 @@ const NotificationDrawer = ({ isOpen, onClose, currentUserId }) => {
 
   return (
     <Drawer anchor="right" open={isOpen} onClose={onClose}>
-      <div style={{ width: '300px' }}>
+      <div style={{ width: "300px" }}>
         <IconButton onClick={onClose}>
           <CloseIcon />
         </IconButton>
@@ -67,21 +72,21 @@ const NotificationDrawer = ({ isOpen, onClose, currentUserId }) => {
                 button
                 onClick={() => markAsRead(notification.id, notification.link)} // Pass the ID and redirect URL
                 style={{
-                  backgroundColor: notification.is_read ? '#e0e0e0' : '#ffffff', // Change color if read
+                  backgroundColor: notification.is_read ? "#e0e0e0" : "#ffffff", // Change color if read
                 }}
               >
                 <ListItemText
                   primary={
-                    <span style={{ display: 'flex', alignItems: 'center' }}>
+                    <span style={{ display: "flex", alignItems: "center" }}>
                       {notification.text}
                       {!notification.is_read && (
                         <div
                           style={{
-                            width: '8px',
-                            height: '8px', 
-                            borderRadius: '50%',
-                            backgroundColor: 'red',
-                            marginLeft: '8px', // Space between text and dot
+                            width: "8px",
+                            height: "8px",
+                            borderRadius: "50%",
+                            backgroundColor: "red",
+                            marginLeft: "8px", // Space between text and dot
                           }}
                         />
                       )}

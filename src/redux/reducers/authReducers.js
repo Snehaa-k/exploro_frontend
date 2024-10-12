@@ -1,16 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, verifyOtp,loginUser,fetchLeaders,fetchTravellers,createTrip,updateTrip } from '../actions/authActions';
-
-
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  registerUser,
+  verifyOtp,
+  loginUser,
+  fetchLeaders,
+  fetchTravellers,
+  createTrip,
+  updateTrip,
+} from "../actions/authActions";
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
     accessToken: null,
     refreshToken: null,
     leaders: [],
     travellers: [],
-  
+
     user: null,
     isLoading: false,
     error: null,
@@ -25,47 +31,46 @@ const userSlice = createSlice({
     },
     setError: (state, action) => {
       state.error = action.payload;
-      console.log(state.error)
+      console.log(state.error);
     },
     setUser: (state, action) => {
       state.user = action.payload;
-      console.log(state.user,"haiii redux")
+      console.log(state.user, "haiii redux");
     },
     setTokens: (state, action) => {
       const { access, refresh } = action.payload;
       state.accessToken = access;
       state.refreshToken = refresh;
       // console.log(access, "settoken");
-      localStorage.setItem('accessToken', access);
-      localStorage.setItem('refreshToken', refresh);
+      localStorage.setItem("accessToken", access);
+      localStorage.setItem("refreshToken", refresh);
     },
     setAdminToken: (state, action) => {
       const { access, refresh } = action.payload;
       state.accessToken = access;
       state.refreshToken = refresh;
-     
-      localStorage.setItem('admin_accessToken', access);
-      localStorage.setItem('admin_refreshToken', refresh);
+
+      localStorage.setItem("admin_accessToken", access);
+      localStorage.setItem("admin_refreshToken", refresh);
     },
-    
-    setLeaders: (state, action) => { 
+
+    setLeaders: (state, action) => {
       state.leaders = action.payload;
     },
     logoutUser: (state) => {
       state.accessToken = null;
       state.refreshToken = null;
       state.user = null;
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
     },
     logoutAdmin: (state) => {
       state.accessToken = null;
       state.refreshToken = null;
       state.user = null;
-      localStorage.removeItem('admin_accessToken');
-      localStorage.removeItem('admin_refreshToken');
+      localStorage.removeItem("admin_accessToken");
+      localStorage.removeItem("admin_refreshToken");
     },
-   
   },
   extraReducers: (builder) => {
     builder
@@ -106,22 +111,20 @@ const userSlice = createSlice({
       //   state.isLoading = false;
       //   state.error = action.payload;
       // })
-      
+
       // .addCase(refreshAccessToken.pending, (state) => {
       //   state.isLoading = true;
-        
-        
+
       // })
       // .addCase(refreshAccessToken.fulfilled, (state, action) => {
-       
+
       //   state.isLoading = false;
       //   state.accessToken = action.payload.accessToken;
-        
+
       //   localStorage.setItem('accessToken', action.payload.accessToken);
       // })
       // .addCase(refreshAccessToken.rejected, (state, action) => {
-       
-        
+
       //   state.isLoading = false;
       //   state.error = action.payload;
       // })
@@ -130,7 +133,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchLeaders.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.leaders = action.payload; 
+        state.leaders = action.payload;
       })
       .addCase(fetchLeaders.rejected, (state, action) => {
         state.isLoading = false;
@@ -147,7 +150,8 @@ const userSlice = createSlice({
       .addCase(fetchTravellers.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      }).addCase(createTrip.pending, (state) => {
+      })
+      .addCase(createTrip.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(createTrip.fulfilled, (state) => {
@@ -158,19 +162,26 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(updateTrip.pending, (state) => {
-      state.isLoading = true;
-    })
-    .addCase(updateTrip.fulfilled, (state) => {
-      state.isLoading = false;
-    })
-    .addCase(updateTrip.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
-
-
+        state.isLoading = true;
+      })
+      .addCase(updateTrip.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(updateTrip.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export const { startLoading, stopLoading, setError, setUser,setTokens ,setLeaders,logoutUser,setAdminToken} = userSlice.actions;
+export const {
+  startLoading,
+  stopLoading,
+  setError,
+  setUser,
+  setTokens,
+  setLeaders,
+  logoutUser,
+  setAdminToken,
+} = userSlice.actions;
 export default userSlice.reducer;

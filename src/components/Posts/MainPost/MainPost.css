@@ -1,16 +1,15 @@
 /* General container responsiveness */
 @media (max-width: 768px) {
-    .main-post-container {
-      padding: 10px;
-    }
-  
-    .main-post-card {
-      width: 100%;
-      max-width: none;
-    }
-  
-    .main-post-media {
-      height: auto; /* Adjust height for smaller screens */
-    }
+  .main-post-container {
+    padding: 10px;
   }
-  
+
+  .main-post-card {
+    width: 100%;
+    max-width: none;
+  }
+
+  .main-post-media {
+    height: auto; /* Adjust height for smaller screens */
+  }
+}

@@ -1,102 +1,112 @@
-import React, { useState } from 'react';
-import { Modal, Box, Button, TextField, Typography, IconButton ,InputLabel,FormControl,Select,MenuItem} from '@mui/material';
-import { PhotoCamera } from '@mui/icons-material';
-import { createPosts } from '../../../redux/actions/authActions';
-import { useDispatch } from 'react-redux';
-import Swal from 'sweetalert2';
-import { setUser } from '../../../redux/reducers/authReducers';
-import { useNavigate } from 'react-router';
+import React, { useState } from "react";
+import {
+  Modal,
+  Box,
+  Button,
+  TextField,
+  Typography,
+  IconButton,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import { PhotoCamera } from "@mui/icons-material";
+import { createPosts } from "../../../redux/actions/authActions";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import { setUser } from "../../../redux/reducers/authReducers";
+import { useNavigate } from "react-router";
 
-const PhotoModal = ({ open, handleClose, onPhotoSubmit ,setReloadPosts}) => {
+const PhotoModal = ({ open, handleClose, onPhotoSubmit, setReloadPosts }) => {
   const dispatch = useDispatch();
   const [photo, setPhoto] = useState(null);
-  const [description, setDescription] = useState('');
-  const [destinationType, setDestinationType] = useState(''); 
+  const [description, setDescription] = useState("");
+  const [destinationType, setDestinationType] = useState("");
   const [photoPreview, setPhotoPreview] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-
-      setPhoto(file); 
+      setPhoto(file);
       setPhotoPreview(URL.createObjectURL(file));
     }
   };
 
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append("post_image", photo);
+    formData.append("description", description);
+    formData.append("type_of_trip", destinationType);
 
-  const handleSubmit = async() => {
-   
-      const formData = new FormData();
-      formData.append('post_image', photo);
-      formData.append('description', description);
-      formData.append('type_of_trip', destinationType);
-  
-      const response = await dispatch(createPosts(formData));
-      
-      
-      if(response){
+    const response = await dispatch(createPosts(formData));
 
-    Swal.fire({
-      icon: 'success',
-      title: 'Post created sucussfully',
-      text: 'Redirecting to home',
-      timer: 2000,
-      timerProgressBar: true,
-      showConfirmButton: false,
-    }).then(() => {
-      navigate('/posts');
-    });
-    setReloadPosts((prev) => !prev);
-  } 
-      handleClose();
-      setPhoto(null);
-      setDescription('');
-      setDestinationType(''); 
-  
+    if (response) {
+      Swal.fire({
+        icon: "success",
+        title: "Post created sucussfully",
+        text: "Redirecting to home",
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      }).then(() => {
+        navigate("/posts");
+      });
+      setReloadPosts((prev) => !prev);
+    }
+    handleClose();
+    setPhoto(null);
+    setDescription("");
+    setDestinationType("");
   };
-
-  
-
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <Box sx={{ padding: 4, backgroundColor: '#fff', margin: '10% auto', maxWidth: '400px', borderRadius: 2 }}>
+      <Box
+        sx={{
+          padding: 4,
+          backgroundColor: "#fff",
+          margin: "10% auto",
+          maxWidth: "400px",
+          borderRadius: 2,
+        }}
+      >
         <Typography variant="h6" gutterBottom>
           Add a Photo and Description
         </Typography>
 
         <Box
           sx={{
-            width: '100%',
+            width: "100%",
             height: 200,
-            backgroundColor: '#f0f0f0',
+            backgroundColor: "#f0f0f0",
             borderRadius: 2,
-            border: '1px dashed #ccc',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            border: "1px dashed #ccc",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             marginBottom: 2,
-            position: 'relative',
-            overflow: 'hidden',
+            position: "relative",
+            overflow: "hidden",
           }}
         >
           {photo ? (
             <img
-            src={photoPreview}
+              src={photoPreview}
               alt="Uploaded"
               style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                position: 'absolute',
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                position: "absolute",
               }}
             />
           ) : (
             <IconButton
               component="label"
               sx={{
-                backgroundColor: '#ffffff',
+                backgroundColor: "#ffffff",
                 borderRadius: 1,
                 padding: 2,
                 zIndex: 1,
@@ -123,7 +133,7 @@ const PhotoModal = ({ open, handleClose, onPhotoSubmit ,setReloadPosts}) => {
           onChange={(e) => setDescription(e.target.value)}
           sx={{ marginBottom: 2 }}
         />
-         {/* <FormControl fullWidth >
+        {/* <FormControl fullWidth >
           <InputLabel id="destination-type-label">Preferred Destination Type</InputLabel>
           <Select
             labelId="destination-type-label"
@@ -138,7 +148,13 @@ const PhotoModal = ({ open, handleClose, onPhotoSubmit ,setReloadPosts}) => {
           </Select>
         </FormControl> */}
 
-        <Button variant="contained" color="primary" fullWidth onClick={handleSubmit} style={{marginTop:'2px'}}>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handleSubmit}
+          style={{ marginTop: "2px" }}
+        >
           Add Post
         </Button>
       </Box>
