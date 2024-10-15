@@ -89,7 +89,7 @@ const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId, receiverName }
     if (isOpen && currentUserId && (receiverId || selectedPartner)) {
       const partnerIdToUse = receiverId || selectedPartner.id;
       const chatSocket = new WebSocket(
-        `ws://localhost:8001/ws/chat/?receiver_id=${partnerIdToUse}&user_id=${currentUserId}`,
+        `ws://16.170.202.50/ws/chat/?receiver_id=${partnerIdToUse}&user_id=${currentUserId}`,
       );
 
       chatSocket.onopen = () => {

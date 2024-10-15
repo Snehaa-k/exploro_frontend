@@ -6,7 +6,7 @@ const token = localStorage.getItem("accessToken");
 console.log("in intercepter", token);
 
 const api = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "http://16.170.202.50",
   headers: {
     Authorization: `Bearer ${token}`,
   },
