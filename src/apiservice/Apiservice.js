@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_URL = "https://exploro.snehak.site";
+export const API_URL = "http://exploro.snehak.site";
 
 const apiService = {
   createUser: (userData) => axios.post(`${API_URL}/register/`, userData),
