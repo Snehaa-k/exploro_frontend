@@ -89,7 +89,7 @@ const ChatDrawer = ({ isOpen, onClose, currentUserId, receiverId, receiverName }
     if (isOpen && currentUserId && (receiverId || selectedPartner)) {
       const partnerIdToUse = receiverId || selectedPartner.id;
       const chatSocket = new WebSocket(
-        `wss://exploro-frontend-hnup.vercel.app/ws/chat/?receiver_id=${partnerIdToUse}&user_id=${currentUserId}`,
+        `wss://exploro.snehak.site/ws/chat/?receiver_id=${partnerIdToUse}&user_id=${currentUserId}`,
       );
 
       chatSocket.onopen = () => {
