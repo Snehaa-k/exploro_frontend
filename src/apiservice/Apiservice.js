@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_URL = "http://16.170.202.50";
+export const API_URL = "http://13.53.42.87";
 
 const apiService = {
   createUser: (userData) => axios.post(`${API_URL}/register/`, userData),

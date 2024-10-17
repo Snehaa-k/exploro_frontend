@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTravellers } from "../../../redux/actions/authActions";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_URL } from "../../../apiservice/Apiservice";
 
 const ViewTravellers = () => {
   const users = useSelector((state) => state.reducer.user.travellers);
@@ -35,7 +36,7 @@ const ViewTravellers = () => {
   const handleBlock = (id) => {
     // setLoading(true);
     axios
-      .post(`http://localhost:8000/block/${id}/`)
+      .post(`${API_URL}/block/${id}/`)
       .then((response) => {
         console.log("Accepted:", response.data);
         Swal.fire({

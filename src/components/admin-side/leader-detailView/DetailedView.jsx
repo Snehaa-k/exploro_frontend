@@ -5,6 +5,7 @@ import { Button, Typography, Paper } from "@mui/material";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { ThreeDots } from "react-loader-spinner";
+import { API_URL } from "../../../apiservice/Apiservice";
 
 const TravelLeaderDetails = () => {
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ const TravelLeaderDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/details/${id}`)
+      .get(`${API_URL}/details/${id}`)
       .then((response) => {
         setDetails(response.data);
       })
@@ -28,7 +29,7 @@ const TravelLeaderDetails = () => {
   const handleReject = (id) => {
     setIsloading(true);
     axios
-      .post(`http://localhost:8000/reject/${id}/`)
+      .post(`${API_URL}/reject/${id}/`)
       .then((response) => {
         console.log("Rejected:", response.data);
         Swal.fire({
@@ -50,7 +51,7 @@ const TravelLeaderDetails = () => {
   const handleAccept = (id) => {
     setLoading(true);
     axios
-      .post(`http://localhost:8000/accept/${id}/`)
+      .post(`${API_URL}/accept/${id}/`)
       .then((response) => {
         console.log("Accepted:", response.data);
         Swal.fire({

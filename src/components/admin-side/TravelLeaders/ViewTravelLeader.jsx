@@ -19,6 +19,7 @@ import { fetchLeaders } from "../../../redux/actions/authActions";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { API_URL } from "../../../apiservice/Apiservice";
 
 const ViewTravelLeaders = () => {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ const ViewTravelLeaders = () => {
   const handleBlock = (id) => {
     // setLoading(true);
     axios
-      .post(`http://localhost:8000/block/${id}/`)
+      .post(`${API_URL}/block/${id}/`)
       .then((response) => {
         console.log("Accepted:", response.data);
         Swal.fire({
