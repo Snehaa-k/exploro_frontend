@@ -6,7 +6,7 @@ const token = localStorage.getItem("accessToken");
 console.log("in intercepter", token);
 
 const api = axios.create({
-  baseURL: "http://13.53.42.87",
+  baseURL: "https://exploro.snehak.site",
   headers: {
     Authorization: `Bearer ${token}`,
   },
