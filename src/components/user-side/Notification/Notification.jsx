@@ -32,8 +32,9 @@ const NotificationSystem = ({
 
   useEffect(() => {
     const socket = new WebSocket(
-      `wss://http://https://exploro.snehak.site/ws/notification/?user_id=${userId}`,
+      `wss://exploro.snehak.site/ws/notification/?user_id=${userId}`,
     );
+
 
     socket.onopen = () => {
       console.log(

@@ -332,7 +332,7 @@ const TravellerProfile = () => {
                 <Actions
                   avatarSrc={
                     profile?.profile?.profile_image
-                      ? `http://127.0.0.1:8000${profile.profile.profile_image}`
+                      ? `${API_URL}${profile.profile.profile_image}`
                       : "https://via.placeholder.com/100"
                   }
                   menuItems={menuItemsLeader}
@@ -341,7 +341,7 @@ const TravellerProfile = () => {
                 <Actions
                   avatarSrc={
                     profile?.profile?.profile_image
-                      ? `http://127.0.0.1:8000${profile.profile.profile_image}`
+                      ? `${API_URL}${profile.profile.profile_image}`
                       : "https://via.placeholder.com/100"
                   }
                   menuItems={menuItems}
@@ -351,7 +351,7 @@ const TravellerProfile = () => {
                 <ViewProfile
                   profilePic={
                     profile?.profile?.profile_image
-                      ? `http://127.0.0.1:8000${profile.profile.profile_image}`
+                      ? `${API_URL}${profile.profile.profile_image}`
                       : "https://via.placeholder.com/100"
                   }
                   name={profile?.user?.username ?? "No username available"}
@@ -372,7 +372,7 @@ const TravellerProfile = () => {
                 <ViewProfile
                   profilePic={
                     profile?.profile?.profile_image
-                      ? `http://127.0.0.1:8000${profile.profile.profile_image}`
+                      ? `${API_URL}${profile.profile.profile_image}`
                       : "https://via.placeholder.com/100"
                   }
                   name={profile?.user?.username ?? "No username available"}
