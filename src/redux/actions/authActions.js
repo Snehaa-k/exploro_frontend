@@ -111,7 +111,7 @@ export const updateProfile = createAsyncThunk(
       });
 
       const response = await axios.put(
-        "http://localhost:8000/profile/",
+        "https://exploro-backend.snehak.site/profile/",
         formData,
         {
           headers: {
