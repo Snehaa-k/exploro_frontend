@@ -267,7 +267,7 @@ const EditProfile = () => {
 
       {profile.is_travel_leader ? (
         <Actions
-          avatarSrc={`http://127.0.0.1:8000${image}`}
+          avatarSrc={`${API_URL}${image}`}
           menuItems={[
             { text: "Edit Profile", icon: <EditIcon />, path: "/editprofile" },
             { text: "Inbox", icon: <MessageIcon />, path: "/inbox" },
@@ -283,7 +283,7 @@ const EditProfile = () => {
         />
       ) : (
         <Actions
-          avatarSrc={`http://127.0.0.1:8000${image}`}
+          avatarSrc={`${API_URL}${image}`}
           menuItems={[
             { text: "Edit Profile", icon: <EditIcon />, path: "/editprofile" },
             { text: "Messages", icon: <MessageIcon />, path: "/messages" },
@@ -316,7 +316,7 @@ const EditProfile = () => {
                 <img src={photo} alt="Uploaded" className="uploaded-image" />
               ) : image ? (
                 <img
-                  src={`http://127.0.0.1:8000${image}`}
+                  src={`${API_URL}${image}`}
                   alt="Uploaded"
                   className="uploaded-image"
                 />

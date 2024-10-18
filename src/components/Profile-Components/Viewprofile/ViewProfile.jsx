@@ -91,6 +91,9 @@ const ViewProfile = ({
     navigate(`/userprofile/${travelid}`);
   };
 
+
+  // console.log(`halo this is my url$`,profile);
+  
   return (
     <div>
       <Box
