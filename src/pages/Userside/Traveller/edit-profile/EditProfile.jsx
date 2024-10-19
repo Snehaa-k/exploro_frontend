@@ -229,8 +229,8 @@ const EditProfile = () => {
   };
 
   const menuItems = [
-    { label: "Home", onClick: () => console.log("Home clicked") },
-    { label: "Destination", onClick: () => console.log("Destination clicked") },
+    { label: "Home", onclick:HandleHome },
+    { label: "Destination", onClick: HandleDestination },
   ];
   const HomePage = () => {
     const handleMenuClick = () => {

@@ -11,6 +11,7 @@ import {
   Slider,
   Box,
   Container,
+  CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import MainView from "../../../components/user-side/user-destinations/MainView/MainView";
@@ -63,6 +64,7 @@ const Destination = () => {
   const [trips, setTrips] = useState([]);
   const [travelead, setTravelLeads] = useState([]);
   const [user, setUser] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -86,6 +88,7 @@ const Destination = () => {
 
   useEffect(() => {
     const fetchTrips = async () => {
+      setIsLoading(true);
       try {
         const response = await api.get(`/viewalltrips/`);
         const tripsWithMonth = response.data.trip.map((trip) => ({
@@ -96,6 +99,7 @@ const Destination = () => {
         setUser(response.data.user);
         const ids = response.data.trip.map((trip) => trip?.travelead || null);
         setTravelLeads(ids);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching trips:", error.message);
       }
@@ -225,7 +229,13 @@ const Destination = () => {
           </Grid>
         </FilterBox>
         <Grid container spacing={4}>
-          {currentTrips.length ? (
+          {isLoading ? ( // Display loading spinner while fetching trips
+            <Grid item xs={12}>
+              <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <CircularProgress />
+              </Box>
+            </Grid>
+          ) : currentTrips.length ? (
             currentTrips.map((trip) => (
               <Grid item xs={12} sm={4} md={4} key={trip.id}>
                 <Box onClick={() => handleClick(trip.id)} sx={{ cursor: "pointer" }}>

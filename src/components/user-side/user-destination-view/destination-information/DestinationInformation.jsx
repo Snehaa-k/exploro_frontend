@@ -127,10 +127,10 @@ const TourPlan = ({ tripId }) => {
               </List>
             ) : (
               <Box sx={{ textAlign: "center", mt: 10 }}>
-                <img
+                {/* <img
                   src=""
                   alt="No places available"
-                  style={{ maxWidth: "100%", height: "auto" }}/>
+                  style={{ maxWidth: "100%", height: "auto" }}/> */}
                 <Typography variant="h6" sx={{ mt: 2 }}>
                   No places available for this tour.
                 </Typography>

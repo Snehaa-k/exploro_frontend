@@ -8,6 +8,7 @@ import {
   Paper,
   Avatar,
   ListItemIcon,
+  CircularProgress,
 } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -48,6 +49,7 @@ const PostsPage = () => {
   const [unreadmessages, setunreadmessage] = useState(0);
   const [unreadmessagess, setunreadmessages] = useState(0);
   const [partners, setChatPartners] = useState(0);
+  const [isLoading, setIsLoading] = useState(true); 
   console.log(partners, "partners.........");
 
   const notificationCount = unreadmessages ? unreadmessages : partners;
@@ -156,10 +158,12 @@ const PostsPage = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true);
       try {
         const response = await api.get(`/viewposts/`);
 
         setPosts(response.data.posts);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching trips:", error.message);
       }
@@ -268,6 +272,7 @@ const PostsPage = () => {
     console.log(event.target.value);
   };
 
+   
   return (
     <div>
       <div className="dashboard">
@@ -284,7 +289,7 @@ const PostsPage = () => {
           chatCount={notificationCount}
         />
       </div>
-      <div className="create-post">
+      <div className="create-post" >
         {user.is_travel_leader && (
           <div className="create-post">
             <CreatePost setReloadPosts={setReloadPosts} />
@@ -292,27 +297,33 @@ const PostsPage = () => {
         )}
       </div>
       <div className="main-container">
-        {combinedPosts.map((post) => {
-          if (post.post_image) {
-            return (
-              <TravelPostCard
-                key={post.id}
-                post={post}
-                likes={post.likes.length || 0}
-                handleLike={handleLike}
-              />
-            );
-          } else {
-            return (
-              <TravelArticleCard
-                key={post.id}
-                post={post}
-                likes={post.likes.length || 0}
-                handleLike={handleLikearticle}
-              />
-            );
-          }
-        })}
+        {isLoading ? ( // Check loading state
+          <Box display="flex" justifyContent="center" alignItems="center" height="100vh" marginRight= "400px">
+          <CircularProgress />
+        </Box>
+        ) : (
+          combinedPosts.map((post) => {
+            if (post.post_image) {
+              return (
+                <TravelPostCard
+                  key={post.id}
+                  post={post}
+                  likes={post.likes.length || 0}
+                  handleLike={handleLike}
+                />
+              );
+            } else {
+              return (
+                <TravelArticleCard
+                  key={post.id}
+                  post={post}
+                  likes={post.likes.length || 0}
+                  handleLike={handleLikearticle}
+                />
+              );
+            }
+          })
+        )}
       </div>
 
       <NotificationSystem
